@@ -1,4 +1,4 @@
-import React, {useContext, useState, useRef, useEffect} from "react";
+import React, {useContext, useState, useEffect} from "react";
 import EUSignContext from './context/EUSign';
 import IconCoding6 from './icons/duotune/coding/cod006.svg';
 import Timeline from "./components/Timeline";
