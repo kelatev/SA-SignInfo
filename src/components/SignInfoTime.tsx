@@ -1,5 +1,7 @@
 import React from 'react';
 import {EndUserTimeInfo} from "../EUSign/types";
+import IconCoding6 from "../icons/duotune/coding/cod006.svg";
+import TimelineItem from "./TimelineItem";
 
 interface SignTimeProps {
     data: EndUserTimeInfo
@@ -7,12 +9,11 @@ interface SignTimeProps {
 
 function SignInfoTime(props: SignTimeProps) {
     return (
-        <div>
-            <div>время</div>
+        <TimelineItem title='время' icon={IconCoding6}>
             <div>isTimeAvail: {props.data.isTimeAvail ? '1' : '0'}</div>
             <div>isTimeStamp: {props.data.isTimeStamp ? '1' : '0'}</div>
             <div>time: {props.data.time.toString()}</div>
-        </div>
+        </TimelineItem>
     );
 }
 

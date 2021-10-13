@@ -1,9 +1,15 @@
 import React from 'react';
 
+export interface FileInterface {
+    content: string
+    name: string
+    size: number
+}
+
 interface FileProps {
     title: string
     accept?: string
-    onChange: (base64: string, name: string, size: number) => void
+    onChange: (file: FileInterface) => void
 }
 
 function File(props: FileProps) {
@@ -15,7 +21,7 @@ function File(props: FileProps) {
         let content: any = fileReader.result;
         content = content.substring(content.indexOf(';base64,') + 8);
 
-        props.onChange(content, name, size);
+        props.onChange({content, name, size});
     }
 
     function handleFileChosen(e: any) {

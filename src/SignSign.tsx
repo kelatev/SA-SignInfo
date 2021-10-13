@@ -1,116 +1,23 @@
 import React, {useContext, useState, useRef, useEffect} from "react";
 import EUSignContext from './context/EUSign';
-import File from "./components/File";
 import IconCoding6 from './icons/duotune/coding/cod006.svg';
-import IconFil004 from './icons/duotune/files/fil004.svg';
+import Timeline from "./components/Timeline";
+import TimelineItem from "./components/TimelineItem";
+import TimelineItemFile from "./components/TimelineItemFile";
+import {FileInterface} from "./components/File";
+import Password from "./components/Password";
 
-const Timeline: React.FC = ({children}) => {
-    return (
-        <div className="timeline">
-            {children}
-        </div>
-    );
-}
-
-interface TimelineItemInterface {
-    icon: string
-    title: string
-    time?: string
-}
-
-const TimelineItem: React.FC<TimelineItemInterface> = ({icon, title, time, children}) => {
-    return (
-        /*begin::Timeline item*/
-        <div className="timeline-item">
-            {/*begin::Timeline line*/}
-            <div className="timeline-line w-40px"></div>
-            {/*end::Timeline line*/}
-            {/*begin::Timeline icon*/}
-            <div className="timeline-icon symbol symbol-circle symbol-40px me-4">
-                <div className="symbol-label">
-                    <span className="svg-icon svg-icon-2"><img src={icon} alt="logo"/></span>
-                </div>
-            </div>
-            {/*end::Timeline icon*/}
-            {/*begin::Timeline content*/}
-            <div className="timeline-content mb-10 mt-n1">
-                {/*begin::Timeline heading*/}
-                <div className="pe-3 mb-5">
-                    {/*begin::Title*/}
-                    <div className="fs-5 fw-bold mb-2 text-white">{title}</div>
-                    {/*end::Title*/}
-                    {/*begin::Description*/}
-                    {
-                        time && (
-                            <div className="d-flex align-items-center mt-1 fs-6">
-                                {/*begin::Info*/}
-                                <div className="text-white opacity-50 me-2 fs-7">{time}</div>
-                                {/*end::Info*/}
-                            </div>
-                        )
-                    }
-                    {/*end::Description*/}
-                </div>
-                {/*end::Timeline heading*/}
-                {/*begin::Timeline details*/}
-                <div className="pb-5">
-                    {children}
-                </div>
-                {/*end::Timeline details*/}
-            </div>
-            {/*end::Timeline content*/}
-        </div>
-    );
-};
-
-interface TimelineItemFileInterface {
-    name: string
-    size: number
-}
-
-const TimelineItemFile: React.FC<TimelineItemFileInterface> = ({name, size}) => {
-    return (
-        <div className="d-flex flex-stack border rounded p-4 mb-5">
-            {/*begin::Wrapper*/}
-            <div className="d-flex align-items-center me-2">
-                {/*begin::Icon*/}
-                <img alt="" className="w-30px me-3" src={IconFil004}/>
-                {/*end::Icon*/}
-                {/*begin::Info*/}
-                <div className="d-flex flex-stack">
-                    {/*begin::Info*/}
-                    <div className="d-flex flex-column me-2">
-                        {/*begin::Desc*/}
-                        <a href="#" className="fs-7 text-white text-hover-success fw-bolder">{name}</a>
-                        {/*end::Desc*/}
-                        {/*begin::Number*/}
-                        <div className="text-gray-400">{size}mb</div>
-                        {/*end::Number*/}
-                    </div>
-                    {/*end::Info*/}
-                </div>
-                {/*begin::Info*/}
-            </div>
-            {/*end::Wrapper*/}
-            {/*-begin::Action*/}
-            <a href="#" className="btn btn-sm btn-hover-rise text-white bg-white bg-opacity-10">View</a>
-            {/*end::Action*/}
-        </div>
-    );
-};
 
 function SignSign() {
     const {euSign} = useContext(EUSignContext);
 
-    const passRef = useRef<HTMLInputElement>(null);
-
-    const [sign, setSign] = useState<{ content: string, name: string, size: number }>();
-    const [password, setPassword] = useState('');
+    const [file, setFile] = useState<FileInterface | null>();
+    const [password, setPassword] = useState<string | null>();
 
     useEffect(() => {
-        if (euSign && sign?.content) {
+        if (euSign && file?.content) {
             try {
-                const container = euSign.BASE64Decode(sign.content)
+                const container = euSign.BASE64Decode(file.content)
                 //console.log(euSign.GetSignsCount(content))
                 //console.log(euSign.GetSignerInfo(0, content));
                 console.log(euSign.EnumJKSPrivateKeys(container, 0));
@@ -119,28 +26,18 @@ function SignSign() {
                 console.log(e)
             }
         }
-    }, [euSign, sign]);
+    }, [euSign, file]);
 
     useEffect(() => {
-        if (euSign && sign?.content && password) {
+        if (euSign && file?.content && password) {
             try {
                 euSign.ResetPrivateKey();
-                console.log(euSign.ReadPrivateKeyBinary(euSign.BASE64Decode(sign?.content), password))
+                console.log(euSign.ReadPrivateKeyBinary(euSign.BASE64Decode(file?.content), password))
             } catch (e: any) {
                 console.log(e)
             }
         }
-    }, [euSign, sign, password]);
-
-    function handleFileSignChange(content: any, name: string, size: number) {
-        setSign({content, name, size});
-    }
-
-    function handleSetPassword() {
-        if (passRef.current) {
-            setPassword(passRef.current.value);
-        }
-    }
+    }, [euSign, file, password]);
 
     //ResetPrivateKey
     //ReadPrivateKeyBinary(euSign.BASE64Decode(
@@ -160,20 +57,12 @@ function SignSign() {
                      data-kt-scroll-height="auto" data-kt-scroll-dependencies="#kt_sidebar_header, #kt_sidebar_footer"
                      data-kt-scroll-wrappers="#kt_page, #kt_sidebar, #kt_sidebar_body" data-kt-scroll-offset="0">
                     <Timeline>
-                        {sign ? (
-                            <TimelineItem title='ЕЦП' icon={IconCoding6}>
-                                <TimelineItemFile name={sign.name} size={sign.size}/>
-                                <input type='password' ref={passRef}/>
-                                <button type='button' className='btn btn-light' onClick={handleSetPassword}>считать
-                                </button>
-                            </TimelineItem>
-                        ) : (
-                            <TimelineItem title='ЕЦП' icon={IconCoding6}>
-                                <File title='Выбрать файл' onChange={handleFileSignChange}
-                                      accept='.dat,.pfx,.pk8,.zs2,.jks'/>
-                            </TimelineItem>
-                        )}
-
+                        <TimelineItem title='ЕЦП' icon={IconCoding6}>
+                            <TimelineItemFile onFileChange={setFile}
+                                              accept='.dat,.pfx,.pk8,.zs2,.jks'
+                                              hint='Особистий ключ (Key-6.dat, *.pfx, *.pk8, *.zs2 або *.jks)'/>
+                            {file && password == null && <Password title='считать' onEnter={setPassword} />}
+                        </TimelineItem>
                     </Timeline>
                 </div>
             </div>
