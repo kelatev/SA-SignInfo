@@ -1,4 +1,5 @@
 import React from "react";
+import TimelineItem from "./TimelineItem";
 
 const Timeline: React.FC = ({children}) => {
     return (
@@ -8,4 +9,6 @@ const Timeline: React.FC = ({children}) => {
     );
 }
 
-export default Timeline;
+export default Object.assign(Timeline, {
+    Item: TimelineItem,
+});

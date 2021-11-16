@@ -5,15 +5,16 @@ import {EndUserTimeInfo, EndUserCertificateInfoEx} from "./EUSign/types";
 import SignInfoSigner from "./components/SignInfoSigner";
 import Timeline from "./components/Timeline";
 import IconCoding6 from "./icons/duotune/coding/cod006.svg";
-import TimelineItem from "./components/TimelineItem";
 import TimelineItemFile from "./components/TimelineItemFile";
-import {FileInterface} from "./components/File";
+import {FileInterface} from "./components/FormFile";
+import Card from "./components/Card";
+import SignInfoData from "./components/SignInfoData";
 
 function SignCheck() {
     const {euSign} = useContext(EUSignContext);
 
     const [file, setFile] = useState<FileInterface | null>();
-    const [fileError, setFileError] = useState('');
+    const [fileError, setFileError] = useState<string>();
 
     const [isSignedData, setIsSignedData] = useState<boolean>();
     const [signedData, setSignedData] = useState<string>();
@@ -43,6 +44,7 @@ function SignCheck() {
                 setFileError(e.toString());
             }
         } else {
+            setFileError(undefined);
             setIsSignedData(undefined);
             setSignsCount(undefined);
             setSignTime(undefined);
@@ -65,36 +67,19 @@ function SignCheck() {
     }, [euSign, file, isSignedData]);
 
     return (
-        <div className='card' style={{backgroundColor: '#CBF0F4'}}>
-            <div className="card-header border-0 pt-5">
-                <h3 className="card-title align-items-start flex-column">
-                    <span className="card-label fw-bolder fs-3 mb-1">Проверка подписи</span>
-                </h3>
-            </div>
-            <div className='card-body'>
-                <div className="hover-scroll-y me-n6 pe-6" id="kt_sidebar_body" data-kt-scroll="true"
-                     data-kt-scroll-height="auto" data-kt-scroll-dependencies="#kt_sidebar_header, #kt_sidebar_footer"
-                     data-kt-scroll-wrappers="#kt_page, #kt_sidebar, #kt_sidebar_body" data-kt-scroll-offset="0">
-                    <Timeline>
-                        <TimelineItem title='Подписанный файл' icon={IconCoding6}>
-                            <TimelineItemFile onFileChange={setFile} error={fileError}/>
-                        </TimelineItem>
-                        {isSignedData != null && (isSignedData ?
-                                <TimelineItem title='Подписанные данные' icon={IconCoding6}>
-                                    присутствуют
-                                </TimelineItem>
-                                :
-                                <TimelineItem title='Подписанные данные' icon={IconCoding6}>
-                                    отсутствуют
-                                </TimelineItem>
-                        )
-                        }
-                        {signTime && <SignInfoTime data={signTime}/>}
-                        {signerInfo && <SignInfoSigner data={signerInfo}/>}
-                    </Timeline>
-                </div>
-            </div>
-        </div>
+        <Card title='Проверка подписи' backgroundColor='#CBF0F4'>
+            {/*<img className="mw-100 h-100px mb-7 mx-auto"
+                 src="/media/illustrations/sigma-1/5.png" />*/}
+            <Timeline>
+                <Timeline.Item title='Подпись' icon={IconCoding6}>
+                    <TimelineItemFile onFileChange={setFile} error={fileError}/>
+                </Timeline.Item>
+                {isSignedData != null && <SignInfoData has={isSignedData} data={signedData}/>}
+                {signTime && <SignInfoTime data={signTime}/>}
+                {signerInfo && <SignInfoSigner data={signerInfo}/>}
+                {signsCount}
+            </Timeline>
+        </Card>
     );
 }
 

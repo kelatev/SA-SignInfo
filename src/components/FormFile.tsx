@@ -12,7 +12,7 @@ interface FileProps {
     onChange: (file: FileInterface) => void
 }
 
-function File(props: FileProps) {
+function FormFile(props: FileProps) {
     let fileReader: FileReader;
     let name: string;
     let size: number;
@@ -48,4 +48,4 @@ function File(props: FileProps) {
     );
 }
 
-export default File;
+export default FormFile;

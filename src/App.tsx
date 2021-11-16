@@ -8,7 +8,7 @@ function App() {
     const [euSign, setEUSign] = useState(null);
     return (
         <EUSignContext.Provider value={{euSign, setEUSign}}>
-            {euSign ? null : <Loader/>}
+            {euSign == null && <Loader/>}
             <div className='d-flex flex-column flex-root'>
                 <div className={'page d-flex flex-row flex-column-fluid' + (euSign ? '' : ' overlay overlay-block')}>
                     <div className='wrapper d-flex flex-column flex-row-fluid' id='kt_wrapper'>
@@ -29,10 +29,10 @@ function App() {
                         <div id='kt_content' className='content d-flex flex-column flex-column-fluid px-10'>
                             <div className='row gy-5 g-xl-10'>
                                 <div className='col-xl-6'>
-                                    <SignCheck />
+                                    <SignCheck/>
                                 </div>
                                 <div className='col-xl-6'>
-                                    <SignSign />
+                                    <SignSign/>
                                 </div>
                             </div>
                         </div>

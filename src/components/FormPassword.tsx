@@ -5,7 +5,7 @@ interface PasswordProps {
     onEnter: (pass: string | null) => void
 }
 
-function Password(props: PasswordProps) {
+function FormPassword(props: PasswordProps) {
     const passRef = useRef<HTMLInputElement>(null);
 
     function handleSetPassword() {
@@ -18,10 +18,10 @@ function Password(props: PasswordProps) {
 
     return (
         <div className="input-group mb-3">
-            <input type='password'  className="form-control" placeholder='Password' ref={passRef}/>
-            <button type='button' className='btn btn-light' onClick={handleSetPassword}>{props.title}</button>
+            <input type='password'  className="form-control" placeholder='FormPassword' ref={passRef}/>
+            <button type='button' className='btn btn-primary' onClick={handleSetPassword}>{props.title}</button>
         </div>
     );
 }
 
-export default Password;
+export default FormPassword;

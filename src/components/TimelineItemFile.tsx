@@ -1,7 +1,8 @@
 import React, {useState} from "react";
 import IconFil004 from "../icons/duotune/files/fil004.svg";
-import File, {FileInterface} from "./File";
+import FormFile, {FileInterface} from "./FormFile";
 import Alert from "./Alert";
+import FormBase64 from "./FormBase64";
 
 interface TimelineItemFileInterface {
     onFileChange: (file: FileInterface | null) => void
@@ -42,7 +43,8 @@ const TimelineItemFile: React.FC<TimelineItemFileInterface> = ({onFileChange, ac
                                     className="fs-7 text-inverse-white text-hover-success fw-bolder">{file.name}</span>
                                 {/*end::Desc*/}
                                 {/*begin::Number*/}
-                                <div className="text-gray-400">{file.size}mb</div>
+                                <div
+                                    className="text-gray-400">{file.size > 1024 ? (Math.round(file.size * 100 / 1024) / 100 + ' kB') : (file.size + ' B')}</div>
                                 {/*end::Number*/}
                             </div>
                             {/*end::Info*/}
@@ -57,11 +59,13 @@ const TimelineItemFile: React.FC<TimelineItemFileInterface> = ({onFileChange, ac
             ) : (
                 <>
                     <div>{hint}</div>
-                    <File title='Выбрать файл' onChange={handleFileChange} accept={accept} />
+                    <FormFile title='Выбрать файл' onChange={handleFileChange} accept={accept}/>
+                    &nbsp;
+                    <FormBase64 title='base64' onChange={handleFileChange} />
                 </>
             )}
 
-            {error && <div className='mt-1'><Alert text={error}/></div>}
+            {error && <div className='mt-1'><Alert>{error}</Alert></div>}
         </>
     );
 };

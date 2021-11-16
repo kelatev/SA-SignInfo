@@ -1,6 +1,7 @@
 import React, {useState, useEffect, useContext} from 'react';
 import EUSignContext from '../context/EUSign';
 import {loadCryptoLibrary, initializeCryptoLibrary} from './util';
+//import EUSign from '@mdoffice/ua-signature';
 
 function Loader() {
     const {euSign, setEUSign} = useContext(EUSignContext);
@@ -13,6 +14,17 @@ function Loader() {
         if (euSign == null) {
             setLoading(true);
 
+            /*const lib = new EUSign();
+            setEUSign(lib);
+            lib.fullLoad()
+                .then(() => {
+                    setLoading(false);
+                })
+                .catch((e: any) => {
+                    setError(e);
+                    setLoading(false);
+                });*/
+
             loadCryptoLibrary()
                 .then(initializeCryptoLibrary)
                 .then((library) => {
@@ -24,7 +36,7 @@ function Loader() {
                     setLoading(false);
                 });
         }
-    }, []);
+    }, [euSign, setEUSign]);
 
     const spinner = (<div className="text-center">
         <div className="spinner-border text-primary" role="status">
