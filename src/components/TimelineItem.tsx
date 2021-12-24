@@ -11,7 +11,7 @@ const TimelineItem: React.FC<TimelineItemInterface> = ({icon, title, time, child
         /*begin::Timeline item*/
         <div className="timeline-item">
             {/*begin::Timeline line*/}
-            <div className="timeline-line w-40px"></div>
+            <div className="timeline-line w-40px"/>
             {/*end::Timeline line*/}
             {/*begin::Timeline icon*/}
             <div className="timeline-icon symbol symbol-circle symbol-40px me-4">

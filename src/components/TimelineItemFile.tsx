@@ -1,5 +1,5 @@
 import React, {useState} from "react";
-import IconFil004 from "../icons/duotune/files/fil004.svg";
+import IconFil004 from "../media/icons/duotune/files/fil004.svg";
 import FormFile, {FileInterface} from "./FormFile";
 import Alert from "./Alert";
 import FormBase64 from "./FormBase64";

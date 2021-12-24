@@ -1,14 +1,14 @@
 import React, {useContext, useEffect, useState} from 'react';
 import EUSignContext from './context/EUSign';
-import SignInfoTime from "./components/SignInfoTime";
-import {EndUserTimeInfo, EndUserCertificateInfoEx} from "./EUSign/types";
-import SignInfoSigner from "./components/SignInfoSigner";
-import Timeline from "./components/Timeline";
-import IconCoding6 from "./icons/duotune/coding/cod006.svg";
-import TimelineItemFile from "./components/TimelineItemFile";
 import {FileInterface} from "./components/FormFile";
+import {EndUserTimeInfo, EndUserCertificateInfoEx} from "./EUSign/types";
 import Card from "./components/Card";
+import Timeline from "./components/Timeline";
+import TimelineItemFile from "./components/TimelineItemFile";
+import SignInfoTime from "./components/SignInfoTime";
 import SignInfoData from "./components/SignInfoData";
+import SignInfoSigner from "./components/SignInfoSigner";
+import IconCoding6 from "./media/icons/duotune/coding/cod006.svg";
 
 function SignCheck() {
     const {euSign} = useContext(EUSignContext);

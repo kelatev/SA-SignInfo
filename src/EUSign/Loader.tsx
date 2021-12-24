@@ -1,6 +1,8 @@
 import React, {useState, useEffect, useContext} from 'react';
 import EUSignContext from '../context/EUSign';
 import {loadCryptoLibrary, initializeCryptoLibrary} from './util';
+import Modal from "react-bootstrap/Modal";
+
 //import EUSign from '@mdoffice/ua-signature';
 
 function Loader() {
@@ -45,19 +47,15 @@ function Loader() {
     </div>);
 
     return (
-        <div className="modal fade show d-block" aria-modal="true" role="dialog">
-            <div className="modal-dialog">
-                <div className="modal-content">
-                    <div className="modal-header">
-                        <h5 className="modal-title">Загрузка библиотеки</h5>
-                    </div>
-                    <div className="modal-body">
-                        {loading ? spinner : ''}
-                        {error ? <div dangerouslySetInnerHTML={{__html: error}}/> : ''}
-                    </div>
-                </div>
-            </div>
-        </div>
+        <Modal show={true}>
+            <Modal.Header>
+                <Modal.Title>Загрузка библиотеки</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+                {loading ? spinner : ''}
+                {error ? <div dangerouslySetInnerHTML={{__html: error}}/> : ''}
+            </Modal.Body>
+        </Modal>
     );
 }
 

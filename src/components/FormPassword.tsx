@@ -1,4 +1,7 @@
 import React, {useRef} from "react";
+import InputGroup from 'react-bootstrap/InputGroup';
+import FormControl from 'react-bootstrap/FormControl';
+import Button from 'react-bootstrap/Button';
 
 interface PasswordProps {
     title: string
@@ -17,10 +20,12 @@ function FormPassword(props: PasswordProps) {
     }
 
     return (
-        <div className="input-group mb-3">
-            <input type='password'  className="form-control" placeholder='FormPassword' ref={passRef}/>
-            <button type='button' className='btn btn-primary' onClick={handleSetPassword}>{props.title}</button>
-        </div>
+        <>
+            <InputGroup className="mb-3">
+                <FormControl type="password" placeholder='FormPassword' ref={passRef}/>
+                <Button variant="primary" onClick={handleSetPassword}>{props.title}</Button>
+            </InputGroup>
+        </>
     );
 }
 

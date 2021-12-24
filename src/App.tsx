@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
-import Loader from "./EUSign/Loader";
 import EUSignContext from './context/EUSign';
+import Loader from "./EUSign/Loader";
 import SignCheck from "./SignCheck";
 import SignSign from "./SignSign";
 

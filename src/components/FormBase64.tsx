@@ -1,5 +1,8 @@
 import React, {useRef, useState} from 'react';
 import {FileInterface} from "./FormFile";
+import Button from "react-bootstrap/Button";
+import Modal from "react-bootstrap/Modal";
+import FormControl from "react-bootstrap/FormControl";
 
 interface Base64Props {
     title: string
@@ -31,28 +34,20 @@ function FormBase64(props: Base64Props) {
 
     return (
         <>
-            <button className="btn btn-hover-rise bg-white text-uppercase fs-7 fw-bolder"
-                    onClick={handleShow}>{props.title}</button>
-            <div className="modal fade" aria-modal="true" role="dialog">
-                <div className="modal-dialog">
-                    <div className="modal-content">
-                        <div className="modal-header">
-                            <h5 className="modal-title">Base64</h5>
-                        </div>
-                        <div className="modal-body">
-                            <textarea className='form-control' ref={textInput}></textarea>
-                        </div>
-                        <div className='modal-footer'>
-                            <button className='btn btn-secondary' onClick={handleClose}>
-                                Close
-                            </button>
-                            <button className='btn btn-primary' onClick={handleUpload}>
-                                Upload
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <Button onClick={handleShow} variant="none"
+                    className="btn-hover-rise bg-white fs-7 fw-bolder">{props.title}</Button>
+            <Modal show={show} onHide={handleClose} size="xl">
+                <Modal.Header closeButton>
+                    <Modal.Title>Base64</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <FormControl as="textarea" ref={textInput} />
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button onClick={handleClose} variant="secondary">Close</Button>
+                    <Button onClick={handleUpload} variant="primary">Upload</Button>
+                </Modal.Footer>
+            </Modal>
         </>
     );
 }

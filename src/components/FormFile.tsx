@@ -41,7 +41,7 @@ function FormFile(props: FileProps) {
     return (
         <label>
             <input type='file' className='d-none' onChange={handleFileChosen} accept={props.accept}/>
-            <span className="btn btn-hover-rise bg-white text-uppercase fs-7 fw-bolder">
+            <span className="btn btn-hover-rise bg-white fs-7 fw-bolder">
                 {props.title}
             </span>
         </label>

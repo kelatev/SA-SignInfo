@@ -1,6 +1,6 @@
 import React from 'react';
 import {EndUserTimeInfo} from "../EUSign/types";
-import IconCoding6 from "../icons/duotune/coding/cod006.svg";
+import IconCoding6 from "../media/icons/duotune/coding/cod006.svg";
 import TimelineItem from "./TimelineItem";
 
 interface SignTimeProps {

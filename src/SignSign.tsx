@@ -1,6 +1,6 @@
 import React, {useContext, useState, useEffect} from "react";
 import EUSignContext from './context/EUSign';
-import IconCoding6 from './icons/duotune/coding/cod006.svg';
+import IconCoding6 from './media/icons/duotune/coding/cod006.svg';
 import Timeline from "./components/Timeline";
 import TimelineItemFile from "./components/TimelineItemFile";
 import {FileInterface} from "./components/FormFile";
