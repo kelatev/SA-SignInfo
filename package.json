@@ -3,7 +3,6 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@mdoffice/ua-signature": "^0.1.1",
     "@restart/hooks": "^0.4.1",
     "@restart/ui": "^0.2.3",
     "@testing-library/jest-dom": "^5.11.4",

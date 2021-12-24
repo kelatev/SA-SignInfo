@@ -142,16 +142,16 @@ function DoesNeedSetSettings(euSign: EUSignCP): void {
 
 export function loadCryptoLibrary(): Promise<EUSignCP> {
     return new Promise((resolve, reject) => {
-        console.log("Load library...");
+        //console.log("Load library...");
 
         const loader = new EndUserLibraryLoader(EndUserLibraryLoader.LIBRARY_TYPE_DEFAULT, "euSign");
 
         loader.onload = function (library: EUSignCP) {
-            console.log("Libary loaded");
+            //console.log("Libary loaded");
             resolve(library);
         };
         loader.onerror = function (msg, errorCode, libraryOrNull) {
-            console.log("Libary load failed. Error - " + msg);
+            //console.log("Libary load failed. Error - " + msg);
             reject(msg);
         };
 
@@ -161,7 +161,7 @@ export function loadCryptoLibrary(): Promise<EUSignCP> {
 
 export function initializeCryptoLibrary(euSign: EUSignCP): Promise<EUSignCP> {
     return new Promise((resolve, reject) => {
-        console.log("Initialize library...");
+        //console.log("Initialize library...");
 
         new Promise((resolve1) => {
             euSign.SetUIMode(false, resolve1, reject);
@@ -173,12 +173,12 @@ export function initializeCryptoLibrary(euSign: EUSignCP): Promise<EUSignCP> {
                 euSign.SetUIMode(false, resolve1, reject);
             }))
             .then(() => {
-                console.log("Library initialized");
+                //console.log("Library initialized");
                 DoesNeedSetSettings(euSign);
                 resolve(euSign);
             })
             .catch((e) => {
-                console.log("Initialize library failed. Error - " + e);
+                //console.log("Initialize library failed. Error - " + e);
 
                 reject(e);
             })

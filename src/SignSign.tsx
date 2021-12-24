@@ -6,15 +6,14 @@ import TimelineItemFile from "./components/TimelineItemFile";
 import {FileInterface} from "./components/FormFile";
 import FormPassword from "./components/FormPassword";
 import Card from "./components/Card";
-import {instanceOf} from "prop-types";
-
 
 function SignSign() {
     const {euSign} = useContext(EUSignContext);
 
     const [file, setFile] = useState<FileInterface | null>();
-    const [JKSPrivateKeysList, setJKSPrivateKeysList] = useState<string[]>();
-    const [JKSPrivateKeys, setJKSPrivateKeys] = useState<string>();
+    const [JKSPrivateKeyList, setJKSPrivateKeyList] = useState<string[]>();
+    const [JKSPrivateKeyName, setJKSPrivateKeyName] = useState<string>();
+    const [privateKey, setPrivateKey] = useState();
     const [password, setPassword] = useState<string | null>();
     const [keyRead, setKeyRead] = useState<boolean>(false);
 
@@ -33,9 +32,9 @@ function SignSign() {
                     i++;
                     alias = euSign.EnumJKSPrivateKeys(container, i);
                 }
-                setJKSPrivateKeysList(_JKSPrivateKeysList);
+                setJKSPrivateKeyList(_JKSPrivateKeysList);
                 if (_JKSPrivateKeysList.length > 0) {
-                    setJKSPrivateKeys(_JKSPrivateKeysList[0]);
+                    setJKSPrivateKeyName(_JKSPrivateKeysList[0]);
                 }
             } catch (e: any) {
                 console.log(e)
@@ -46,14 +45,22 @@ function SignSign() {
     }, [euSign, file]);
 
     useEffect(() => {
-        if (euSign && file?.content && JKSPrivateKeys && password) {
+        if (euSign && file?.content && JKSPrivateKeyName) {
             try {
                 const container = euSign.BASE64Decode(file.content);
-                //console.log(euSign.GetKeyInfoBinary(privateKey, password))
-                const JKSPrivateKey = euSign.GetJKSPrivateKey(container, JKSPrivateKeys);
-                const privateKey = JKSPrivateKey.GetPrivateKey();
-                console.log(JKSPrivateKey);
+                const JKSPrivateKey = euSign.GetJKSPrivateKey(container, JKSPrivateKeyName);
+                //console.log(JKSPrivateKey);
 
+                setPrivateKey(JKSPrivateKey.GetPrivateKey());
+            } catch (e: any) {
+                console.log(e)
+            }
+        }
+    }, [euSign, file, JKSPrivateKeyName]);
+
+    useEffect(() => {
+        if (euSign && file?.content && privateKey && password) {
+            try {
                 if (euSign.IsPrivateKeyReaded()) {
                     euSign.ResetPrivateKey();
                 }
@@ -61,6 +68,7 @@ function SignSign() {
                 //LoadCertificates(certsFilePathes);
                 /* Зчитування ключа */
                 console.log(euSign.ReadPrivateKeyBinary(privateKey, password))
+                console.log(euSign.IsPrivateKeyReaded())
 
                 //console.log(euSign.ShowOwnCertificate())
                 setKeyRead(true);
@@ -68,7 +76,7 @@ function SignSign() {
                 console.log(e)
             }
         }
-    }, [euSign, file, JKSPrivateKeys, password]);
+    }, [euSign, file, privateKey, password]);
 
     //GetPrivateKeyOwnerInfo
     //GetKeyInfoBinary
@@ -78,19 +86,23 @@ function SignSign() {
             {/*<img className="mw-100 h-100px mb-7 mx-auto"
                  src="/media/illustrations/sigma-1/4.png" />*/}
             <Timeline>
-                <Timeline.Item title='ЕЦП' icon={IconCoding6}>
+                <Timeline.Item title='Файл ЕЦП' icon={IconCoding6}>
                     <TimelineItemFile onFileChange={setFile}
                                       accept='.dat,.pfx,.pk8,.zs2,.jks'
                                       hint='Особистий ключ (Key-6.dat, *.pfx, *.pk8, *.zs2 або *.jks)'/>
-                    {file && JKSPrivateKeysList && (
+                    {file && !keyRead && JKSPrivateKeyList && (
                         <select className="form-select mb-1"
-                                onChange={(ev) => setJKSPrivateKeys(ev.currentTarget.value)}
-                                disabled={keyRead}>
-                            {JKSPrivateKeysList.map((item) => <option>{item}</option>)}
+                                onChange={(ev) => setJKSPrivateKeyName(ev.currentTarget.value)}>
+                            {JKSPrivateKeyList.map((item) => <option>{item}</option>)}
                         </select>
                     )}
                     {file && !keyRead && <FormPassword title='считать' onEnter={setPassword}/>}
                 </Timeline.Item>
+                {keyRead && (
+                    <Timeline.Item title='...' icon={IconCoding6}>
+
+                    </Timeline.Item>
+                )}
             </Timeline>
         </Card>
     );
