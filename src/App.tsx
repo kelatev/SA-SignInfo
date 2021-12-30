@@ -6,7 +6,7 @@ import SignSign from "./SignSign";
 import Layout from "./components/Layout";
 
 function App() {
-    const [euSign, setEUSign] = useState(null);
+    const [euSign, setEUSign] = useState();
 
     return (
         <EUSignContext.Provider value={{euSign, setEUSign}}>
