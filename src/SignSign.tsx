@@ -15,7 +15,7 @@ function SignSign() {
     const [JKSPrivateKeyName, setJKSPrivateKeyName] = useState<string>();
     const [privateKey, setPrivateKey] = useState();
     const [password, setPassword] = useState<string | null>();
-    const [keyRead, setKeyRead] = useState<boolean>(false);
+    const [keyRead, setKeyRead] = useState<boolean>();
 
     useEffect(() => {
         if (euSign && file?.content) {

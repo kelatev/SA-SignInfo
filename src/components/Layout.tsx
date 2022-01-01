@@ -2,10 +2,11 @@ import React from "react";
 
 interface LayoutProps {
     title: string
+    subtitle?: string
     showOverlay?: boolean
 }
 
-const Layout: React.FC<LayoutProps> = ({children,title, showOverlay = false}) => {
+const Layout: React.FC<LayoutProps> = ({children,title, subtitle, showOverlay = false}) => {
     return (
         <div className='d-flex flex-column flex-root'>
             <div className={'page d-flex flex-row flex-column-fluid' + (showOverlay ? ' overlay overlay-block' : '')}>
@@ -18,7 +19,8 @@ const Layout: React.FC<LayoutProps> = ({children,title, showOverlay = false}) =>
                                 className="page-title d-flex flex-column align-items-start justify-content-center flex-wrap me-lg-2 pb-5 pb-lg-0"
                                 data-kt-swapper="true" data-kt-swapper-mode="prepend"
                                 data-kt-swapper-parent="{default: '#kt_content_container', lg: '#kt_header_container'}">
-                                <h1 className="d-flex flex-column text-dark fw-bolder my-0 fs-1">{title}</h1>
+                                <h1 className="d-flex flex-column text-dark fw-bolder my-0 fs-1">{title}
+                                <small className="text-muted fs-6 fw-bold ms-1 pt-1">{subtitle}</small></h1>
                             </div>
                         </div>
 
