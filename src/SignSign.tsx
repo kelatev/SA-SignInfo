@@ -60,12 +60,11 @@ function SignSign() {
 
     useEffect(() => {
         if (euSign && file?.content && privateKey && password) {
+            console.log('read')
             try {
                 if (euSign.IsPrivateKeyReaded()) {
                     euSign.ResetPrivateKey();
                 }
-                /* Імпорт сертифікатів ос. ключа */
-                //LoadCertificates(certsFilePathes);
                 /* Зчитування ключа */
                 console.log(euSign.ReadPrivateKeyBinary(privateKey, password))
                 console.log(euSign.IsPrivateKeyReaded())

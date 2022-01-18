@@ -29,7 +29,7 @@ function SetSettings(euSign: EUSignCP, CAs: any[], CASettings: CASettingsInterfa
     useCMP = (!offline && (CASettings && CASettings.cmpAddress !== '')) || false;
 
     // @ts-ignore
-    euSign.SetJavaStringCompliant(true);
+    //euSign.SetJavaStringCompliant(true);
 
     let settings1 = euSign.CreateFileStoreSettings();
     // @ts-ignore
@@ -71,9 +71,9 @@ function SetSettings(euSign: EUSignCP, CAs: any[], CASettings: CASettingsInterfa
         // @ts-ignore
         settings5.SetBeforeStore(true);
         // @ts-ignore
-        if(CASettings) settings5.SetAddress(CASettings.ocspAccessPointAddress);
+        if (CASettings) settings5.SetAddress(CASettings.ocspAccessPointAddress);
         // @ts-ignore
-        if(CASettings) settings5.SetPort(CASettings.ocspAccessPointPort);
+        if (CASettings) settings5.SetPort(CASettings.ocspAccessPointPort);
     }
     euSign.SetOCSPSettings(settings5);
 
@@ -111,33 +111,38 @@ function SetSettings(euSign: EUSignCP, CAs: any[], CASettings: CASettingsInterfa
 }
 
 /* Імпорт сертифікатів до сховища криптографічної бібліотеки */
-function LoadCertificates(euSign: EUSignCP, certsFiles: any[]) {
-    if (!certsFiles) {
+function LoadCertificates(euSign: EUSignCP, certsFilePathes: any[]) {
+    if (!certsFilePathes) {
         return;
     }
 
-    for (let i = 0; i < certsFiles.length; i++) {
-        const data = new Uint8Array(certsFiles[i]);
-        //if (path.substr(path.length - 3) == 'p7b') {
-        euSign.SaveCertificates(data);
-        /*} else {
-            euSign.SaveCertificate(data);
-        }*/
+    for (let i = 0; i < certsFilePathes.length; i++) {
+        const path = certsFilePathes[i];
+        fetch(path)
+            .then((response) => response.blob())
+            .then((blob) => blob.arrayBuffer())
+            .then((arrayBuffer) => {
+                if (path.substring(path.length - 3) === 'p7b') {
+                    euSign.SaveCertificates(arrayBuffer);
+                } else {
+                    euSign.SaveCertificate(arrayBuffer);
+                }
+            })
     }
 }
 
 function DoesNeedSetSettings(euSign: EUSignCP): void {
-    if (euSign.DoesNeedSetSettings()) {
+    //if (euSign.DoesNeedSetSettings()) {
 
-        /* Отримання налаштувань АЦСК для ос. ключа */
-        const CASettings = null;
+    /* Отримання налаштувань АЦСК для ос. ключа */
+    const CASettings = null;
 
-        /* Встановлення параметрів за замовчанням */
-        SetSettings(euSign, CAs, CASettings);
+    /* Встановлення параметрів за замовчанням */
+    SetSettings(euSign, CAs, CASettings);
 
-        /* Завантаження сертифікатів ЦСК */
-        LoadCertificates(euSign, CACerts);
-    }
+    /* Завантаження сертифікатів ЦСК */
+    LoadCertificates(euSign, CACerts);
+    //}
 }
 
 export function loadCryptoLibrary(): Promise<EUSignCP> {

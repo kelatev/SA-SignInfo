@@ -80,7 +80,8 @@ const config = {
   },
   devServer: {
     historyApiFallback: true,
-    contentBase       : './'
+    contentBase       : './',
+    port: 8089
   },
   plugins: plugins
 };
