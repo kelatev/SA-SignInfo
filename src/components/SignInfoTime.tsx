@@ -10,9 +10,9 @@ interface SignTimeProps {
 function SignInfoTime(props: SignTimeProps) {
     return (
         <TimelineItem title='время' icon={IconCoding6}>
-            <div>isTimeAvail: {props.data.isTimeAvail ? '1' : '0'}</div>
-            <div>isTimeStamp: {props.data.isTimeStamp ? '1' : '0'}</div>
-            <div>time: {props.data.time.toString()}</div>
+            <div>isTimeAvail: {props.data.IsTimeAvail() ? '1' : '0'}</div>
+            <div>isTimeStamp: {props.data.IsTimeStamp() ? '1' : '0'}</div>
+            <div>time: {props.data.GetTime().toString()}</div>
         </TimelineItem>
     );
 }

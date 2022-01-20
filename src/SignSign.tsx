@@ -11,71 +11,86 @@ function SignSign() {
     const {euSign} = useContext(EUSignContext);
 
     const [file, setFile] = useState<FileInterface | null>();
+    const [fileContainer, setFileContainer] = useState<Uint8Array | null>();
     const [JKSPrivateKeyList, setJKSPrivateKeyList] = useState<string[]>();
     const [JKSPrivateKeyName, setJKSPrivateKeyName] = useState<string>();
-    const [privateKey, setPrivateKey] = useState();
+    const [privateKey, setPrivateKey] = useState<Uint8Array>();
     const [password, setPassword] = useState<string | null>();
     const [keyRead, setKeyRead] = useState<boolean>();
 
     useEffect(() => {
         if (euSign && file?.content) {
-            try {
-                const container = euSign.BASE64Decode(file.content)
-                //console.log(euSign.GetSignsCount(content))
-                //console.log(euSign.GetSignerInfo(0, content));
-
-                const _JKSPrivateKeysList = [];
-                let i = 0;
-                let alias = euSign.EnumJKSPrivateKeys(container, i);
-                while (alias) {
-                    _JKSPrivateKeysList.push(alias);
-                    i++;
-                    alias = euSign.EnumJKSPrivateKeys(container, i);
+            (async function () {
+                try {
+                    setFileContainer(await euSign.BASE64Decode(file.content));
+                } catch (e: any) {
+                    console.log(e)
                 }
-                setJKSPrivateKeyList(_JKSPrivateKeysList);
-                if (_JKSPrivateKeysList.length > 0) {
-                    setJKSPrivateKeyName(_JKSPrivateKeysList[0]);
-                }
-            } catch (e: any) {
-                console.log(e)
-            }
+            })();
         }
         setPassword(null);
         setKeyRead(false);
     }, [euSign, file]);
 
     useEffect(() => {
-        if (euSign && file?.content && JKSPrivateKeyName) {
-            try {
-                const container = euSign.BASE64Decode(file.content);
-                const JKSPrivateKey = euSign.GetJKSPrivateKey(container, JKSPrivateKeyName);
-                //console.log(JKSPrivateKey);
-
-                setPrivateKey(JKSPrivateKey.GetPrivateKey());
-            } catch (e: any) {
-                console.log(e)
-            }
+        if (euSign && fileContainer) {
+            (async function () {
+                try {
+                    //console.log(euSign.GetSignsCount(content))
+                    //console.log(euSign.GetSignerInfo(0, content));
+                    const _JKSPrivateKeysList = [];
+                    let i = 0;
+                    let alias = await euSign.EnumJKSPrivateKeys(fileContainer, i);
+                    while (alias) {
+                        _JKSPrivateKeysList.push(alias);
+                        i++;
+                        alias = await euSign.EnumJKSPrivateKeys(fileContainer, i);
+                    }
+                    setJKSPrivateKeyList(_JKSPrivateKeysList);
+                    if (_JKSPrivateKeysList.length > 0) {
+                        setJKSPrivateKeyName(_JKSPrivateKeysList[0]);
+                    }
+                } catch (e: any) {
+                    console.log(e)
+                }
+            })();
         }
-    }, [euSign, file, JKSPrivateKeyName]);
+    }, [euSign, fileContainer]);
 
     useEffect(() => {
-        if (euSign && file?.content && privateKey && password) {
-            console.log('read')
-            try {
-                if (euSign.IsPrivateKeyReaded()) {
-                    euSign.ResetPrivateKey();
-                }
-                /* Зчитування ключа */
-                console.log(euSign.ReadPrivateKeyBinary(privateKey, password))
-                console.log(euSign.IsPrivateKeyReaded())
+        if (euSign && fileContainer && JKSPrivateKeyName) {
+            (async function () {
+                try {
+                    const JKSPrivateKey = await euSign.GetJKSPrivateKey(fileContainer, JKSPrivateKeyName);
 
-                //console.log(euSign.ShowOwnCertificate())
-                setKeyRead(true);
-            } catch (e: any) {
-                console.log(e)
-            }
+                    setPrivateKey(JKSPrivateKey.GetPrivateKey());
+                } catch (e: any) {
+                    console.log(e)
+                }
+            })();
         }
-    }, [euSign, file, privateKey, password]);
+    }, [euSign, fileContainer, JKSPrivateKeyName]);
+
+    useEffect(() => {
+        if (euSign && privateKey && password) {
+            console.log('read');
+            (async function () {
+                try {
+                    if (await euSign.IsPrivateKeyReaded()) {
+                        await euSign.ResetPrivateKey();
+                    }
+                    /* Зчитування ключа */
+                    console.log(euSign.ReadPrivateKeyBinary(privateKey, password))
+                    console.log(euSign.IsPrivateKeyReaded())
+
+                    //console.log(euSign.ShowOwnCertificate())
+                    setKeyRead(true);
+                } catch (e: any) {
+                    console.log(e)
+                }
+            })();
+        }
+    }, [euSign, privateKey, password]);
 
     //GetPrivateKeyOwnerInfo
     //GetKeyInfoBinary

@@ -1,8 +1,8 @@
 import React from 'react';
-import {EUSignCP} from "../EUSign/eusw";
+import EUSignCPFrontend from "../EUSign/EUSignCPFrontend";
 
 type ContextProps = {
-    euSign: EUSignCP | undefined
+    euSign: EUSignCPFrontend | undefined
     setEUSign: any
 };
 

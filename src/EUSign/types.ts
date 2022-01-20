@@ -1,42 +1,49 @@
-import exp from "constants";
+export interface EndUserKeyMedia {
+    GetTypeIndex(): number
+    GetDevIndex(): number
+    GetPassword(): string
+}
 
 export interface EndUserOwnerInfo {
-    isFilled: boolean,
-    issuer: string,
-    issuerCN: string,
-    serial: string,
-    subject: string,
-    subjCN: string,
-    subjOrg: string,
-    subjOrgUnit: string,
-    subjTitle: string,
-    subjState: string,
-    subjLocality: string,
-    subjFullName: string,
-    subjAddress: string,
-    subjPhone: string,
-    subjEMail: string,
-    subjDNS: string,
-    subjEDRPOUCode: string,
-    subjDRFOCode: string
+    GetIssuer(): string,
+    GetIssuerCN(): string,
+    GetSerial(): string,
+    GetSubject(): string,
+    GetSubjCN(): string,
+    GetSubjOrg(): string,
+    GetSubjOrgUnit(): string,
+    GetSubjTitle(): string,
+    GetSubjState(): string,
+    GetSubjLocality(): string,
+    GetSubjFullName(): string,
+    GetSubjAddress(): string,
+    GetSubjPhone(): string,
+    GetSubjEMail(): string,
+    GetSubjDNS(): string,
+    GetSubjEDRPOUCode(): string,
+    GetSubjDRFOCode(): string
 }
 
 export interface EndUserTimeInfo {
-    isTimeAvail: boolean,
-    isTimeStamp: boolean,
-    time: Date
+    IsTimeAvail(): boolean,
+    IsTimeStamp(): boolean,
+    GetTime(): Date
 }
 
 export interface EndUserSignInfo {
-    ownerInfo: EndUserOwnerInfo,
-    timeInfo: EndUserTimeInfo,
-    data: any
+    GetOwnerInfo(): EndUserOwnerInfo,
+    GetTimeInfo(): EndUserTimeInfo,
+    GetData(): Uint8Array
+    GetDataString(): string
+    GetDataString(charset: string): string
 }
 
 export interface EndUserSenderInfo {
-    ownerInfo: EndUserOwnerInfo,
-    timeInfo: EndUserTimeInfo,
-    data: any
+    GetOwnerInfo(): EndUserOwnerInfo,
+    GetTimeInfo(): EndUserTimeInfo,
+    GetData(): Uint8Array
+    GetDataString(): string
+    GetDataString(charset: string): string
 }
 
 // Клас, що містить інформацію про параметри файлового сховища (див. табл. 3.1)
@@ -113,6 +120,16 @@ export interface EndUserCMPSettings {
 export interface EndUserModeSettings {
     GetOfflineMode(): boolean
     SetOfflineMode(offlineMode: boolean): void
+}
+
+export interface EndUserKeyMediaSettings {
+    GetSourceType(): number
+    SetSourceType(sourceType: number): void
+    GetShowErrors(): boolean
+    SetShowErrors(showErrors: boolean): void
+    GetKeyMedia(): EndUserKeyMedia
+    SetKeyMedia(keyMedia: EndUserKeyMedia): void
+
 }
 
 // Клас, що містить інформацію про параметри використання точок
@@ -219,4 +236,11 @@ export interface EndUserCertificateInfoEx {
 export interface EndUserCertificate {
     infoEx: EndUserCertificateInfoEx,
     data: any
+}
+
+export interface EndUserJKSPrivateKey {
+    GetCertificates(): Uint8Array[]
+    GetPrivateKey(): Uint8Array
+    GetCertificate(index: number): Uint8Array
+    GetCertificatesCount(): number
 }

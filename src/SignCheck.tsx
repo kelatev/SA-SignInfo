@@ -24,25 +24,17 @@ function SignCheck() {
 
     useEffect(() => {
         if (euSign && file?.content) {
-            try {
-                const container = euSign.BASE64Decode(file.content)
-                //console.log(euSign.GetSignsCount(content))
-                //console.log(euSign.GetSignerInfo(0, content));
-                console.log(euSign.EnumJKSPrivateKeys(container, 0));
-                console.log(euSign.GetJKSPrivateKey(container, 'keyAlias'));
-            } catch (e: any) {
-                console.log(e)
-            }
-
-            try {
-                setIsSignedData(euSign.IsDataInSignedDataAvailable(file.content));
-                setSignsCount(euSign.GetSignsCount(file.content));
-                setSignTime(euSign.GetSignTimeInfo(0, file.content));
-                setSignerInfo(euSign.GetSignerInfo(0, file.content));
-            } catch (e: any) {
-                console.log(e)
-                setFileError(e.toString());
-            }
+            (async function () {
+                try {
+                    setIsSignedData(await euSign.IsDataInSignedDataAvailable(file.content));
+                    setSignsCount(await euSign.GetSignsCount(file.content));
+                    setSignTime(await euSign.GetSignTimeInfo(0, file.content));
+                    setSignerInfo(await euSign.GetSignerInfo(0, file.content));
+                } catch (e: any) {
+                    console.log(e)
+                    setFileError(e.toString());
+                }
+            })();
         } else {
             setFileError(undefined);
             setIsSignedData(undefined);
@@ -54,13 +46,15 @@ function SignCheck() {
 
     useEffect(() => {
         if (euSign && file?.content && isSignedData) {
-            try {
-                //Buffer.from(, 'base64')
-                setSignedData(euSign.GetDataFromSignedData(file.content));
-            } catch (e: any) {
-                console.log(e)
-                setFileError(e.toString());
-            }
+            (async function () {
+                try {
+                    //Buffer.from(, 'base64')
+                    setSignedData(await euSign.GetDataFromSignedData(file.content));
+                } catch (e: any) {
+                    console.log(e)
+                    setFileError(e.toString());
+                }
+            })();
         } else {
             setSignedData(undefined);
         }

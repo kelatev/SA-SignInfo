@@ -1,9 +1,16 @@
 import React, {useState, useEffect, useContext} from 'react';
 import EUSignContext from '../context/EUSign';
-import {loadCryptoLibrary, initializeCryptoLibrary} from './util';
 import Modal from "react-bootstrap/Modal";
+import EUSignCPFrontend from "./EUSignCPFrontend";
 
 //import EUSign from '@mdoffice/ua-signature';
+
+/* Налаштування серверів АЦСК */
+const CAs = '/CAs.json';
+/* Масив з шляхом до кореневих сертификатів ЦЗО та ЦСК */
+const CACerts = [
+    '/CACertificates.p7b'
+];
 
 function Loader() {
     const {euSign, setEUSign} = useContext(EUSignContext);
@@ -16,24 +23,14 @@ function Loader() {
         if (euSign == null) {
             setLoading(true);
 
-            /*const lib = new EUSign();
-            setEUSign(lib);
-            lib.fullLoad()
-                .then(() => {
-                    setLoading(false);
-                })
-                .catch((e: any) => {
-                    setError(e);
-                    setLoading(false);
-                });*/
-
-            loadCryptoLibrary()
-                .then(initializeCryptoLibrary)
+            EUSignCPFrontend.loadLibrary()
+                .then((library) => library.initializeLibrary(CAs, CACerts))
                 .then((library) => {
                     setEUSign(library);
                     setLoading(false);
                 })
                 .catch((e) => {
+                    console.log(e)
                     setError(e);
                     setLoading(false);
                 });
