@@ -13,29 +13,31 @@ const CACerts = [
 ];
 
 function Loader() {
-    const {euSign, setEUSign} = useContext(EUSignContext);
+    const {setEUSign} = useContext(EUSignContext);
 
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
 
+    const initLibrary = () => {
+        setLoading(true);
+
+        EUSignCPFrontend.loadLibrary()
+            .then((library) => library.initializeLibrary(CAs, CACerts))
+            .then((library) => {
+                setEUSign(library);
+                setLoading(false);
+            })
+            .catch((e) => {
+                console.log(e)
+                setError(e);
+                setLoading(false);
+            });
+    }
 
     useEffect(() => {
-        if (euSign == null) {
-            setLoading(true);
-
-            EUSignCPFrontend.loadLibrary()
-                .then((library) => library.initializeLibrary(CAs, CACerts))
-                .then((library) => {
-                    setEUSign(library);
-                    setLoading(false);
-                })
-                .catch((e) => {
-                    console.log(e)
-                    setError(e);
-                    setLoading(false);
-                });
-        }
-    }, [euSign, setEUSign]);
+        initLibrary();
+        return () => {};
+    }, []);
 
     const spinner = (<div className="text-center">
         <div className="spinner-border text-primary" role="status">

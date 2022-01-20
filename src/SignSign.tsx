@@ -107,7 +107,7 @@ function SignSign() {
                     {file && !keyRead && JKSPrivateKeyList && (
                         <select className="form-select mb-1"
                                 onChange={(ev) => setJKSPrivateKeyName(ev.currentTarget.value)}>
-                            {JKSPrivateKeyList.map((item) => <option>{item}</option>)}
+                            {JKSPrivateKeyList.map((item) => <option key={item}>{item}</option>)}
                         </select>
                     )}
                     {file && !keyRead && <FormPassword title='считать' onEnter={setPassword}/>}
