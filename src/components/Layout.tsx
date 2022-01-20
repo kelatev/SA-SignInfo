@@ -1,12 +1,14 @@
-import React from "react";
+import React, {ReactElement} from "react";
 
 interface LayoutProps {
     title: string
     subtitle?: string
     showOverlay?: boolean
+    left: ReactElement
+    right: ReactElement
 }
 
-const Layout: React.FC<LayoutProps> = ({children,title, subtitle, showOverlay = false}) => {
+const Layout: React.FC<LayoutProps> = ({children,title, subtitle, showOverlay = false, left, right}) => {
     return (
         <div className='d-flex flex-column flex-root'>
             <div className={'page d-flex flex-row flex-column-fluid' + (showOverlay ? ' overlay overlay-block' : '')}>
@@ -26,7 +28,14 @@ const Layout: React.FC<LayoutProps> = ({children,title, subtitle, showOverlay = 
 
                     </div>
                     <div id='kt_content' className='content d-flex flex-column flex-column-fluid px-10'>
-                        {children}
+                        <div className='row gy-5 g-xl-10'>
+                            <div className='col-xl-6'>
+                                {left}
+                            </div>
+                            <div className='col-xl-6'>
+                                {right}
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

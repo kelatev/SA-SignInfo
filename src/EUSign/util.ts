@@ -1,4 +1,12 @@
 import {EndUserLibraryLoader, EUSignCP} from "./eusw";
+import {
+    EndUserCMPSettings,
+    EndUserFileStoreSettings, EndUserLDAPSettings,
+    EndUserModeSettings,
+    EndUserOCSPAccessInfoModeSettings, EndUserOCSPAccessInfoSettings,
+    EndUserOCSPSettings,
+    EndUserTSPSettings
+} from "./types";
 
 /* Налаштування серверів АЦСК */
 import CAs from './data/CAs.json';
@@ -11,6 +19,7 @@ const CACerts = [
 interface CASettingsInterface {
     address: string
     ocspAccessPointAddress: string
+    ocspAccessPointPort: string
     cmpAddress: string
     tspAddress: string
     tspAddressPort: string
@@ -20,7 +29,7 @@ const CADefaultSettings: CASettingsInterface | null = null;
 
 /* Ініціалізація налаштувань криптографічної бібліотеки */
 function SetSettings(euSign: EUSignCP, CAs: any[], CASettings: CASettingsInterface | null) {
-    let offline = false;
+    let offline = true;
     let useOCSP = false;
     let useCMP = false;
 
@@ -28,85 +37,86 @@ function SetSettings(euSign: EUSignCP, CAs: any[], CASettings: CASettingsInterfa
     useOCSP = (!offline && (CASettings && CASettings.ocspAccessPointAddress !== '')) || false;
     useCMP = (!offline && (CASettings && CASettings.cmpAddress !== '')) || false;
 
-    // @ts-ignore
     //euSign.SetJavaStringCompliant(true);
+    euSign.SetRuntimeParameter(euSign.EU_SAVE_SETTINGS_PARAMETER, euSign.EU_SETTINGS_ID_NONE);
 
-    let settings1 = euSign.CreateFileStoreSettings();
     // @ts-ignore
-    settings1.SetPath('');
-    // @ts-ignore
-    settings1.SetSaveLoadedCerts(false);
+    let settings1: EndUserFileStoreSettings = euSign.CreateFileStoreSettings();
+    //settings1.SetPath('');
+    //settings1.SetSaveLoadedCerts(false);
+    /*if (!settings1.GetPath()) {
+        settings1.SetPath('C:\\MasterD\\MD-Declaration\\EC_EXCHANGE\\Certificates');
+    }*/
+    settings1.SetPath("");
+    settings1.SetAutoRefresh(true);
+    settings1.SetSaveLoadedCerts(true);
+    settings1.SetExpireTime(3600);
+    settings1.SetCheckCRLs(false);
+    settings1.SetOwnCRLsOnly(false);
+    settings1.SetAutoDownloadCRLs(false);
+    settings1.SetFullAndDeltaCRLs(false);
     euSign.SetFileStoreSettings(settings1);
 
-    let settings2 = euSign.CreateModeSettings();
     // @ts-ignore
+    let settings2: EndUserModeSettings = euSign.CreateModeSettings();
     settings2.SetOfflineMode(offline);
     euSign.SetModeSettings(settings2);
 
     let settings3 = euSign.CreateProxySettings();
     euSign.SetProxySettings(settings3);
 
-    let settings4 = euSign.CreateTSPSettings();
     // @ts-ignore
+    let settings4: EndUserTSPSettings = euSign.CreateTSPSettings();
     settings4.SetGetStamps(!offline);
     if (!offline) {
         if (CASettings && CASettings.tspAddress !== '') {
-            // @ts-ignore
             settings4.SetAddress(CASettings.tspAddress);
-            // @ts-ignore
             settings4.SetPort(CASettings.tspAddressPort);
         } else if (CADefaultSettings) {
-            // @ts-ignore
             settings4.SetAddress(CADefaultSettings.tspAddress);
-            // @ts-ignore
             settings4.SetPort(CADefaultSettings.tspAddressPort);
         }
     }
     euSign.SetTSPSettings(settings4);
 
-    let settings5 = euSign.CreateOCSPSettings();
+    // @ts-ignore
+    let settings5: EndUserOCSPSettings = euSign.CreateOCSPSettings();
     if (useOCSP) {
-        // @ts-ignore
         settings5.SetUseOCSP(true);
-        // @ts-ignore
         settings5.SetBeforeStore(true);
-        // @ts-ignore
         if (CASettings) settings5.SetAddress(CASettings.ocspAccessPointAddress);
-        // @ts-ignore
         if (CASettings) settings5.SetPort(CASettings.ocspAccessPointPort);
     }
     euSign.SetOCSPSettings(settings5);
 
-    let settings6 = euSign.CreateOCSPAccessInfoModeSettings();
     // @ts-ignore
+    let settings6: EndUserOCSPAccessInfoModeSettings = euSign.CreateOCSPAccessInfoModeSettings();
     settings6.SetEnabled(true);
     euSign.SetOCSPAccessInfoModeSettings(settings6);
-    let settings7 = euSign.CreateOCSPAccessInfoSettings();
+
+    // @ts-ignore
+    let settings7: EndUserOCSPAccessInfoSettings = euSign.CreateOCSPAccessInfoSettings();
     for (let i = 0; i < CAs.length; i++) {
-        // @ts-ignore
         settings7.SetAddress(CAs[i].ocspAccessPointAddress);
-        // @ts-ignore
         settings7.SetPort(CAs[i].ocspAccessPointPort);
 
         for (let j = 0; j < CAs[i].issuerCNs.length; j++) {
-            // @ts-ignore
             settings7.SetIssuerCN(CAs[i].issuerCNs[j]);
             euSign.SetOCSPAccessInfoSettings(settings7);
         }
     }
 
-    let settings8 = euSign.CreateCMPSettings();
     // @ts-ignore
+    let settings8: EndUserCMPSettings = euSign.CreateCMPSettings();
     settings8.SetUseCMP(useCMP);
     if (useCMP) {
-        // @ts-ignore
         if (CASettings) settings8.SetAddress(CASettings.cmpAddress);
-        // @ts-ignore
         settings8.SetPort('80');
     }
     euSign.SetCMPSettings(settings8);
 
-    let settings9 = euSign.CreateLDAPSettings();
+    // @ts-ignore
+    let settings9: EndUserLDAPSettings = euSign.CreateLDAPSettings();
     euSign.SetLDAPSettings(settings9);
 }
 
