@@ -4,12 +4,12 @@ import TimelineItem from "./TimelineItem";
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 
-interface SignDataProps {
+interface SignInfoDataProps {
     has: boolean
     data: string | undefined
 }
 
-function SignInfoData(props: SignDataProps) {
+function SignInfoData(props: SignInfoDataProps) {
     const [dataShow, setDataShow] = useState(false);
 
     const handleClose = () => setDataShow(false);
