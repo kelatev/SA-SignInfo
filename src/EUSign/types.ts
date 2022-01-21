@@ -238,6 +238,13 @@ export interface EndUserCertificate {
     data: any
 }
 
+export interface EndUserPrivateKeyInfo {
+    GetPrivateKey(): Uint8Array
+    SetPrivateKey(issuerCN: Uint8Array): void
+    GetPrivateKeyInfo(): Uint8Array
+    SetPrivateKeyInfo(address: Uint8Array): void
+}
+
 export interface EndUserJKSPrivateKey {
     GetCertificates(): Uint8Array[]
     GetPrivateKey(): Uint8Array

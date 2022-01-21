@@ -80,8 +80,9 @@ function SignSign() {
                         await euSign.ResetPrivateKey();
                     }
                     /* Зчитування ключа */
-                    console.log(euSign.ReadPrivateKeyBinary(privateKey, password))
-                    console.log(euSign.IsPrivateKeyReaded())
+                    console.log(await euSign.GetKeyInfoBinary(privateKey, password))
+                    console.log(await euSign.ReadPrivateKeyBinary(privateKey, password))
+                    console.log(await euSign.IsPrivateKeyReaded())
 
                     //console.log(euSign.ShowOwnCertificate())
                     setKeyRead(true);

@@ -7,7 +7,7 @@ import {
     EndUserModeSettings,
     EndUserOCSPAccessInfoModeSettings,
     EndUserOCSPAccessInfoSettings,
-    EndUserOCSPSettings, EndUserTimeInfo, EndUserTSPSettings
+    EndUserOCSPSettings, EndUserPrivateKeyInfo, EndUserTimeInfo, EndUserTSPSettings
 } from "./types";
 
 export default class EUSignCPPromise {
@@ -483,7 +483,22 @@ export default class EUSignCPPromise {
 
 
 
+    // Отримання інформації про відкритий ключ(і) користувача. Інформація може бути
+    // використана для отримання сертифіката(ів) користувача з CMP-сервера
+    // або файлового сховища. Повертається інформація про відкритий ключ(і)
+    GetKeyInfoBinary(privateKey: Uint8Array, password: string): Promise<EndUserPrivateKeyInfo> {
+        return new Promise((resolve, reject) => {
+            this.euSign.GetKeyInfoBinary(privateKey, password, resolve, reject);
+        })
+    }
 
+    // Отримання відкритої інформації про особистий ключ, може бути використана для
+    // отримання сертифіката користувача, з сервера CMP або файлового сховища
+    GetKeyInfoFile(privateKeyFileName: string, password: string): Promise<EndUserPrivateKeyInfo> {
+        return new Promise((resolve, reject) => {
+            this.euSign.GetKeyInfoFile(privateKeyFileName, password, resolve, reject);
+        })
+    }
 
     // Отримання особистого ключа з контейнера JKS
     EnumJKSPrivateKeys(container: Uint8Array, index: number): Promise<string> {
