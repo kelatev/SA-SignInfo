@@ -1,16 +1,37 @@
-import {EUSignCP} from "./eusw";
+import {EUSignCP, EndUserCertificate as EndUserCertificateClass} from "./eusw";
 import {
+    EndUserCertificate,
+    EndUserCertificateInfo,
     EndUserCertificateInfoEx,
     EndUserCMPSettings,
-    EndUserFileStoreSettings, EndUserJKSPrivateKey, EndUserKeyMedia,
-    EndUserKeyMediaSettings, EndUserLDAPSettings,
+    EndUserFileStoreSettings,
+    EndUserJKSPrivateKey,
+    EndUserKeyMedia,
+    EndUserKeyMediaSettings,
+    EndUserLDAPSettings,
     EndUserModeSettings,
     EndUserOCSPAccessInfoModeSettings,
     EndUserOCSPAccessInfoSettings,
-    EndUserOCSPSettings, EndUserPrivateKeyInfo, EndUserTimeInfo, EndUserTSPSettings
+    EndUserOCSPSettings,
+    EndUserPrivateKeyInfo,
+    EndUserTimeInfo,
+    EndUserTSPSettings
 } from "./types";
 
 export default class EUSignCPPromise {
+    EU_SUBJECT_TYPE_CA = 1;
+    EU_SUBJECT_TYPE_CA_SERVER = 2;
+    EU_SUBJECT_TYPE_RA_ADMINISTRATOR = 3;
+    EU_SUBJECT_TYPE_END_USER = 4;
+    EU_SUBJECT_CA_SERVER_SUB_TYPE_UNDIFFERENCED = 0;
+    EU_SUBJECT_CA_SERVER_SUB_TYPE_CMP = 1;
+    EU_SUBJECT_CA_SERVER_SUB_TYPE_TSP = 2;
+    EU_SUBJECT_CA_SERVER_SUB_TYPE_OCSP = 3;
+    EU_CERT_KEY_TYPE_UNKNOWN = 0;
+    EU_CERT_KEY_TYPE_DSTU4145 = 1;
+    EU_CERT_KEY_TYPE_RSA = 2;
+    EU_CERT_KEY_TYPE_ECDSA = 4;
+
     constructor(public euSign: EUSignCP) {
     }
 
@@ -222,9 +243,9 @@ export default class EUSignCPPromise {
     }
 
     // Встановлення інформації, щодо використання точок доступу до OCSP-серверів
-    SetOCSPAccessInfoModeSettings (settings: EndUserOCSPAccessInfoModeSettings): Promise<void> {
+    SetOCSPAccessInfoModeSettings(settings: EndUserOCSPAccessInfoModeSettings): Promise<void> {
         return new Promise((resolve, reject) => {
-            this.euSign.SetOCSPAccessInfoModeSettings (settings, resolve, reject);
+            this.euSign.SetOCSPAccessInfoModeSettings(settings, resolve, reject);
         })
     }
 
@@ -251,18 +272,18 @@ export default class EUSignCPPromise {
     }
 
     // Встановлення інформації, щодо використання точки доступу до OCSP-серверу
-    SetOCSPAccessInfoSettings  (settings: EndUserOCSPAccessInfoSettings): Promise<void> {
+    SetOCSPAccessInfoSettings(settings: EndUserOCSPAccessInfoSettings): Promise<void> {
         return new Promise((resolve, reject) => {
-            this.euSign.SetOCSPAccessInfoSettings  (settings, resolve, reject);
+            this.euSign.SetOCSPAccessInfoSettings(settings, resolve, reject);
         })
     }
 
     // Перелічення точок доступу до OCSP-серверів ЦСК. Повертається інформація про
     // параметри точки доступу до OCSP-серверу або null, якщо перелік
     // закінчено
-    EnumOCSPAccessInfoSettings (index: number): Promise<EndUserOCSPAccessInfoSettings> {
+    EnumOCSPAccessInfoSettings(index: number): Promise<EndUserOCSPAccessInfoSettings> {
         return new Promise((resolve, reject) => {
-            this.euSign.EnumOCSPAccessInfoSettings (index, resolve, reject);
+            this.euSign.EnumOCSPAccessInfoSettings(index, resolve, reject);
         })
     }
 
@@ -347,6 +368,23 @@ export default class EUSignCPPromise {
     }
 
     //А.5.1.4 Функції роботи з сховищем сертифікатів та СВС
+
+    /* Отримання детальної інформації про сертифікат.
+    * Повертає детальну інформацію про сертифікат
+    */
+    ParseCertificate(certificate: Uint8Array): Promise<EndUserCertificateInfo> {
+        return new Promise((resolve, reject) => {
+            this.euSign.ParseCertificate(certificate, resolve, reject);
+        })
+    }
+
+    // Отримання розширеної детальної інформації про сертифікат.
+    // Повертає розширеної детальну інформацію про сертифікат
+    ParseCertificateEx(certificate: Uint8Array): Promise<EndUserCertificateInfoEx> {
+        return new Promise((resolve, reject) => {
+            this.euSign.ParseCertificateEx(certificate, resolve, reject);
+        })
+    }
 
     //А.5.1.5 Функції роботи з особистим ключем та носієм ключової інформації
 
@@ -482,7 +520,6 @@ export default class EUSignCPPromise {
     }
 
 
-
     // Отримання інформації про відкритий ключ(і) користувача. Інформація може бути
     // використана для отримання сертифіката(ів) користувача з CMP-сервера
     // або файлового сховища. Повертається інформація про відкритий ключ(і)
@@ -507,6 +544,18 @@ export default class EUSignCPPromise {
         })
     }
 
+    async ListJKSPrivateKeys(container: Uint8Array): Promise<string[]> {
+        const _JKSPrivateKeysList = [];
+        let i = 0;
+        let alias = await this.EnumJKSPrivateKeys(container, i);
+        while (alias) {
+            _JKSPrivateKeysList.push(alias);
+            i++;
+            alias = await this.EnumJKSPrivateKeys(container, i);
+        }
+        return _JKSPrivateKeysList;
+    }
+
     // Перелічення особистих ключів в контейнері JKS.
     EnumJKSPrivateKeysFile(fileName: string, index: number): Promise<string> {
         return new Promise((resolve, reject) => {
@@ -519,6 +568,35 @@ export default class EUSignCPPromise {
         return new Promise((resolve, reject) => {
             this.euSign.GetJKSPrivateKey(container, keyAlias, resolve, reject);
         })
+    }
+
+    // Перелічення особистих ключів в контейнері JKS.
+    async GetJKSPrivateKeyS(container: Uint8Array): Promise<EndUserJKSPrivateKey[]> {
+        const keyList = await this.ListJKSPrivateKeys(container);
+
+        return await Promise.all(keyList.map(async (alias) => {
+            const privateKey = await this.GetJKSPrivateKey(container, alias);
+            privateKey.info = {alias: alias, certificates: []};
+
+            for (let i = 0, len = privateKey.GetCertificates().length; i < len; i++) {
+                const certificate = privateKey.GetCertificate(i);
+                const certificateInfoEx = await this.ParseCertificateEx(certificate);
+
+                if(certificateInfoEx.GetSubjType() === this.EU_SUBJECT_TYPE_END_USER) {
+                    //console.log('certificateInfoEx', certificateInfoEx)
+                    //t.GetPublicKeyType() == i.EU_CERT_KEY_TYPE_DSTU4145
+                    // && (t.GetKeyUsageType() & i.EU_KEY_USAGE_DIGITAL_SIGNATURE) == i.EU_KEY_USAGE_DIGITAL_SIGNATURE
+                    // && (a.digitalStamp = t.GetExtKeyUsages().indexOf(i.EU_UA_OID_EXT_KEY_USAGE_STAMP) > -1);
+
+                    const userCertificate = new EndUserCertificateClass() as unknown as EndUserCertificate;
+                    userCertificate.SetData(certificate);
+                    userCertificate.SetInfoEx(certificateInfoEx);
+                    privateKey.info.certificates.push(userCertificate);
+                }
+            }
+
+            return privateKey;
+        }))
     }
 
     // Перелічення особистих ключів в контейнері JKS.

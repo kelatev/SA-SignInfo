@@ -2983,7 +2983,7 @@ EndUserTransferableObject.makeTransferable(EndUserCertificateInfoEx);
 
 //--------------------------------------------------------------------------------
 
-var EndUserCertificate = function () {
+export const EndUserCertificate = function () {
     this.setClassInfo('EndUserCertificate', 1, true, true);
 
     this.fields = {

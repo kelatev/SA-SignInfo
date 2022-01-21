@@ -6,15 +6,16 @@ import TimelineItemFile from "./components/TimelineItemFile";
 import {FileInterface} from "./components/FormFile";
 import FormPassword from "./components/FormPassword";
 import Card from "./components/Card";
+import {EndUserJKSPrivateKey} from "./EUSign/types";
 
 function SignSign() {
     const {euSign} = useContext(EUSignContext);
 
     const [file, setFile] = useState<FileInterface | null>();
     const [fileContainer, setFileContainer] = useState<Uint8Array | null>();
-    const [JKSPrivateKeyList, setJKSPrivateKeyList] = useState<string[]>();
-    const [JKSPrivateKeyName, setJKSPrivateKeyName] = useState<string>();
-    const [privateKey, setPrivateKey] = useState<Uint8Array>();
+    const [userJKSPrivateKeys, setUserJKSPrivateKeys] = useState<EndUserJKSPrivateKey[]>();
+    const [fileAliasSelect, setFileAliasSelect] = useState<string>();
+    const [privateKey, setPrivateKey] = useState<EndUserJKSPrivateKey>();
     const [password, setPassword] = useState<string | null>();
     const [keyRead, setKeyRead] = useState<boolean>();
 
@@ -38,17 +39,11 @@ function SignSign() {
                 try {
                     //console.log(euSign.GetSignsCount(content))
                     //console.log(euSign.GetSignerInfo(0, content));
-                    const _JKSPrivateKeysList = [];
-                    let i = 0;
-                    let alias = await euSign.EnumJKSPrivateKeys(fileContainer, i);
-                    while (alias) {
-                        _JKSPrivateKeysList.push(alias);
-                        i++;
-                        alias = await euSign.EnumJKSPrivateKeys(fileContainer, i);
-                    }
-                    setJKSPrivateKeyList(_JKSPrivateKeysList);
-                    if (_JKSPrivateKeysList.length > 0) {
-                        setJKSPrivateKeyName(_JKSPrivateKeysList[0]);
+
+                    const userJKSPrivateKeys = await euSign.GetJKSPrivateKeyS(fileContainer);
+                    setUserJKSPrivateKeys(userJKSPrivateKeys);
+                    if (userJKSPrivateKeys.length > 0) {
+                        setFileAliasSelect(userJKSPrivateKeys[0].info.alias);
                     }
                 } catch (e: any) {
                     console.log(e)
@@ -58,19 +53,17 @@ function SignSign() {
     }, [euSign, fileContainer]);
 
     useEffect(() => {
-        if (euSign && fileContainer && JKSPrivateKeyName) {
-            (async function () {
-                try {
-                    const JKSPrivateKey = await euSign.GetJKSPrivateKey(fileContainer, JKSPrivateKeyName);
-
-                    setPrivateKey(JKSPrivateKey.GetPrivateKey());
-                } catch (e: any) {
-                    console.log(e)
-                }
-            })();
+        if (euSign && fileContainer && userJKSPrivateKeys && fileAliasSelect) {
+            try {
+                const JKSPrivateKey = userJKSPrivateKeys.filter((item) => item.info.alias === fileAliasSelect);
+                setPrivateKey(JKSPrivateKey[0]);
+            } catch (e: any) {
+                console.log(e)
+            }
         }
-    }, [euSign, fileContainer, JKSPrivateKeyName]);
+    }, [euSign, fileContainer, userJKSPrivateKeys, fileAliasSelect]);
 
+    //OnReadPKey
     useEffect(() => {
         if (euSign && privateKey && password) {
             console.log('read');
@@ -80,8 +73,8 @@ function SignSign() {
                         await euSign.ResetPrivateKey();
                     }
                     /* Зчитування ключа */
-                    console.log(await euSign.GetKeyInfoBinary(privateKey, password))
-                    console.log(await euSign.ReadPrivateKeyBinary(privateKey, password))
+                    console.log(await euSign.GetKeyInfoBinary(privateKey.GetPrivateKey(), password))
+                    console.log(await euSign.ReadPrivateKeyBinary(privateKey.GetPrivateKey(), password))
                     console.log(await euSign.IsPrivateKeyReaded())
 
                     //console.log(euSign.ShowOwnCertificate())
@@ -94,7 +87,6 @@ function SignSign() {
     }, [euSign, privateKey, password]);
 
     //GetPrivateKeyOwnerInfo
-    //GetKeyInfoBinary
 
     return (
         <Card title='Подпись файла' backgroundColor='#CBD4F4'>
@@ -105,10 +97,11 @@ function SignSign() {
                     <TimelineItemFile onFileChange={setFile}
                                       accept='.dat,.pfx,.pk8,.zs2,.jks'
                                       hint='Особистий ключ (Key-6.dat, *.pfx, *.pk8, *.zs2 або *.jks)'/>
-                    {file && !keyRead && JKSPrivateKeyList && (
+                    {file && !keyRead && userJKSPrivateKeys && (
                         <select className="form-select mb-1"
-                                onChange={(ev) => setJKSPrivateKeyName(ev.currentTarget.value)}>
-                            {JKSPrivateKeyList.map((item) => <option key={item}>{item}</option>)}
+                                onChange={(ev) => setFileAliasSelect(ev.currentTarget.value)}>
+                            {userJKSPrivateKeys.map((item) => <option
+                                key={item.info.alias}>{item.info.alias} ({item.info.certificates[0].GetInfoEx().GetSubjCN()})</option>)}
                         </select>
                     )}
                     {file && !keyRead && <FormPassword title='считать' onEnter={setPassword}/>}

@@ -29,15 +29,15 @@ function SignInfoSigner(props: SignerProps) {
     return (
         <TimelineItem title='Подписант' icon={IconCoding6}>
             <div>
-                issuer: {props.data.issuer} <br />
-                subject: {props.data.subject} <br />
-                subjEDRPOUCode: {props.data.subjEDRPOUCode} <br />
-                subjDRFOCode: {props.data.subjDRFOCode} <br />
-                certBeginTime: {props.data.certBeginTime.toString()} <br />
-                certEndTime: {props.data.certEndTime.toString()} <br />
-                isPrivKeyTimesAvail: {props.data.isPrivKeyTimesAvail.toString()} <br />
-                privKeyBeginTime: {props.data.privKeyBeginTime.toString()} <br />
-                privKeyEndTime: {props.data.privKeyEndTime.toString()} <br />
+                issuer: {props.data.GetIssuer()} <br />
+                subject: {props.data.GetSubject()} <br />
+                subjEDRPOUCode: {props.data.GetSubjEDRPOUCode()} <br />
+                subjDRFOCode: {props.data.GetSubjDRFOCode()} <br />
+                certBeginTime: {props.data.GetCertBeginTime().toString()} <br />
+                certEndTime: {props.data.GetCertEndTime().toString()} <br />
+                isPrivKeyTimesAvail: {props.data.IsPrivKeyTimesAvail().toString()} <br />
+                privKeyBeginTime: {props.data.GetPrivKeyBeginTime().toString()} <br />
+                privKeyEndTime: {props.data.GetPrivKeyEndTime().toString()} <br />
             </div>
 
             <Button onClick={handleShow} variant="light" size="sm" className="ms-2">json</Button>

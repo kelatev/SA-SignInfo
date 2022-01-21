@@ -3,6 +3,7 @@ import {EndUserLibraryLoader, EUSignCP} from "./eusw";
 
 export default class EUSignCPFrontend extends EUSignCPPromise {
     CAs: any[] | undefined;
+    m_context: any;
 
     static loadLibrary(withLog: boolean = false): Promise<EUSignCPFrontend> {
         return new Promise((resolve, reject) => {
@@ -114,5 +115,7 @@ export default class EUSignCPFrontend extends EUSignCPPromise {
 
         let settings9 = this.CreateLDAPSettings();
         this.SetLDAPSettings(settings9).then(r => {});
+
+        this.SetRuntimeParameter(this.euSign.EU_RESOLVE_OIDS_PARAMETER, 0).then(r => {});
     }
 }
