@@ -56,13 +56,13 @@ export default class EUSignCPFrontend extends EUSignCPPromise {
             })
     }
 
-    loadCertificates(certsFilePathes: string[]) {
-        if (!certsFilePathes) {
+    loadCertificates(certsFilePaths: string[]) {
+        if (!certsFilePaths) {
             return;
         }
 
-        for (let i = 0; i < certsFilePathes.length; i++) {
-            const path = certsFilePathes[i];
+        for (let i = 0; i < certsFilePaths.length; i++) {
+            const path = certsFilePaths[i];
             fetch(path)
                 .then((response) => response.blob())
                 .then((blob) => blob.arrayBuffer())

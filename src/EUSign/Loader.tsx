@@ -3,8 +3,6 @@ import EUSignContext from '../context/EUSign';
 import Modal from "react-bootstrap/Modal";
 import EUSignCPFrontend from "./EUSignCPFrontend";
 
-//import EUSign from '@mdoffice/ua-signature';
-
 /* Налаштування серверів АЦСК */
 const CAs = '/CAs.json';
 /* Масив з шляхом до кореневих сертификатів ЦЗО та ЦСК */

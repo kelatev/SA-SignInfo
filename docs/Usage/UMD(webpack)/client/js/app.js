@@ -18,22 +18,22 @@ let g_isNeedReadNewKey = false;
 
 //================================================================================
 
-var eu_wait = function(first) { 
-	return new (function() { 
+var eu_wait = function(first) {
+	return new (function() {
 		var self = this;
 		var callback = function() {
 			var args;
 			if(self.deferred.length) {
-				args = [].slice.call(arguments); 
-				args.unshift(callback); 
-				self.deferred[0].apply(self, args); 
-				self.deferred.shift(); 
+				args = [].slice.call(arguments);
+				args.unshift(callback);
+				self.deferred[0].apply(self, args);
+				self.deferred.shift();
 			}
 		}
 		this.deferred = [];
 		this.eu_wait = function(run) {
-			this.deferred.push(run); 
-			return self; 
+			this.deferred.push(run);
+			return self;
 		}
 		first(callback);
 	});
@@ -54,13 +54,13 @@ function loadCryptoLibrary(onSuccess, onError) {
 		IEUSignCP.EndUserLibraryLoader.LIBRARY_TYPE_DEFAULT, "euSign");
 
 	loader.onload = function(library) {
-		log("Libary loaded");
+		log("Library loaded");
 
 		g_euSign = library;
 		onSuccess();
 	};
 	loader.onerror = function(msg, errorCode, libraryOrNull){
-		log("Libary load failed. Error - " + msg);
+		log("Library load failed. Error - " + msg);
 
 		onError();
 	};
@@ -218,7 +218,7 @@ function getKMDevices(typeIndex, onSuccess, onError) {
 			function (device) {
 				if (device == null || device == '') {
 					log("Get key media devices. Devices - " + kmDevices);
-					
+
 					onSuccess(kmDevices);
 					return;
 				}
@@ -228,7 +228,7 @@ function getKMDevices(typeIndex, onSuccess, onError) {
 			},
 			function (e) {
 				log("Get key media devices failed. Error - " + e);
-				
+
 				onError(e);
 			});
 	}
@@ -251,16 +251,16 @@ function updateKMTypes(onSuccess, onError) {
 		getKMTypes(runNext, _onError);
 	}).eu_wait(function(runNext, kmTypes) {
 		$('#kmTypes').empty();
-		
+
 		if (kmTypes.length != 0) {
 			$.each(kmTypes, function (index, value) {
 				$('#kmTypes').append(
-					$('<option/>', { 
+					$('<option/>', {
 						value: value,
-						text : value 
+						text : value
 					}));
 			});
-			
+
 			$('#kmTypes').val(kmTypes[0]);
 		}
 
@@ -271,9 +271,9 @@ function updateKMTypes(onSuccess, onError) {
 		if (kmDevices.length != 0) {
 			$.each(kmDevices, function (index, value) {
 				$('#kmDevices').append(
-					$('<option/>', { 
+					$('<option/>', {
 						value: value,
-						text : value 
+						text : value
 					}));
 			});
 
@@ -301,7 +301,7 @@ function updateKMDevices() {
 	};
 
 	eu_wait(function(runNext) {
-		getKMDevices($('#kmTypes').prop('selectedIndex'), 
+		getKMDevices($('#kmTypes').prop('selectedIndex'),
 			runNext, _onError);
 	}).eu_wait(function(runNext, kmDevices) {
 		$('#kmDevices').empty();
@@ -309,9 +309,9 @@ function updateKMDevices() {
 		if (kmDevices.length != 0) {
 			$.each(kmDevices, function (index, value) {
 				$('#kmDevices').append(
-					$('<option/>', { 
+					$('<option/>', {
 						value: value,
-						text : value 
+						text : value
 					}));
 			});
 
@@ -326,12 +326,12 @@ function updateKMDevices() {
 
 function onLoad() {
 	var _onError = function(e) {
-		var error = "Виникла помилка при завантаженні бібліотеки" + 
+		var error = "Виникла помилка при завантаженні бібліотеки" +
 			(e ? (". " + e) : "");
 
 		alert(error);
 	};
-	
+
 	eu_wait(function(runNext) {
 		loadCryptoLibrary(runNext, _onError);
 	}).eu_wait(function(runNext) {
@@ -382,7 +382,7 @@ function onSignFile() {
 	}
 
 	var _onError = function(e) {
-		var error = "Виникла помилка при підписі файлу" + 
+		var error = "Виникла помилка при підписі файлу" +
 			(e ? (". " + e) : "");
 
 		alert(error);
@@ -400,10 +400,10 @@ function onSignFile() {
 	}).eu_wait(function(runNext) {
 		g_isNeedReadNewKey = false;
 		g_euSign.ReadPrivateKeySilently(
-			parseInt(kmType), parseInt(kmDevice), 
+			parseInt(kmType), parseInt(kmDevice),
 			password, runNext, _onError);
 	}).eu_wait(function(runNext) {
-		g_euSign.SignFile(fileToSign, fileSign, 
+		g_euSign.SignFile(fileToSign, fileSign,
 			externalSign, runNext, _onError);
 	}).eu_wait(function(runNext) {
 		alert("Файл успішно підписано");
@@ -418,7 +418,7 @@ window.addEventListener('load', function () {
 	$('#kmTypes').on('change', function(e) {
 		e.preventDefault();
 		updateKMDevices();
-		
+
 		g_isNeedReadNewKey = true;
 	});
 	$('#kmDevices').on('change', function(e) {
@@ -427,21 +427,21 @@ window.addEventListener('load', function () {
 		g_isNeedReadNewKey = true;
 	});
 	$('#selectFile').on('click', function() {
-		g_euSign.SelectFile(true, '', 
+		g_euSign.SelectFile(true, '',
 			function(fileName) {
 				$('#fileToSign').val(fileName || '');
 				if (fileName && $('#fileSign').val() == '')
 					$('#fileSign').val(fileName + ".p7s");
-			}, 
+			},
 			function(e) {
 				$('#fileToSign').val('');
 			});
 	});
 	$('#selectSignFile').on('click', function() {
-		g_euSign.SelectFile(true, '', 
+		g_euSign.SelectFile(true, '',
 			function(fileName) {
 				$('#fileSign').val(fileName || '');
-			}, 
+			},
 			function(e) {
 				$('#fileToSign').val('');
 			});

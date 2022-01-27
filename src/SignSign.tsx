@@ -5,7 +5,7 @@ import Card from "./components/Card";
 import {EndUserJKSPrivateKey} from "./EUSign/types";
 import SignSignInfoBlock from "./components/SignSignInfoBlock";
 import SignSignFileBlock from "./components/SignSignFileBlock";
-import SignSignSignBlock from "./components/SignSignSignBlock";
+import SignSignSignBlock, {signTypeCAdESExt, signTypeCAdESInt} from "./components/SignSignSignBlock";
 import {FileInterface} from "./components/FormFile";
 import TimelineItemFile from "./components/TimelineItemFile";
 import IconCoding6 from "./media/icons/duotune/coding/cod006.svg";
@@ -15,9 +15,9 @@ function SignSign() {
     const {euSign} = useContext(EUSignContext);
 
     const [privateKey, setPrivateKey] = useState<EndUserJKSPrivateKey>();
-    const [signType, setSignType] = useState<string>();
-    const [signAlgo, setSignAlgo] = useState<string>();
-    const [signFormat, setSignFormat] = useState<string>();
+    const [signType, setSignType] = useState<number>();
+    const [signAlgo, setSignAlgo] = useState<number>();
+    const [signFormat, setSignFormat] = useState<number>();
     const [fileToSign, setFileToSign] = useState<FileInterface | null>();
     const [signedData, setSignedData] = useState<string>();
 
@@ -25,10 +25,15 @@ function SignSign() {
         if (euSign && signType && signAlgo && signFormat && fileToSign) {
             (async function () {
                 try {
-                    const signanure = await euSign.Sign(await euSign.BASE64Decode(fileToSign.content));
+                    const data = await euSign.BASE64Decode(fileToSign.content);
+                    if (signType === signTypeCAdESExt) {
+                        setSignedData(await euSign.Sign(data));
+                    } else if (signType === signTypeCAdESInt) {
+                        setSignedData(await euSign.Sign(data));
+                        //setSignedData(await euSign.SignInternal(data));
+                    }
                     //SignInternal
                     //CreateEmptySign
-                    setSignedData(signanure);
                 } catch (e: any) {
                     console.log(e)
                 }
