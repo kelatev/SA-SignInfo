@@ -2,7 +2,7 @@ import React, {useState} from "react";
 import IconFil004 from "../media/icons/duotune/files/fil004.svg";
 import FormFile, {FileInterface} from "./FormFile";
 import Alert from "./Alert";
-import FormBase64 from "./FormBase64";
+import FormBase64Upload from "./FormBase64Upload";
 
 interface TimelineItemFileInterface {
     onFileChange: (file: FileInterface | null) => void
@@ -61,7 +61,7 @@ const TimelineItemFile: React.FC<TimelineItemFileInterface> = ({onFileChange, ac
                     <div>{hint}</div>
                     <FormFile title='Выбрать файл' onChange={handleFileChange} accept={accept}/>
                     &nbsp;
-                    <FormBase64 title='base64' onChange={handleFileChange} />
+                    <FormBase64Upload title='base64' onChange={handleFileChange} />
                 </>
             )}
 

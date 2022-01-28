@@ -25,7 +25,7 @@ function SignInfoData(props: SignInfoDataProps) {
                             <Modal.Title>Подписанные данные</Modal.Title>
                         </Modal.Header>
                         <Modal.Body>
-                            {props.data}
+                            <code>{props.data}</code>
                         </Modal.Body>
                     </Modal>
                 </>

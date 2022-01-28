@@ -10,6 +10,7 @@ import {FileInterface} from "./components/FormFile";
 import TimelineItemFile from "./components/TimelineItemFile";
 import IconCoding6 from "./media/icons/duotune/coding/cod006.svg";
 import SignInfoData from "./components/SignInfoData";
+import FormData from "./components/FormData";
 
 function SignSign() {
     const {euSign} = useContext(EUSignContext);
@@ -53,7 +54,7 @@ function SignSign() {
                 {privateKey && <Timeline.Item title='Файл для підпису' icon={IconCoding6}>
                     <TimelineItemFile onFileChange={setFileToSign}/>
                 </Timeline.Item>}
-                {signedData && <SignInfoData has={true} data={signedData}/>}
+                {signedData && <FormData title={'Результат'} data={signedData} fileName={'sign.p7k'}/>}
             </Timeline>
         </Card>
     );
