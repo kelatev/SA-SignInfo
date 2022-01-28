@@ -1,12 +1,12 @@
-import React from 'react';
+import {createContext} from 'react';
 import EUSignCPFrontend from "../EUSign/EUSignCPFrontend";
 
-type ContextProps = {
-    euSign: EUSignCPFrontend | undefined
-    setEUSign: any
+type ContextInterface = {
+    euSign: EUSignCPFrontend | undefined;
+    setEUSign: (library: EUSignCPFrontend) => void;
 };
 
-export default React.createContext<ContextProps>({
+export default createContext<ContextInterface>({
     euSign: undefined,
-    setEUSign: (_library: any) => {}
+    setEUSign: (_library: EUSignCPFrontend) => {}
 });
