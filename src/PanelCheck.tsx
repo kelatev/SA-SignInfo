@@ -6,11 +6,12 @@ import Card from "./components/Card";
 import Timeline from "./components/Timeline";
 import TimelineItemFile from "./components/TimelineItemFile";
 import SignInfoTime from "./components/SignInfoTime";
-import SignInfoData from "./components/SignInfoData";
 import SignInfoSigner from "./components/SignInfoSigner";
 import IconCoding6 from "./media/icons/duotune/coding/cod006.svg";
+import FormData from "./components/FormData";
+import {Buffer} from 'buffer';
 
-function SignCheck() {
+function PanelCheck() {
     const {euSign} = useContext(EUSignContext);
 
     const [file, setFile] = useState<FileInterface | null>();
@@ -48,8 +49,8 @@ function SignCheck() {
         if (euSign && file?.content && isSignedData) {
             (async function () {
                 try {
-                    //Buffer.from(, 'base64')
-                    setSignedData(await euSign.GetDataFromSignedData(file.content));
+                    const data = await euSign.GetDataFromSignedData(file.content);
+                    setSignedData(Buffer.from(data).toString('base64'));
                 } catch (e: any) {
                     console.log(e)
                     setFileError(e.toString());
@@ -68,13 +69,13 @@ function SignCheck() {
                 <Timeline.Item title='Подпись' icon={IconCoding6}>
                     <TimelineItemFile onFileChange={setFile} error={fileError}/>
                 </Timeline.Item>
-                {isSignedData != null && <SignInfoData has={isSignedData} data={signedData}/>}
+                {isSignedData === true &&
+                    <FormData title={'Файл без підпису'} base64Data={signedData} showAsAscii={true} fileName={file?.name.replace('.p7s', '')}/>}
                 {signTime && <SignInfoTime data={signTime}/>}
                 {signerInfo && <SignInfoSigner data={signerInfo}/>}
-                {signsCount}
             </Timeline>
         </Card>
     );
 }
 
-export default SignCheck;
+export default PanelCheck;

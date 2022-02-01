@@ -2,8 +2,8 @@ import React, {useState} from 'react';
 import EUSignContext from './context/EUSign';
 import EUSignCPFrontend from "./EUSign/EUSignCPFrontend";
 import Loader from "./EUSign/Loader";
-import SignCheck from "./SignCheck";
-import SignSign from "./SignSign";
+import PanelCheck from "./PanelCheck";
+import PanelSign from "./PanelSign";
 import Layout from "./components/Layout";
 
 function App() {
@@ -16,8 +16,8 @@ function App() {
                 title="SA - UA Sign"
                 subtitle="ЕЦП (ДСТУ 4145)"
                 showOverlay={!euSign}
-                left={<SignCheck/>}
-                right={<SignSign/>}
+                left={<PanelCheck/>}
+                right={<PanelSign/>}
             />
         </EUSignContext.Provider>
     );

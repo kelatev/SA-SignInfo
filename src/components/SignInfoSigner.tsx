@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {EndUserCertificateInfoEx} from "../EUSign/types";
 import IconCoding6 from "../media/icons/duotune/coding/cod006.svg";
 import TimelineItem from "./TimelineItem";
@@ -6,12 +6,28 @@ import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import SyntaxHighlighter from 'react-syntax-highlighter';
 import {darcula} from 'react-syntax-highlighter/dist/esm/styles/hljs';
+import EUSignContext from "../context/EUSign";
 
 interface SignerProps {
     data: EndUserCertificateInfoEx
 }
 
+const RowDescription: React.FC<{ title: string, description: string }> = ({title, description}) => {
+    return (
+        <div className="d-flex align-items-sm-center mb-2">
+            <div className="d-flex align-items-center flex-row-fluid flex-wrap">
+                <div className="flex-grow-1 me-2">
+                    <span className="text-muted fw-bold d-block fs-7">{title}</span>
+                    <span className="text-gray-800 text-hover-primary fs-6 fw-bolder">{description}</span>
+                </div>
+            </div>
+        </div>
+    );
+}
+
 function SignInfoSigner(props: SignerProps) {
+    const {euSign} = useContext(EUSignContext);
+
     const [show, setShow] = useState(false);
     const [json, setJson] = useState<string>();
 
@@ -27,20 +43,28 @@ function SignInfoSigner(props: SignerProps) {
     }, [props.data]);
 
     return (
-        <TimelineItem title='Подписант' icon={IconCoding6}>
-            <div>
-                issuer: {props.data.GetIssuer()} <br />
-                subject: {props.data.GetSubject()} <br />
-                subjEDRPOUCode: {props.data.GetSubjEDRPOUCode()} <br />
-                subjDRFOCode: {props.data.GetSubjDRFOCode()} <br />
-                certBeginTime: {props.data.GetCertBeginTime().toString()} <br />
-                certEndTime: {props.data.GetCertEndTime().toString()} <br />
-                isPrivKeyTimesAvail: {props.data.IsPrivKeyTimesAvail().toString()} <br />
-                privKeyBeginTime: {props.data.GetPrivKeyBeginTime().toString()} <br />
-                privKeyEndTime: {props.data.GetPrivKeyEndTime().toString()} <br />
-            </div>
+        <TimelineItem title='Підписувачі' icon={IconCoding6}>
+            <RowDescription title={'Підписувач'} description={props.data.GetSubjCN()}/>
+            <RowDescription title={'П.І.Б.'} description={props.data.GetSubjFullName()}/>
+            {props.data.GetSubjEDRPOUCode() &&
+                <RowDescription title={'EDRPOU'} description={props.data.GetSubjEDRPOUCode()}/>}
+            <RowDescription title={'РНОКПП'} description={props.data.GetSubjDRFOCode()}/>
+            <RowDescription title={'Організація (установа)'} description={props.data.GetSubjOrg()}/>
+            {/*Час підпису (підтверджено кваліфікованою позначкою часу для даних від Надавача)*/}
+            <RowDescription title={'Сертифікат виданий'} description={props.data.GetIssuerCN()}/>
+            <RowDescription title={'Серійний номер'} description={props.data.GetSerial()}/>
+            {/*<RowDescription title={'Тип носія особистого ключа'} description={''}/>*/}
+            <RowDescription title={'Алгоритм підпису'} description={euSign?.GetSignAlgo(props.data) || ''}/>
+            {/*<RowDescription title={'Тип підпису'} description={''}/>
+            <RowDescription title={'Тип контейнера'} description={''}/>
+            <RowDescription title={'Формат підпису'} description={''}/>
+            <RowDescription title={'Сертифікат'} description={''}/>*/}
+            {/*
+            keyUsageType
+            subjType
+            subjSubType*/}
 
-            <Button onClick={handleShow} variant="light" size="sm" className="ms-2">json</Button>
+            <Button onClick={handleShow} variant="light" size="sm">json</Button>
             <Modal show={show} onHide={handleClose} size="xl">
                 <Modal.Header closeButton>
                     <Modal.Title>Подписант</Modal.Title>

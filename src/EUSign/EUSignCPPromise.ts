@@ -1,7 +1,7 @@
 import {EndUserCertificate as EndUserCertificateClass, EUSignCP} from "./eusw";
 import EUSignCPCore from "./EUSignCPCore";
 import {
-    EndUserCertificate,
+    EndUserCertificate, EndUserCertificateInfoEx,
     EndUserJKSPrivateKey, EndUserKeyMedia,
 } from "./types";
 
@@ -135,4 +135,48 @@ export default class EUSignCPPromise extends EUSignCPCore {
             return privateKey;
         }))
     }
+
+    GetHashAlgoForCertificate(info: EndUserCertificateInfoEx) {
+        const EU_CTX_SIGN_DSTU4145_WITH_GOST34311 = 1;
+        const EU_CTX_HASH_ALGO_UNKNOWN = 0;
+        const EU_CTX_HASH_ALGO_GOST34311 = 1;
+        const EU_CTX_HASH_ALGO_SHA160 = 2;
+        const EU_CTX_HASH_ALGO_SHA224 = 3;
+        const EU_CTX_HASH_ALGO_SHA256 = 4;
+        return (info.GetPublicKeyType() == EU_CTX_SIGN_DSTU4145_WITH_GOST34311) ?
+            EU_CTX_HASH_ALGO_GOST34311 : EU_CTX_HASH_ALGO_SHA160;
+    }
+
+    /*async VerifyExternalData(data: string, sign: string): Promise<any[]> {
+        const signsInfos = [];
+
+        const signers = await this.GetSignsCount(sign);
+        for (let i = 0; i < signers; i++) {
+            const signerCert = await this.GetSignerInfo(i, sign);
+            const hashAlgo = this.GetHashAlgoForCertificate(signerCert.GetInfoEx());
+            var hashContext = this.HashDataBegin(hashAlgo, signerCert.GetData());
+            var parts = Math.floor(data.length / Module.MAX_DATA_SIZE);
+            var lastPart = data.length % Module.MAX_DATA_SIZE;
+            for (var j = 0; j < parts; j++) {
+                this.HashDataContinue(hashContext, new Uint8Array(
+                    data.buffer, j * Module.MAX_DATA_SIZE, Module.MAX_DATA_SIZE));
+            }
+            if (lastPart) {
+                this.HashDataContinue(hashContext, new Uint8Array(
+                    data.buffer, parts * Module.MAX_DATA_SIZE, lastPart));
+            }
+
+            var hash = this.HashDataEnd(hashContext, false);
+            var useCRL = this.IsUseCRLs(signerCert.GetInfoEx().GetIssuerCN());
+            var signInfo = this.m_context.VerifyHashOnTimeEx(hash, i, sign, null, useCRL, !useCRL);
+            var signFormat = this.GetSignType(i, sign);
+
+            signsInfos.push(CreateSignInfoResult(
+                signInfo, signerCert, signFormat,
+                EUSignContainerType.CAdES | EUSignContainerType.Detached,
+                true));
+        }
+
+        return signsInfos;
+    }*/
 }

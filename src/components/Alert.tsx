@@ -1,39 +1,11 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import {Variant} from "./types";
 import {ReactComponent as IconGen48} from '../media/icons/duotune/general/gen048.svg';
 
 interface AlertProps extends React.HTMLAttributes<HTMLDivElement> {
-    variant?: Variant
     show?: boolean
     onClose?: (a: any, b: any) => void
     title?: string
 }
-
-const AlertHeading = () => {
-
-};
-
-const AlertLink = () => {
-
-};
-
-const propTypes = {
-    /**
-     * The Alert visual variant
-     *
-     * @type {'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'dark' | 'light'}
-     */
-    variant: PropTypes.string,
-};
-
-const defaultProps = {
-    variant: 'primary',
-};
-
-/*const Alert = React.forwardRef<HTMLDivElement, AlertProps>( (uncontrolledProps: AlertProps, ref) => {
-
-});*/
 
 const Alert: React.FC<AlertProps> = ({children, title}) => {
     const icon = (
@@ -53,11 +25,4 @@ const Alert: React.FC<AlertProps> = ({children, title}) => {
     );
 };
 
-Alert.displayName = 'Alert';
-Alert.defaultProps = defaultProps;
-Alert.propTypes = propTypes;
-
-export default Object.assign(Alert, {
-    Link: AlertLink,
-    Heading: AlertHeading,
-});
+export default Alert;
