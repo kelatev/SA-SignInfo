@@ -9,13 +9,12 @@ import SignSignSignBlock, {signTypeCAdESExt, signTypeCAdESInt} from "./component
 import {FileInterface} from "./components/FormFile";
 import TimelineItemFile from "./components/TimelineItemFile";
 import IconCoding6 from "./media/icons/duotune/coding/cod006.svg";
-import SignInfoData from "./components/SignInfoData";
 import FormData from "./components/FormData";
 
 function SignSign() {
     const {euSign} = useContext(EUSignContext);
 
-    const [privateKey, setPrivateKey] = useState<EndUserJKSPrivateKey>();
+    const [privateKey, setPrivateKey] = useState<EndUserJKSPrivateKey | null>();
     const [signType, setSignType] = useState<number>();
     const [signAlgo, setSignAlgo] = useState<number>();
     const [signFormat, setSignFormat] = useState<number>();

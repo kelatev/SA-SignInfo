@@ -8,7 +8,7 @@ interface LayoutProps {
     right: ReactElement
 }
 
-const Layout: React.FC<LayoutProps> = ({children,title, subtitle, showOverlay = false, left, right}) => {
+const Layout: React.FC<LayoutProps> = ({title, subtitle, showOverlay = false, left, right}) => {
     return (
         <div className='d-flex flex-column flex-root'>
             <div className={'page d-flex flex-row flex-column-fluid' + (showOverlay ? ' overlay overlay-block' : '')}>

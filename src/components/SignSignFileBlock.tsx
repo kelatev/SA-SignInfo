@@ -9,7 +9,7 @@ import FormPassword from "./FormPassword";
 import Form from "react-bootstrap/Form";
 
 interface SignSignFileBlockProps {
-    onKeyRead: (key: EndUserJKSPrivateKey) => void
+    onKeyRead: (key: EndUserJKSPrivateKey | null) => void
 }
 
 function SignSignFileBlock(props: SignSignFileBlockProps) {
@@ -35,6 +35,7 @@ function SignSignFileBlock(props: SignSignFileBlockProps) {
         }
         setPassword(null);
         setKeyRead(false);
+        props.onKeyRead(null);
     }, [euSign, file]);
 
     useEffect(() => {

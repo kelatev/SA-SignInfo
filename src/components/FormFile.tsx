@@ -48,4 +48,8 @@ function FormFile(props: FileProps) {
     );
 }
 
+/*function arePropsEqual(prevProps: FileProps, nextProps: FileProps) {
+    return prevProps.title === nextProps.title && prevProps.accept === nextProps.accept && prevProps.onChange === nextProps.onChange;
+}*/
+
 export default FormFile;
