@@ -1,14 +1,14 @@
 import React, {useContext, useEffect, useState} from 'react';
-import {EndUserJKSPrivateKey, EndUserOwnerInfo} from "../EUSign/types";
-import IconCoding6 from "../media/icons/duotune/coding/cod006.svg";
-import EUSignContext from "../context/EUSign";
-import Timeline from "./Timeline";
+import {EndUserJKSPrivateKey, EndUserOwnerInfo} from "../../EUSign/types";
+import IconCoding6 from "../../media/icons/duotune/coding/cod006.svg";
+import EUSignContext from "../../context/EUSign";
+import Timeline from "../Timeline/Timeline";
 
 interface SignSignInfoBlockProps {
     endUserJKSPrivateKey: EndUserJKSPrivateKey
 }
 
-function SignSignInfoBlock(props: SignSignInfoBlockProps) {
+function SignInfo(props: SignSignInfoBlockProps) {
     const {euSign} = useContext(EUSignContext);
 
     const [ownerInfo, setOwnerInfo] = useState<EndUserOwnerInfo>();
@@ -33,4 +33,4 @@ function SignSignInfoBlock(props: SignSignInfoBlockProps) {
     );
 }
 
-export default SignSignInfoBlock;
+export default SignInfo;

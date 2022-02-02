@@ -1,5 +1,5 @@
 import React, {useRef, useState} from 'react';
-import {FileInterface} from "./FormFile";
+import {FileInterface} from "../types";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import FormControl from "react-bootstrap/FormControl";
@@ -10,7 +10,7 @@ interface Base64Props {
     onChange: (file: FileInterface) => void
 }
 
-function FormBase64Upload(props: Base64Props) {
+function FormUploadBase64(props: Base64Props) {
     const [show, setShow] = useState(false);
 
     const handleClose = () => setShow(false);
@@ -52,4 +52,4 @@ function FormBase64Upload(props: Base64Props) {
     );
 }
 
-export default FormBase64Upload;
+export default FormUploadBase64;

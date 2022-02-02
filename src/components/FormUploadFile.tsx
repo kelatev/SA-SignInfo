@@ -1,10 +1,5 @@
 import React from 'react';
-
-export interface FileInterface {
-    content: string
-    name: string
-    size: number
-}
+import {FileInterface} from "../types";
 
 interface FileProps {
     title: string
@@ -12,7 +7,7 @@ interface FileProps {
     onChange: (file: FileInterface) => void
 }
 
-function FormFile(props: FileProps) {
+function FormUploadFile(props: FileProps) {
     let fileReader: FileReader;
     let name: string;
     let size: number;
@@ -52,4 +47,4 @@ function FormFile(props: FileProps) {
     return prevProps.title === nextProps.title && prevProps.accept === nextProps.accept && prevProps.onChange === nextProps.onChange;
 }*/
 
-export default FormFile;
+export default FormUploadFile;

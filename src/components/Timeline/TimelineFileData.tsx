@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import IconFil3 from "../media/icons/duotune/files/fil003.svg";
+import IconFil3 from "../../media/icons/duotune/files/fil003.svg";
 import TimelineItem from "./TimelineItem";
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
@@ -7,10 +7,10 @@ import FormControl from "react-bootstrap/FormControl";
 import {Buffer} from 'buffer';
 import {saveAs} from "file-saver";
 import {CopyToClipboard} from 'react-copy-to-clipboard';
+import {fileSizeName} from "../../utils/fileSizeName";
 
 interface FormDataProps {
     title: string
-    hint?: string
     base64Data: string | undefined
     showAsAscii?: boolean
     fileName?: string
@@ -31,14 +31,10 @@ function base64ToBlob(text: string): Blob {
 
 function base64Size(text: string | undefined): string {
     const bytes = text ? base64ToBuffer(text).length : 0;
-    const sizes = ['B', 'KB', 'MB', 'GB', 'TB'];
-    if (bytes === 0) return 'n/a';
-    const i = parseInt(String(Math.floor(Math.log(bytes) / Math.log(1024))), 10)
-    if (i === 0) return `${bytes} ${sizes[i]}`
-    return `${(bytes / (1024 ** i)).toFixed(1)} ${sizes[i]}`
+    return fileSizeName(bytes);
 }
 
-function FormData(props: FormDataProps) {
+function TimelineFileData(props: FormDataProps) {
     const [base64Show, setBase64Show] = useState(false);
     const data = props.base64Data && props.showAsAscii ? base64ToAscii(props.base64Data) : props.base64Data;
 
@@ -55,7 +51,6 @@ function FormData(props: FormDataProps) {
 
     return (
         <TimelineItem title={props.title} icon={IconFil3}>
-            {props.hint && <span>{props.hint}</span>}
             {data && (
                 <>
                     {props.fileName && (
@@ -84,4 +79,4 @@ function FormData(props: FormDataProps) {
     );
 }
 
-export default FormData;
+export default TimelineFileData;

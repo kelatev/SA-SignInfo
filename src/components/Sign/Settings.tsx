@@ -1,8 +1,8 @@
 import React, {useContext, useEffect, useState} from 'react';
-import IconCoding6 from "../media/icons/duotune/coding/cod006.svg";
-import Timeline from "./Timeline";
+import IconCoding6 from "../../media/icons/duotune/coding/cod006.svg";
+import Timeline from "../Timeline/Timeline";
 import Form from "react-bootstrap/Form";
-import EUSignContext from "../context/EUSign";
+import EUSignContext from "../../context/EUSign";
 
 interface SignSignSignBlockProps {
     onSignTypeSelect: (key: number) => void
@@ -19,7 +19,7 @@ export const signTypeCAdESInt = 1;
 export const signTypeCAdESExt = 2;
 export const signTypeASiCS = 3;
 
-function SignSignSignBlock(props: SignSignSignBlockProps) {
+function Settings(props: SignSignSignBlockProps) {
     const {euSign} = useContext(EUSignContext);
 
     const [signAlgoType, setSignTypeList] = useState<SelectItem[]>();
@@ -133,4 +133,4 @@ function SignSignSignBlock(props: SignSignSignBlockProps) {
     );
 }
 
-export default SignSignSignBlock;
+export default Settings;

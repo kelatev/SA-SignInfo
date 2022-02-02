@@ -1,12 +1,12 @@
 import React, {useState} from 'react';
-import EUSignContext from './context/EUSign';
-import EUSignCPFrontend from "./EUSign/EUSignCPFrontend";
-import Loader from "./EUSign/Loader";
-import PanelCheck from "./PanelCheck";
-import PanelSign from "./PanelSign";
-import Layout from "./components/Layout";
+import EUSignContext from '../context/EUSign';
+import EUSignCPFrontend from "../EUSign/EUSignCPFrontend";
+import Loader from "../EUSign/Loader";
+import PanelCheck from "../components/Check";
+import PanelSign from "../components/Sign";
+import Layout from "../components/Layout";
 
-function App() {
+function Home() {
     const [euSign, setEUSign] = useState<EUSignCPFrontend>();
 
     return (
@@ -23,4 +23,4 @@ function App() {
     );
 }
 
-export default App;
+export default Home;

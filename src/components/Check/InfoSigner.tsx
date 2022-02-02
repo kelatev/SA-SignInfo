@@ -1,15 +1,16 @@
 import React, {useContext, useEffect, useState} from 'react';
-import {EndUserCertificateInfoEx} from "../EUSign/types";
-import IconCoding6 from "../media/icons/duotune/coding/cod006.svg";
-import TimelineItem from "./TimelineItem";
+import {EndUserCertificateInfoEx, EndUserTimeInfo} from "../../EUSign/types";
+import IconCoding6 from "../../media/icons/duotune/coding/cod006.svg";
+import TimelineItem from "../Timeline/TimelineItem";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import SyntaxHighlighter from 'react-syntax-highlighter';
 import {darcula} from 'react-syntax-highlighter/dist/esm/styles/hljs';
-import EUSignContext from "../context/EUSign";
+import EUSignContext from "../../context/EUSign";
 
 interface SignerProps {
-    data: EndUserCertificateInfoEx
+    data: EndUserCertificateInfoEx,
+    time: EndUserTimeInfo
 }
 
 const RowDescription: React.FC<{ title: string, description: string }> = ({title, description}) => {
@@ -25,7 +26,7 @@ const RowDescription: React.FC<{ title: string, description: string }> = ({title
     );
 }
 
-function SignInfoSigner(props: SignerProps) {
+function InfoSigner(props: SignerProps) {
     const {euSign} = useContext(EUSignContext);
 
     const [show, setShow] = useState(false);
@@ -50,7 +51,7 @@ function SignInfoSigner(props: SignerProps) {
                 <RowDescription title={'EDRPOU'} description={props.data.GetSubjEDRPOUCode()}/>}
             <RowDescription title={'РНОКПП'} description={props.data.GetSubjDRFOCode()}/>
             <RowDescription title={'Організація (установа)'} description={props.data.GetSubjOrg()}/>
-            {/*Час підпису (підтверджено кваліфікованою позначкою часу для даних від Надавача)*/}
+            <RowDescription title={'Час підпису (підтверджено кваліфікованою позначкою часу для даних від Надавача)'} description={props.time.GetTime().toString()}/>
             <RowDescription title={'Сертифікат виданий'} description={props.data.GetIssuerCN()}/>
             <RowDescription title={'Серійний номер'} description={props.data.GetSerial()}/>
             {/*<RowDescription title={'Тип носія особистого ключа'} description={''}/>*/}
@@ -79,4 +80,4 @@ function SignInfoSigner(props: SignerProps) {
     );
 }
 
-export default SignInfoSigner;
+export default InfoSigner;

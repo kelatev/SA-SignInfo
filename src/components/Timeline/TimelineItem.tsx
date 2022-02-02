@@ -3,10 +3,10 @@ import React from "react";
 interface TimelineItemInterface {
     icon: string
     title: string
-    time?: string
+    description?: string
 }
 
-const TimelineItem: React.FC<TimelineItemInterface> = ({icon, title, time, children}) => {
+const TimelineItem: React.FC<TimelineItemInterface> = ({icon, title, description, children}) => {
     return (
         /*begin::Timeline item*/
         <div className="timeline-item">
@@ -21,22 +21,14 @@ const TimelineItem: React.FC<TimelineItemInterface> = ({icon, title, time, child
             </div>
             {/*end::Timeline icon*/}
             {/*begin::Timeline content*/}
-            <div className="timeline-content mb-10 mt-n1">
+            <div className="timeline-content mb-8 mt-n1">
                 {/*begin::Timeline heading*/}
                 <div className="pe-3 mb-5">
                     {/*begin::Title*/}
                     <div className="fs-5 fw-bold mb-2 text-white">{title}</div>
                     {/*end::Title*/}
                     {/*begin::Description*/}
-                    {
-                        time && (
-                            <div className="d-flex align-items-center mt-1 fs-6">
-                                {/*begin::Info*/}
-                                <div className="text-white opacity-50 me-2 fs-7">{time}</div>
-                                {/*end::Info*/}
-                            </div>
-                        )
-                    }
+                    {description && <div className="d-flex align-items-center mt-1 fs-6">{description}</div>}
                     {/*end::Description*/}
                 </div>
                 {/*end::Timeline heading*/}

@@ -1,15 +1,14 @@
 import React, {useContext, useEffect, useState} from 'react';
-import EUSignContext from './context/EUSign';
-import {FileInterface} from "./components/FormFile";
-import {EndUserTimeInfo, EndUserCertificateInfoEx} from "./EUSign/types";
-import Card from "./components/Card";
-import Timeline from "./components/Timeline";
-import TimelineItemFile from "./components/TimelineItemFile";
-import SignInfoTime from "./components/SignInfoTime";
-import SignInfoSigner from "./components/SignInfoSigner";
-import IconCoding6 from "./media/icons/duotune/coding/cod006.svg";
-import FormData from "./components/FormData";
+import EUSignContext from '../../context/EUSign';
+import {EndUserTimeInfo, EndUserCertificateInfoEx} from "../../EUSign/types";
+import Card from "../Card";
+import Timeline from "../Timeline/Timeline";
+import TimelineFileSelect from "../Timeline/TimelineFileSelect";
+import InfoSigner from "./InfoSigner";
+import IconCoding6 from "../../media/icons/duotune/coding/cod006.svg";
+import TimelineFileData from "../Timeline/TimelineFileData";
 import {Buffer} from 'buffer';
+import {FileInterface} from "../../types";
 
 function PanelCheck() {
     const {euSign} = useContext(EUSignContext);
@@ -67,12 +66,11 @@ function PanelCheck() {
                  src="/media/illustrations/sigma-1/5.png" />*/}
             <Timeline>
                 <Timeline.Item title='Подпись' icon={IconCoding6}>
-                    <TimelineItemFile onFileChange={setFile} error={fileError}/>
+                    <TimelineFileSelect onFileChange={setFile} error={fileError}/>
                 </Timeline.Item>
                 {isSignedData === true &&
-                    <FormData title={'Файл без підпису'} base64Data={signedData} showAsAscii={true} fileName={file?.name.replace('.p7s', '')}/>}
-                {signTime && <SignInfoTime data={signTime}/>}
-                {signerInfo && <SignInfoSigner data={signerInfo}/>}
+                    <TimelineFileData title={'Файл без підпису'} base64Data={signedData} showAsAscii={true} fileName={file?.name.replace('.p7s', '')}/>}
+                {signerInfo && signTime && <InfoSigner data={signerInfo} time={signTime}/>}
             </Timeline>
         </Card>
     );

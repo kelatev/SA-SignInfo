@@ -1,15 +1,15 @@
 import React, {useContext, useEffect, useState} from "react";
-import EUSignContext from './context/EUSign';
-import Timeline from "./components/Timeline";
-import Card from "./components/Card";
-import {EndUserJKSPrivateKey} from "./EUSign/types";
-import SignSignInfoBlock from "./components/SignSignInfoBlock";
-import SignSignFileBlock from "./components/SignSignFileBlock";
-import SignSignSignBlock, {signTypeCAdESExt, signTypeCAdESInt} from "./components/SignSignSignBlock";
-import {FileInterface} from "./components/FormFile";
-import TimelineItemFile from "./components/TimelineItemFile";
-import IconCoding6 from "./media/icons/duotune/coding/cod006.svg";
-import FormData from "./components/FormData";
+import EUSignContext from '../../context/EUSign';
+import Timeline from "../Timeline/Timeline";
+import Card from "../Card";
+import {EndUserJKSPrivateKey} from "../../EUSign/types";
+import SignInfo from "./SignInfo";
+import SignSelect from "./SignSelect";
+import Settings, {signTypeCAdESExt, signTypeCAdESInt} from "./Settings";
+import TimelineFileSelect from "../Timeline/TimelineFileSelect";
+import IconCoding6 from "../../media/icons/duotune/coding/cod006.svg";
+import TimelineFileData from "../Timeline/TimelineFileData";
+import {FileInterface} from "../../types";
 
 function PanelSign() {
     const {euSign} = useContext(EUSignContext);
@@ -46,14 +46,18 @@ function PanelSign() {
             {/*<img className="mw-100 h-100px mb-7 mx-auto"
                  src="/media/illustrations/sigma-1/4.png" />*/}
             <Timeline>
-                <SignSignFileBlock onKeyRead={setPrivateKey}/>
-                {privateKey && <SignSignInfoBlock endUserJKSPrivateKey={privateKey}/>}
-                {privateKey && <SignSignSignBlock onSignTypeSelect={setSignType} onSignAlgoSelect={setSignAlgo}
-                                                  onSignFormatSelect={setSignFormat}/>}
-                {privateKey && <Timeline.Item title='Файл для підпису' icon={IconCoding6}>
-                    <TimelineItemFile onFileChange={setFileToSign}/>
-                </Timeline.Item>}
-                {signedData && <FormData title={'Результат'} base64Data={signedData} fileName={'sign.p7k'}/>}
+                <SignSelect onKeyRead={setPrivateKey}/>
+                {privateKey && (
+                    <>
+                        <SignInfo endUserJKSPrivateKey={privateKey}/>
+                        <Settings onSignTypeSelect={setSignType} onSignAlgoSelect={setSignAlgo}
+                                  onSignFormatSelect={setSignFormat}/>
+                        <Timeline.Item title='Файл для підпису' icon={IconCoding6}>
+                            <TimelineFileSelect onFileChange={setFileToSign}/>
+                        </Timeline.Item>
+                    </>
+                )}
+                {signedData && <TimelineFileData title={'Результат'} base64Data={signedData} fileName={'sign.p7k'}/>}
             </Timeline>
         </Card>
     );

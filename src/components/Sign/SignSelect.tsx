@@ -1,18 +1,18 @@
 import React, {useContext, useEffect, useState} from 'react';
-import {EndUserJKSPrivateKey} from "../EUSign/types";
-import IconCoding6 from "../media/icons/duotune/coding/cod006.svg";
-import EUSignContext from "../context/EUSign";
-import Timeline from "./Timeline";
-import {FileInterface} from "./FormFile";
-import TimelineItemFile from "./TimelineItemFile";
-import FormPassword from "./FormPassword";
+import {EndUserJKSPrivateKey} from "../../EUSign/types";
+import IconCoding6 from "../../media/icons/duotune/coding/cod006.svg";
+import EUSignContext from "../../context/EUSign";
+import Timeline from "../Timeline/Timeline";
+import TimelineFileSelect from "../Timeline/TimelineFileSelect";
+import FormPassword from "../FormPassword";
 import Form from "react-bootstrap/Form";
+import {FileInterface} from "../../types";
 
 interface SignSignFileBlockProps {
     onKeyRead: (key: EndUserJKSPrivateKey | null) => void
 }
 
-function SignSignFileBlock(props: SignSignFileBlockProps) {
+function SignSelect(props: SignSignFileBlockProps) {
     const {euSign} = useContext(EUSignContext);
 
     const [file, setFile] = useState<FileInterface | null>();
@@ -93,13 +93,16 @@ function SignSignFileBlock(props: SignSignFileBlockProps) {
     }, [euSign, privateKey, keyRead, props]);
 
     return (
-        <Timeline.Item title='Файл ЕЦП' icon={IconCoding6}>
-            <TimelineItemFile onFileChange={setFile}
-                              accept='.dat,.pfx,.pk8,.zs2,.jks'
-                              hint='Особистий ключ (Key-6.dat, *.pfx, *.pk8, *.zs2 або *.jks)'/>
+        <Timeline.Item
+            title='Файл ЕЦП'
+            icon={IconCoding6}
+            description={'Особистий ключ (Key-6.dat, *.pfx, *.pk8, *.zs2 або *.jks)'}
+        >
+            <TimelineFileSelect onFileChange={setFile}
+                                accept='.dat,.pfx,.pk8,.zs2,.jks'/>
             {file && !keyRead && userJKSPrivateKeys && (
                 <Form.Select className="mb-1"
-                        onChange={(ev) => setFileAliasSelect(ev.currentTarget.value)}>
+                             onChange={(ev) => setFileAliasSelect(ev.currentTarget.value)}>
                     {userJKSPrivateKeys.map((item) => <option
                         key={item.info.alias}>{item.info.alias} ({item.info.certificates[0].GetInfoEx().GetSubjCN()})</option>)}
                 </Form.Select>
@@ -109,4 +112,4 @@ function SignSignFileBlock(props: SignSignFileBlockProps) {
     );
 }
 
-export default SignSignFileBlock;
+export default SignSelect;
