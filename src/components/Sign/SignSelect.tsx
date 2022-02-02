@@ -4,7 +4,7 @@ import IconCoding6 from "../../media/icons/duotune/coding/cod006.svg";
 import EUSignContext from "../../context/EUSign";
 import Timeline from "../Timeline/Timeline";
 import TimelineFileSelect from "../Timeline/TimelineFileSelect";
-import FormPassword from "../FormPassword";
+import FormPassword from "../Form/FormPassword";
 import Form from "react-bootstrap/Form";
 import {FileInterface} from "../../types";
 
@@ -20,7 +20,7 @@ function SignSelect(props: SignSignFileBlockProps) {
     const [userJKSPrivateKeys, setUserJKSPrivateKeys] = useState<EndUserJKSPrivateKey[]>();
     const [fileAliasSelect, setFileAliasSelect] = useState<string>();
     const [privateKey, setPrivateKey] = useState<EndUserJKSPrivateKey>();
-    const [password, setPassword] = useState<string | null>();
+    const [password, setPassword] = useState<string>();
     const [keyRead, setKeyRead] = useState<boolean>();
 
     useEffect(() => {
@@ -33,7 +33,7 @@ function SignSelect(props: SignSignFileBlockProps) {
                 }
             })();
         }
-        setPassword(null);
+        setPassword(undefined);
         setKeyRead(false);
         props.onKeyRead(null);
     }, [euSign, file]);

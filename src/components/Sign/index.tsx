@@ -1,7 +1,7 @@
 import React, {useContext, useEffect, useState} from "react";
 import EUSignContext from '../../context/EUSign';
 import Timeline from "../Timeline/Timeline";
-import Card from "../Card";
+import Card from "../Form/Card";
 import {EndUserJKSPrivateKey} from "../../EUSign/types";
 import SignInfo from "./SignInfo";
 import SignSelect from "./SignSelect";

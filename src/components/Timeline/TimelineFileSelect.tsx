@@ -1,8 +1,8 @@
 import React, {useState} from "react";
 import IconFil004 from "../../media/icons/duotune/files/fil004.svg";
-import FormUploadFile from "../FormUploadFile";
-import Alert from "../Alert";
-import FormUploadBase64 from "../FormUploadBase64";
+import FormUploadFile from "../Form/FormUploadFile";
+import AlertDanger from "../Form/AlertDanger";
+import FormUploadBase64 from "../Form/FormUploadBase64";
 import {FileInterface} from "../../types";
 import DetailsFileAction from "./DetailsFileAction";
 
@@ -42,7 +42,7 @@ const TimelineFileSelect: React.FC<TimelineItemFileInterface> = ({onFileChange, 
                 </>
             )}
 
-            {error && <div className='mt-1'><Alert>{error}</Alert></div>}
+            {error && <div className='mt-1'><AlertDanger>{error}</AlertDanger></div>}
         </>
     );
 };

@@ -1,5 +1,5 @@
 import React from 'react';
-import {FileInterface} from "../types";
+import {FileInterface} from "../../types";
 
 interface FileProps {
     title: string
