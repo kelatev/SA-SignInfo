@@ -47,11 +47,13 @@ function InfoSigner(props: SignerProps) {
         <TimelineItem title='Підписувачі' icon={IconCoding6}>
             <RowDescription title={'Підписувач'} description={props.data.GetSubjCN()}/>
             <RowDescription title={'П.І.Б.'} description={props.data.GetSubjFullName()}/>
-            {props.data.GetSubjEDRPOUCode() &&
-                <RowDescription title={'EDRPOU'} description={props.data.GetSubjEDRPOUCode()}/>}
-            <RowDescription title={'РНОКПП'} description={props.data.GetSubjDRFOCode()}/>
+            {props.data.GetSubjDRFOCode() &&
+                <RowDescription title={'РНОКПП'} description={props.data.GetSubjDRFOCode()}/>}
             <RowDescription title={'Організація (установа)'} description={props.data.GetSubjOrg()}/>
-            <RowDescription title={'Час підпису (підтверджено кваліфікованою позначкою часу для даних від Надавача)'} description={props.time.GetTime().toString()}/>
+            {props.data.GetSubjEDRPOUCode() &&
+                <RowDescription title={'Код ЄДРПОУ'} description={props.data.GetSubjEDRPOUCode()}/>}
+            <RowDescription title={'Час підпису (підтверджено кваліфікованою позначкою часу для даних від Надавача)'}
+                            description={props.time.GetTime().toString()}/>
             <RowDescription title={'Сертифікат виданий'} description={props.data.GetIssuerCN()}/>
             <RowDescription title={'Серійний номер'} description={props.data.GetSerial()}/>
             {/*<RowDescription title={'Тип носія особистого ключа'} description={''}/>*/}

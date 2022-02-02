@@ -674,4 +674,19 @@ export default class EUSignCPCore {
             this.m_library.Sign(data, resolve, reject);
         })
     }
+
+    // Формування внутрішнього (підпис знаходиться разом з даними) електронного
+    // цифрового підпису (ЕЦП). Повертається підпис у вигляді BASE64-строки
+    SignInternal(appendCertificate: boolean, data: Uint8Array): Promise<string> {
+        return new Promise((resolve, reject) => {
+            this.m_library.SignInternal(appendCertificate, data, resolve, reject);
+        })
+    }
+
+    // Формування підпису геша за алгоритмом RSA
+    SignRSA(data: Uint8Array, appendCert: boolean, externalSign: boolean): Promise<string> {
+        return new Promise((resolve, reject) => {
+            this.m_library.SignRSA(data, appendCert, externalSign, resolve, reject);
+        })
+    }
 }

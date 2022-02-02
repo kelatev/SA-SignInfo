@@ -26,13 +26,18 @@ function PanelSign() {
             (async function () {
                 try {
                     const data = await euSign.BASE64Decode(fileToSign.content);
-                    if (signType === signTypeCAdESExt) {
-                        setSignedData(await euSign.Sign(data));
-                    } else if (signType === signTypeCAdESInt) {
-                        setSignedData(await euSign.Sign(data));
-                        //setSignedData(await euSign.SignInternal(data));
+
+                    if (signAlgo === euSign.m_library.CERT_KEY_TYPE_DSTU4145) {
+                        if (signType === signTypeCAdESExt) {
+                            setSignedData(await euSign.Sign(data));
+                        } else if (signType === signTypeCAdESInt) {
+                            setSignedData(await euSign.SignInternal(true, data));
+                        }
+                    } else if (signAlgo === euSign.m_library.CERT_KEY_TYPE_RSA) {
+                        setSignedData(await euSign.SignRSA(data, true, signType === signTypeCAdESExt));
                     }
-                    //SignInternal
+                    //SignECDSA
+
                     //CreateEmptySign
                 } catch (e: any) {
                     console.log(e)
