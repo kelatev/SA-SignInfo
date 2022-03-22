@@ -21,24 +21,30 @@ function PanelSign() {
     const [fileToSign, setFileToSign] = useState<FileInterface | null>();
     const [signedData, setSignedData] = useState<string>();
 
+    function Sign(data: Uint8Array, signAlgo: number, signType: number): Promise<string | undefined> {
+        if (euSign) {
+            if (signAlgo === euSign.m_library.CERT_KEY_TYPE_DSTU4145) {
+                if (signType === signTypeCAdESExt) {
+                    return euSign.Sign(data);
+                } else if (signType === signTypeCAdESInt) {
+                    return euSign.SignInternal(true, data);
+                }
+            } else if (signAlgo === euSign.m_library.CERT_KEY_TYPE_RSA) {
+                return euSign.SignRSA(data, true, signType === signTypeCAdESExt);
+            }
+            //SignECDSA
+            //CreateEmptySign
+        }
+        return Promise.resolve(undefined);
+    }
+
     useEffect(() => {
         if (euSign && signType && signAlgo && signFormat && fileToSign) {
             (async function () {
                 try {
                     const data = await euSign.BASE64Decode(fileToSign.content);
 
-                    if (signAlgo === euSign.m_library.CERT_KEY_TYPE_DSTU4145) {
-                        if (signType === signTypeCAdESExt) {
-                            setSignedData(await euSign.Sign(data));
-                        } else if (signType === signTypeCAdESInt) {
-                            setSignedData(await euSign.SignInternal(true, data));
-                        }
-                    } else if (signAlgo === euSign.m_library.CERT_KEY_TYPE_RSA) {
-                        setSignedData(await euSign.SignRSA(data, true, signType === signTypeCAdESExt));
-                    }
-                    //SignECDSA
-
-                    //CreateEmptySign
+                    setSignedData(await Sign(data, signAlgo, signType));
                 } catch (e: any) {
                     console.log(e)
                 }
