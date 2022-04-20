@@ -1,5 +1,5 @@
 import EUSignCPPromise from "./EUSignCPPromise";
-import {EndUserLibraryLoader, EUSignCP} from "./eusw";
+import {EUSignCP, EndUserLibraryLoader} from "./eusw";
 import {EndUserCertificateInfoEx} from "./types";
 
 const EUSignContainerType = {
@@ -17,9 +17,6 @@ const EUSignContainerType = {
 };
 const EU_ASIC_SIGN_LEVEL_BES = 1;
 const EU_ASIC_SIGN_LEVEL_T = 4;
-
-const EU_CERT_KEY_TYPE_RSA = 0x02;
-const EU_CERT_KEY_TYPE_ECDSA = 0x04;
 
 export default class EUSignCPFrontend extends EUSignCPPromise {
     static loadLibrary(withLog: boolean = false): Promise<EUSignCPFrontend> {

@@ -10,19 +10,6 @@ export default class EUSignCPPromise extends EUSignCPCore {
     m_settings: { CAs: any[] };
     m_context: any;
 
-    EU_SUBJECT_TYPE_CA = 1;
-    EU_SUBJECT_TYPE_CA_SERVER = 2;
-    EU_SUBJECT_TYPE_RA_ADMINISTRATOR = 3;
-    EU_SUBJECT_TYPE_END_USER = 4;
-    EU_SUBJECT_CA_SERVER_SUB_TYPE_UNDIFFERENCED = 0;
-    EU_SUBJECT_CA_SERVER_SUB_TYPE_CMP = 1;
-    EU_SUBJECT_CA_SERVER_SUB_TYPE_TSP = 2;
-    EU_SUBJECT_CA_SERVER_SUB_TYPE_OCSP = 3;
-    EU_CERT_KEY_TYPE_UNKNOWN = 0;
-    EU_CERT_KEY_TYPE_DSTU4145 = 1;
-    EU_CERT_KEY_TYPE_RSA = 2;
-    EU_CERT_KEY_TYPE_ECDSA = 4;
-
     constructor(m_library: EUSignCP) {
         super(m_library);
         this.m_settings = {CAs: []};
@@ -119,7 +106,7 @@ export default class EUSignCPPromise extends EUSignCPCore {
                 const certificate = privateKey.GetCertificate(i);
                 const certificateInfoEx = await this.ParseCertificateEx(certificate);
 
-                if (certificateInfoEx.GetSubjType() === this.EU_SUBJECT_TYPE_END_USER) {
+                if (certificateInfoEx.GetSubjType() === this.m_context.EU_SUBJECT_TYPE_END_USER) {
                     //console.log('certificateInfoEx', certificateInfoEx)
                     //t.GetPublicKeyType() == i.EU_CERT_KEY_TYPE_DSTU4145
                     // && (t.GetKeyUsageType() & i.EU_KEY_USAGE_DIGITAL_SIGNATURE) == i.EU_KEY_USAGE_DIGITAL_SIGNATURE

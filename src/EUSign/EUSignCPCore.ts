@@ -1,4 +1,5 @@
 import {EUSignCP} from "./eusw";
+
 import {
     EndUserCertificateInfo,
     EndUserCertificateInfoEx,
@@ -687,6 +688,24 @@ export default class EUSignCPCore {
     SignRSA(data: Uint8Array, appendCert: boolean, externalSign: boolean): Promise<string> {
         return new Promise((resolve, reject) => {
             this.m_library.SignRSA(data, appendCert, externalSign, resolve, reject);
+        })
+    }
+
+    CtxCreate(): Promise<any> {
+        return new Promise((resolve, reject) => {
+            this.m_library.CtxCreate(resolve, reject);
+        })
+    }
+
+    CtxFree(context: any): Promise<void> {
+        return new Promise((resolve, reject) => {
+            this.m_library.CtxFree(context, resolve, reject);
+        })
+    }
+
+    CtxSetParameter(context: any, name: string, value: string): Promise<void> {
+        return new Promise((resolve, reject) => {
+            this.m_library.CtxSetParameter(context, name, value, resolve, reject);
         })
     }
 }
