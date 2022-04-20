@@ -36,15 +36,12 @@ function SignSelect(props: SignSignFileBlockProps) {
         setPassword(undefined);
         setKeyRead(false);
         props.onKeyRead(null);
-    }, [euSign, file]);
+    }, [euSign, file, props]);
 
     useEffect(() => {
         if (euSign && fileContainer) {
             (async function () {
                 try {
-                    //console.log(euSign.GetSignsCount(content))
-                    //console.log(euSign.GetSignerInfo(0, content));
-
                     const userJKSPrivateKeys = await euSign.GetJKSPrivateKeys(fileContainer);
                     setUserJKSPrivateKeys(userJKSPrivateKeys);
                     if (userJKSPrivateKeys.length > 0) {
@@ -100,7 +97,7 @@ function SignSelect(props: SignSignFileBlockProps) {
         >
             <TimelineFileSelect onFileChange={setFile}
                                 accept='.dat,.pfx,.pk8,.zs2,.jks'/>
-            {file && !keyRead && userJKSPrivateKeys && (
+            {file && !keyRead && userJKSPrivateKeys && userJKSPrivateKeys.length > 0 && (
                 <Form.Select className="mb-1"
                              onChange={(ev) => setFileAliasSelect(ev.currentTarget.value)}>
                     {userJKSPrivateKeys.map((item) => <option

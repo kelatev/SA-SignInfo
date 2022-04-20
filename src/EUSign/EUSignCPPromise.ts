@@ -75,7 +75,11 @@ export default class EUSignCPPromise extends EUSignCPCore {
     async CtxReadPrivateKeyInternal(privateKey: Uint8Array, password: string, keyMedia: EndUserKeyMedia | null, certificates: Uint8Array[], issuerCN: string | null): Promise<void> {
         await this.SaveCertificatesInternal(certificates);
         await this.SetIssuerSettings(issuerCN);
-        (privateKey !== null && password !== null) ? await this.ReadPrivateKeyBinary(privateKey, password) : (keyMedia && await this.ReadPrivateKeySilently(keyMedia));
+        if (privateKey !== null && password !== null) {
+            await this.ReadPrivateKeyBinary(privateKey, password)
+        } else if (keyMedia) {
+            await this.ReadPrivateKeySilently(keyMedia)
+        }
         const ownerInfo = await this.GetPrivateKeyOwnerInfo();
         if (issuerCN === null) {
             return this.SetIssuerSettings(ownerInfo.GetIssuerCN());
