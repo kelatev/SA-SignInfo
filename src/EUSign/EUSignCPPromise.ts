@@ -8,11 +8,33 @@ import {
 export default class EUSignCPPromise extends EUSignCPCore {
 
     m_settings: { CAs: any[] };
-    m_context: any;
+    m_initialized: boolean = false;
+    m_kmTypes: any = null;
+    m_kmActiveOperation: boolean = false;
+    m_context: any = null;
+    m_pkContext: any = null;
 
     constructor(m_library: EUSignCP) {
         super(m_library);
         this.m_settings = {CAs: []};
+    }
+
+    BeginKMOperation() {
+        return new Promise<void>((resolve) => {
+            const run = () => {
+                if (this.m_kmActiveOperation) {
+                    setTimeout(run, 10)
+                } else {
+                    this.m_kmActiveOperation = true;
+                    resolve();
+                }
+            };
+            run();
+        });
+    }
+
+    EndKMOperation() {
+        this.m_kmActiveOperation = false;
     }
 
     GetCASettings(issuerCN: string | null): any {
@@ -27,6 +49,10 @@ export default class EUSignCPPromise extends EUSignCPCore {
             }
         }
         return null;
+    }
+
+    IsCMPCompatible(caSettings: any, e: any): boolean {
+        return !!caSettings.cmpAddress && (void 0 === caSettings.cmpCompatibility || (caSettings.cmpCompatibility & e) == e)
     }
 
     async SetIssuerSettings(issuerCN: string | null): Promise<void> {
@@ -72,6 +98,48 @@ export default class EUSignCPPromise extends EUSignCPCore {
         })).then(() => Promise.resolve());
     }
 
+    async ListJKSPrivateKeys(container: Uint8Array): Promise<string[]> {
+        const _JKSPrivateKeysList = [];
+        let i = 0;
+        let alias = await this.EnumJKSPrivateKeys(container, i);
+        while (alias) {
+            _JKSPrivateKeysList.push(alias);
+            i++;
+            alias = await this.EnumJKSPrivateKeys(container, i);
+        }
+        return _JKSPrivateKeysList;
+    }
+
+    async GetJKSPrivateKeys(container: Uint8Array): Promise<EndUserJKSPrivateKey[]> {
+        const keyList = await this.ListJKSPrivateKeys(container);
+
+        return await Promise.all(keyList.map(async (alias) => {
+            const privateKey = await this.GetJKSPrivateKey(container, alias);
+            privateKey.info = {alias: alias, certificates: [], digitalStamp: false};
+
+            for (let i = 0, len = privateKey.GetCertificates().length; i < len; i++) {
+                const certificate = privateKey.GetCertificate(i);
+                const certificateInfoEx = await this.ParseCertificateEx(certificate);
+
+                if (certificateInfoEx.GetSubjType() === this.m_library.EU_SUBJECT_TYPE_END_USER) {
+                    //console.log('certificateInfoEx', certificateInfoEx)
+                    if (certificateInfoEx.GetPublicKeyType() === this.m_library.EU_CERT_KEY_TYPE_DSTU4145
+                        && (certificateInfoEx.GetKeyUsageType() & this.m_library.EU_KEY_USAGE_DIGITAL_SIGNATURE) === this.m_library.EU_KEY_USAGE_DIGITAL_SIGNATURE
+                    ) {
+                        privateKey.info.digitalStamp = certificateInfoEx.GetExtKeyUsages().indexOf(this.m_library.EU_UA_OID_EXT_KEY_USAGE_STAMP) > -1
+                    }
+
+                    const userCertificate = new EndUserCertificateClass() as EndUserCertificate;
+                    userCertificate.SetData(certificate);
+                    userCertificate.SetInfoEx(certificateInfoEx);
+                    privateKey.info.certificates.push(userCertificate);
+                }
+            }
+
+            return privateKey;
+        }))
+    }
+
     async CtxReadPrivateKeyInternal(privateKey: Uint8Array, password: string, keyMedia: EndUserKeyMedia | null, certificates: Uint8Array[], issuerCN: string | null): Promise<void> {
         await this.SaveCertificatesInternal(certificates);
         await this.SetIssuerSettings(issuerCN);
@@ -85,48 +153,6 @@ export default class EUSignCPPromise extends EUSignCPCore {
             return this.SetIssuerSettings(ownerInfo.GetIssuerCN());
         }
     }
-
-    async ListJKSPrivateKeys(container: Uint8Array): Promise<string[]> {
-        const _JKSPrivateKeysList = [];
-        let i = 0;
-        let alias = await this.EnumJKSPrivateKeys(container, i);
-        while (alias) {
-            _JKSPrivateKeysList.push(alias);
-            i++;
-            alias = await this.EnumJKSPrivateKeys(container, i);
-        }
-        return _JKSPrivateKeysList;
-    }
-
-    // Перелічення особистих ключів в контейнері JKS.
-    async GetJKSPrivateKeys(container: Uint8Array): Promise<EndUserJKSPrivateKey[]> {
-        const keyList = await this.ListJKSPrivateKeys(container);
-
-        return await Promise.all(keyList.map(async (alias) => {
-            const privateKey = await this.GetJKSPrivateKey(container, alias);
-            privateKey.info = {alias: alias, certificates: []};
-
-            for (let i = 0, len = privateKey.GetCertificates().length; i < len; i++) {
-                const certificate = privateKey.GetCertificate(i);
-                const certificateInfoEx = await this.ParseCertificateEx(certificate);
-
-                if (certificateInfoEx.GetSubjType() === this.m_library.EU_SUBJECT_TYPE_END_USER) {
-                    //console.log('certificateInfoEx', certificateInfoEx)
-                    //t.GetPublicKeyType() == i.EU_CERT_KEY_TYPE_DSTU4145
-                    // && (t.GetKeyUsageType() & i.EU_KEY_USAGE_DIGITAL_SIGNATURE) == i.EU_KEY_USAGE_DIGITAL_SIGNATURE
-                    // && (a.digitalStamp = t.GetExtKeyUsages().indexOf(i.EU_UA_OID_EXT_KEY_USAGE_STAMP) > -1);
-
-                    const userCertificate = new EndUserCertificateClass() as unknown as EndUserCertificate;
-                    userCertificate.SetData(certificate);
-                    userCertificate.SetInfoEx(certificateInfoEx);
-                    privateKey.info.certificates.push(userCertificate);
-                }
-            }
-
-            return privateKey;
-        }))
-    }
-
     GetHashAlgoForCertificate(info: EndUserCertificateInfoEx) {
         return (info.GetPublicKeyType() === this.m_library.EU_CTX_SIGN_DSTU4145_WITH_GOST34311) ?
             this.m_library.EU_CTX_HASH_ALGO_GOST34311 : this.m_library.EU_CTX_HASH_ALGO_SHA160;

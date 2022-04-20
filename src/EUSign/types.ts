@@ -559,7 +559,8 @@ export interface EndUserJKSPrivateKey {
 
     info: {
         alias: string,
-        certificates: EndUserCertificate[]
+        certificates: EndUserCertificate[],
+        digitalStamp: boolean
     }
 }
 

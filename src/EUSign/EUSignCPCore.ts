@@ -22,6 +22,12 @@ export default class EUSignCPCore {
     constructor(public m_library: EUSignCP) {
     }
 
+    GetVersion(): Promise<string> {
+        return new Promise((resolve, reject) => {
+            this.m_library.GetVersion(resolve, reject);
+        })
+    }
+
     // Перевірка стану бібліотеки. Повертається інформація про стан бібліотеки
     IsInitialized(): Promise<boolean> {
         return new Promise((resolve, reject) => {

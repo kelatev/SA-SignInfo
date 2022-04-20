@@ -91,7 +91,7 @@ function SignSelect(props: SignSignFileBlockProps) {
 
     return (
         <Timeline.Item
-            title='Файл ЕЦП'
+            title='Обраний особистий ключ'
             icon={IconCoding6}
             description={'Особистий ключ (Key-6.dat, *.pfx, *.pk8, *.zs2 або *.jks)'}
         >
