@@ -106,7 +106,7 @@ export default class EUSignCPPromise extends EUSignCPCore {
                 const certificate = privateKey.GetCertificate(i);
                 const certificateInfoEx = await this.ParseCertificateEx(certificate);
 
-                if (certificateInfoEx.GetSubjType() === this.m_context.EU_SUBJECT_TYPE_END_USER) {
+                if (certificateInfoEx.GetSubjType() === this.m_library.EU_SUBJECT_TYPE_END_USER) {
                     //console.log('certificateInfoEx', certificateInfoEx)
                     //t.GetPublicKeyType() == i.EU_CERT_KEY_TYPE_DSTU4145
                     // && (t.GetKeyUsageType() & i.EU_KEY_USAGE_DIGITAL_SIGNATURE) == i.EU_KEY_USAGE_DIGITAL_SIGNATURE
@@ -124,14 +124,8 @@ export default class EUSignCPPromise extends EUSignCPCore {
     }
 
     GetHashAlgoForCertificate(info: EndUserCertificateInfoEx) {
-        const EU_CTX_SIGN_DSTU4145_WITH_GOST34311 = 1;
-        const EU_CTX_HASH_ALGO_UNKNOWN = 0;
-        const EU_CTX_HASH_ALGO_GOST34311 = 1;
-        const EU_CTX_HASH_ALGO_SHA160 = 2;
-        const EU_CTX_HASH_ALGO_SHA224 = 3;
-        const EU_CTX_HASH_ALGO_SHA256 = 4;
-        return (info.GetPublicKeyType() == EU_CTX_SIGN_DSTU4145_WITH_GOST34311) ?
-            EU_CTX_HASH_ALGO_GOST34311 : EU_CTX_HASH_ALGO_SHA160;
+        return (info.GetPublicKeyType() === this.m_library.EU_CTX_SIGN_DSTU4145_WITH_GOST34311) ?
+            this.m_library.EU_CTX_HASH_ALGO_GOST34311 : this.m_library.EU_CTX_HASH_ALGO_SHA160;
     }
 
     /*async VerifyExternalData(data: string, sign: string): Promise<any[]> {

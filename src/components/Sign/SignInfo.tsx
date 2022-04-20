@@ -27,6 +27,7 @@ function SignInfo(props: SignSignInfoBlockProps) {
         <>
             {ownerInfo && (
                 <Timeline.Item title={ownerInfo.GetSubjFullName()} icon={IconCoding6}>
+                    <p>Організація: {ownerInfo.GetSubjOrg()}</p>
                     <p>РНОКПП: {ownerInfo.GetSubjDRFOCode() || ownerInfo.GetSubjEDRPOUCode()}</p>
                 </Timeline.Item>)}
         </>

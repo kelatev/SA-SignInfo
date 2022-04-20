@@ -14,7 +14,7 @@ function Home() {
             {euSign == null && <Loader/>}
             <Layout
                 title="SA - UA Sign"
-                subtitle="ЕЦП (ДСТУ 4145)"
+                subtitle="ЕЦП (ДСТУ 4145-2002)"
                 showOverlay={!euSign}
                 left={<PanelCheck/>}
                 right={<PanelSign/>}
