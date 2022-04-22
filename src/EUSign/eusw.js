@@ -1416,7 +1416,7 @@ var EU_SIGN_CP_FIELD_NAME_CLASS_FIELDS		= 'classFields';
 
 //================================================================================
 
-var EndUserArrayList = function() {
+export const EndUserArrayList = function() {
     this.vendor = 'JSC IIT';
     this.parentClassName = 'Object';
     this.className = 'EndUserArrayList';
@@ -4380,7 +4380,7 @@ EndUserError.getErrorDescriptionEx = function(error, language) {
 
 //================================================================================
 
-function EndUserException(errorCode, message) {
+export function EndUserException(errorCode, message) {
     this.errorCode = errorCode;
     this.message = message;
 

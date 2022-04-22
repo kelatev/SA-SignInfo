@@ -1,3 +1,14 @@
+export interface EndUserException {
+    GetErrorCode(): number
+    GetMessage(): string
+    toString(): string
+}
+
+export interface EndUserError {
+    GetErrorCode(): number
+    GetMessage(): string
+    toString(): string
+}
 
 export interface EndUserByteArray {
     GetData(): Uint8Array;

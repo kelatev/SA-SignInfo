@@ -1,6 +1,7 @@
-import {EUSignCP} from "./eusw";
+import {EUSignCP, EndUserArrayList} from "./eusw";
 
 import {
+    EndUserCertificate,
     EndUserCertificateInfo,
     EndUserCertificateInfoEx,
     EndUserCMPSettings,
@@ -59,18 +60,6 @@ export default class EUSignCPCore {
         })
     }
 
-    BASE64Encode(data: Uint8Array): Promise<string> {
-        return new Promise((resolve, reject) => {
-            this.m_library.BASE64Encode(data, resolve, reject);
-        })
-    }
-
-    BASE64Decode(data: string): Promise<Uint8Array> {
-        return new Promise((resolve, reject) => {
-            this.m_library.BASE64Decode(data, resolve, reject);
-        })
-    }
-
     //А.5.1.3 Функції отримання та встановлення параметрів роботи бібліотеки
 
     /*Встановлення режиму використання графічного інтерфейсу у разі виникнення помилок*/
@@ -104,17 +93,41 @@ export default class EUSignCPCore {
         })
     }
 
-    // Встановлення параметрів роботи з бібліотекою (див. дод. Е.1)
-    SetSettings(): Promise<void> {
+    // Отримання параметру з сховища параметрів
+    GetStorageParameter(protect: boolean, name: string): Promise<void> {
         return new Promise((resolve, reject) => {
-            this.m_library.SetSettings(resolve, reject);
+            this.m_library.GetStorageParameter(protect, name, resolve, reject);
         })
     }
 
-    // Відображення сертифікатів з файлового сховища (див. дод. Е.2)
-    ShowCertificates(): Promise<void> {
+    // Запис параметру до сховища параметрів
+    SetStorageParameter(protect: boolean, name: string, value: string): Promise<void> {
         return new Promise((resolve, reject) => {
-            this.m_library.ShowCertificates(resolve, reject);
+            this.m_library.SetStorageParameter(protect, name, value, resolve, reject);
+        })
+    }
+
+    BASE64Encode(data: Uint8Array): Promise<string> {
+        return new Promise((resolve, reject) => {
+            this.m_library.BASE64Encode(data, resolve, reject);
+        })
+    }
+
+    BASE64Decode(data: string): Promise<Uint8Array> {
+        return new Promise((resolve, reject) => {
+            this.m_library.BASE64Decode(data, resolve, reject);
+        })
+    }
+
+    StringToBytes(data: string): Promise<Uint8Array> {
+        return new Promise((resolve, reject) => {
+            this.m_library.StringToBytes(data, resolve, reject);
+        })
+    }
+
+    BytesToString(data: Uint8Array): Promise<string> {
+        return new Promise((resolve, reject) => {
+            this.m_library.BytesToString(data, resolve, reject);
         })
     }
 
@@ -346,25 +359,93 @@ export default class EUSignCPCore {
         })
     }
 
-    // Отримання параметру з сховища параметрів
-    GetStorageParameter(protect: boolean, name: string): Promise<void> {
+    // Встановлення параметрів роботи з бібліотекою (див. дод. Е.1)
+    SetSettings(): Promise<void> {
         return new Promise((resolve, reject) => {
-            this.m_library.GetStorageParameter(protect, name, resolve, reject);
+            this.m_library.SetSettings(resolve, reject);
         })
     }
 
-    // Запис параметру до сховища параметрів
-    SetStorageParameter(protect: boolean, name: string, value: string): Promise<void> {
+    // Відображення сертифікатів з файлового сховища (див. дод. Е.2)
+    ShowCertificates(): Promise<void> {
         return new Promise((resolve, reject) => {
-            this.m_library.SetStorageParameter(protect, name, value, resolve, reject);
+            this.m_library.ShowCertificates(resolve, reject);
         })
     }
+
 
     //А.5.1.4 Функції роботи з сховищем сертифікатів та СВС
 
-    /* Отримання детальної інформації про сертифікат.
-    * Повертає детальну інформацію про сертифікат
-    */
+    RefreshFileStore(reload: boolean): Promise<void> {
+        return new Promise((resolve, reject) => {
+            this.m_library.RefreshFileStore(reload, resolve, reject);
+        })
+    }
+
+    SelectCertificateInfo(): Promise<EndUserOwnerInfo> {
+        return new Promise((resolve, reject) => {
+            this.m_library.SelectCertificateInfo(resolve, reject);
+        })
+    }
+
+	GetCertificatesCount(): Promise<number> {
+        return new Promise((resolve, reject) => {
+            this.m_library.GetCertificatesCount(resolve, reject);
+        })
+    }
+
+	GetCertificatesCount2(subjectType: number, SubjectSubType: number): Promise<number> {
+        return new Promise((resolve, reject) => {
+            this.m_library.GetCertificatesCount(subjectType, SubjectSubType, resolve, reject);
+        })
+    }
+
+    EnumCertificates(certificateIndex: number): Promise<EndUserOwnerInfo> {
+        return new Promise((resolve, reject) => {
+            this.m_library.EnumCertificates(certificateIndex, resolve, reject);
+        })
+    }
+
+    EnumCertificates2(subjectType: number, SubjectSubType: number, certificateIndex: number): Promise<EndUserOwnerInfo> {
+        return new Promise((resolve, reject) => {
+            this.m_library.EnumCertificates(subjectType, SubjectSubType, certificateIndex, resolve, reject);
+        })
+    }
+
+    GetCertificateInfo(issuer: string, serial: string): Promise<EndUserCertificateInfo> {
+        return new Promise((resolve, reject) => {
+            this.m_library.GetCertificateInfo(issuer, serial, resolve, reject);
+        })
+    }
+
+    GetCertificateInfoEx(issuer: string, serial: string): Promise<EndUserCertificateInfoEx> {
+        return new Promise((resolve, reject) => {
+            this.m_library.GetCertificateInfoEx(issuer, serial, resolve, reject);
+        })
+    }
+
+    /*Отримання сертифікату з файлового сховища. Повертається сертифікат у вигляді масиву байт*/
+    GetCertificate(issuer: string, serial: string): Promise<Uint8Array> {
+        return new Promise((resolve, reject) => {
+            this.m_library.GetCertificate(issuer, serial, resolve, reject);
+        })
+    }
+
+    /* Визначення статусу сертифіката. */
+    CheckCertificate(certificate: Uint8Array): Promise<void> {
+        return new Promise((resolve, reject) => {
+            this.m_library.CheckCertificate(certificate, resolve, reject);
+        })
+    }
+
+    /* Перевірка та отримання сертифіката за інформацією про ЦСК та серійним номером */
+    CheckCertificateByIssuerAndSerial(issuer: string, serial: string): Promise<Uint8Array> {
+        return new Promise((resolve, reject) => {
+            this.m_library.CheckCertificateByIssuerAndSerial(issuer, serial, resolve, reject);
+        })
+    }
+
+    // Отримання розширеної детальної інформації про сертифікат.
     ParseCertificate(certificate: Uint8Array): Promise<EndUserCertificateInfo> {
         return new Promise((resolve, reject) => {
             this.m_library.ParseCertificate(certificate, resolve, reject);
@@ -372,7 +453,6 @@ export default class EUSignCPCore {
     }
 
     // Отримання розширеної детальної інформації про сертифікат.
-    // Повертає розширеної детальну інформацію про сертифікат
     ParseCertificateEx(certificate: Uint8Array): Promise<EndUserCertificateInfoEx> {
         return new Promise((resolve, reject) => {
             this.m_library.ParseCertificateEx(certificate, resolve, reject);
@@ -390,6 +470,160 @@ export default class EUSignCPCore {
     SaveCertificates(certificate: Uint8Array): Promise<void> {
         return new Promise((resolve, reject) => {
             this.m_library.SaveCertificates(certificate, resolve, reject);
+        })
+    }
+
+    ShowOwnCertificate(): Promise<void> {
+        return new Promise((resolve, reject) => {
+            this.m_library.ShowOwnCertificate(resolve, reject);
+        })
+    }
+
+    EnumOwnCertificates(index: number): Promise<EndUserCertificateInfoEx> {
+        return new Promise((resolve, reject) => {
+            this.m_library.EnumOwnCertificates(index, resolve, reject);
+        })
+    }
+
+    /*Отримання сертифікату особистого ключа. Повертається сертифікат у  вигляді масиву байт*/
+    GetOwnCertificate(): Promise<Uint8Array> {
+        return new Promise((resolve, reject) => {
+            this.m_library.GetOwnCertificate(resolve, reject);
+        })
+    }
+
+    /*Отримання сертифікату особистого ключа. Повертається сертифікат у  вигляді масиву байт*/
+    GetOwnCertificate2(certKeyType: number, keyUsage: number): Promise<Uint8Array> {
+        return new Promise((resolve, reject) => {
+            this.m_library.GetOwnCertificate(certKeyType, keyUsage, resolve, reject);
+        })
+    }
+
+    // Отримання ланцюжку сертифікатів з CMP-серверу за інформацією про відкритий
+    // ключ(і) користувача. Налаштування proxy-серверу беруться з налаштувань
+    // бібліотеки. Завантажений ланцюжок не додається в файлове сховище.
+    // Повертається ланцюжок сертифікатів у вигляді масиву байт
+    GetCertificateByKeyInfo(keyInfo: Uint8Array): Promise<Uint8Array> {
+        return new Promise((resolve, reject) => {
+            this.m_library.GetCertificateByKeyInfo(keyInfo, resolve, reject);
+        })
+    }
+
+    // Отримання ланцюжку сертифікатів з CMP-серверів за інформацією про відкритий
+    // ключ(і) користувача. Налаштування proxy-серверу беруться з налаштувань
+    // бібліотеки. Завантажений ланцюжок не додається в файлове сховище.
+    // Повертається ланцюжок сертифікатів у вигляді масиву байт
+    GetCertificatesByKeyInfo(keyInfo: Uint8Array, cmpServers: EndUserArrayList, cmpServersPorts: EndUserArrayList): Promise<Uint8Array> {
+        return new Promise((resolve, reject) => {
+            this.m_library.GetCertificatesByKeyInfo(keyInfo, cmpServers, cmpServersPorts, resolve, reject);
+        })
+    }
+
+    GetCertificatesFromLDAPByEDRPOUCode(edrpouCode: string, certKeyType: number, certKeyUsage: number, ldapServers: EndUserArrayList): Promise<Uint8Array> {
+        return new Promise((resolve, reject) => {
+            this.m_library.GetCertificatesFromLDAPByEDRPOUCode(edrpouCode, certKeyType, certKeyUsage, ldapServers, resolve, reject);
+        })
+    }
+
+    GetCertificates(subjectType: number, subjectSubType: number): Promise<EndUserCertificate[]> {
+        return new Promise((resolve, reject) => {
+            this.m_library.GetCertificates(subjectType, subjectSubType, resolve, reject);
+        })
+    }
+
+    GetCertificateByFingerprint(fingerprint: string): Promise<EndUserCertificate> {
+        return new Promise((resolve, reject) => {
+            this.m_library.GetCertificateByFingerprint(fingerprint, resolve, reject);
+        })
+    }
+
+    GetCertificatesByEDRPOUAndDRFOCode(edrpouCode: string, drfoCode: string): Promise<EndUserCertificate[]> {
+        return new Promise((resolve, reject) => {
+            this.m_library.GetCertificatesByEDRPOUAndDRFOCode(edrpouCode, drfoCode, resolve, reject);
+        })
+    }
+
+    GetCACertificatesCount(): Promise<number> {
+        return new Promise((resolve, reject) => {
+            this.m_library.GetCACertificatesCount(resolve, reject);
+        })
+    }
+
+    GetCAServerCertificatesCount(): Promise<number> {
+        return new Promise((resolve, reject) => {
+            this.m_library.GetCAServerCertificatesCount(resolve, reject);
+        })
+    }
+
+    GetCMPServerCertificatesCount(): Promise<number> {
+        return new Promise((resolve, reject) => {
+            this.m_library.GetCMPServerCertificatesCount(resolve, reject);
+        })
+    }
+
+    GetOCSPServerCertificatesCount(): Promise<number> {
+        return new Promise((resolve, reject) => {
+            this.m_library.GetOCSPServerCertificatesCount(resolve, reject);
+        })
+    }
+
+    GetTSPServerCertificatesCount(): Promise<number> {
+        return new Promise((resolve, reject) => {
+            this.m_library.GetTSPServerCertificatesCount(resolve, reject);
+        })
+    }
+
+    GetRAAdministratorCertificatesCount(): Promise<number> {
+        return new Promise((resolve, reject) => {
+            this.m_library.GetRAAdministratorCertificatesCount(resolve, reject);
+        })
+    }
+
+    GetEndUserCertificatesCount(): Promise<number> {
+        return new Promise((resolve, reject) => {
+            this.m_library.GetEndUserCertificatesCount(resolve, reject);
+        })
+    }
+
+    EnumCACertificates(certificateIndex: number): Promise<EndUserOwnerInfo> {
+        return new Promise((resolve, reject) => {
+            this.m_library.EnumCACertificates(certificateIndex, resolve, reject);
+        })
+    }
+
+    EnumCAServerCertificates(certificateIndex: number): Promise<EndUserOwnerInfo> {
+        return new Promise((resolve, reject) => {
+            this.m_library.EnumCAServerCertificates(certificateIndex, resolve, reject);
+        })
+    }
+
+    EnumCMPServerCertificatesCount(certificateIndex: number): Promise<EndUserOwnerInfo> {
+        return new Promise((resolve, reject) => {
+            this.m_library.EnumCMPServerCertificatesCount(certificateIndex, resolve, reject);
+        })
+    }
+
+    EnumOCSPServerCertificatesCount(certificateIndex: number): Promise<EndUserOwnerInfo> {
+        return new Promise((resolve, reject) => {
+            this.m_library.EnumOCSPServerCertificatesCount(certificateIndex, resolve, reject);
+        })
+    }
+
+    EnumTSPServerCertificatesCount(certificateIndex: number): Promise<EndUserOwnerInfo> {
+        return new Promise((resolve, reject) => {
+            this.m_library.EnumTSPServerCertificatesCount(certificateIndex, resolve, reject);
+        })
+    }
+
+    EnumRAAdministratorCertificatesCount(certificateIndex: number): Promise<EndUserOwnerInfo> {
+        return new Promise((resolve, reject) => {
+            this.m_library.EnumRAAdministratorCertificatesCount(certificateIndex, resolve, reject);
+        })
+    }
+
+    EnumEndUserCertificatesCount(certificateIndex: number): Promise<EndUserOwnerInfo> {
+        return new Promise((resolve, reject) => {
+            this.m_library.EnumEndUserCertificatesCount(certificateIndex, resolve, reject);
         })
     }
 
@@ -534,14 +768,6 @@ export default class EUSignCPCore {
             this.m_library.GetPrivateKeyOwnerInfo(resolve, reject);
         })
     }
-    // Отримання інформації про відкритий ключ(і) користувача. Інформація може бути
-    // використана для отримання сертифіката(ів) користувача з CMP-сервера
-    // або файлового сховища. Повертається інформація про відкритий ключ(і)
-    GetKeyInfo(keyMedia: EndUserKeyMedia): Promise<EndUserPrivateKeyInfo> {
-        return new Promise((resolve, reject) => {
-            this.m_library.GetKeyInfo(keyMedia, resolve, reject);
-        })
-    }
 
     // Отримання інформації про відкритий ключ(і) користувача. Інформація може бути
     // використана для отримання сертифіката(ів) користувача з CMP-сервера
@@ -549,6 +775,15 @@ export default class EUSignCPCore {
     GetKeyInfoSilently(typeIndex: number, devIndex: number, password: string): Promise<EndUserPrivateKeyInfo> {
         return new Promise((resolve, reject) => {
             this.m_library.GetKeyInfoSilently(typeIndex, devIndex, password, resolve, reject);
+        })
+    }
+
+    // Отримання інформації про відкритий ключ(і) користувача. Інформація може бути
+    // використана для отримання сертифіката(ів) користувача з CMP-сервера
+    // або файлового сховища. Повертається інформація про відкритий ключ(і)
+    GetKeyInfo(keyMedia: EndUserKeyMedia): Promise<EndUserPrivateKeyInfo> {
+        return new Promise((resolve, reject) => {
+            this.m_library.GetKeyInfo(keyMedia, resolve, reject);
         })
     }
 

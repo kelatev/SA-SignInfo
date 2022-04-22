@@ -1,9 +1,41 @@
-import {EndUserCertificate as EndUserCertificateClass, EUSignCP} from "./eusw";
+import {EndUserCertificate as EndUserCertificateClass, EUSignCP, EndUserError} from "./eusw";
 import EUSignCPCore from "./EUSignCPCore";
 import {
+    EndUserException, EndUserError as IEndUserError,
     EndUserCertificate, EndUserCertificateInfoEx,
     EndUserJKSPrivateKey, EndUserKeyMedia,
 } from "./types";
+
+const enum EndUserLibraryType {
+    JS,
+    SW,
+    MS
+}
+
+const enum EndUserKeysType {
+    DSTUAndECDHWithGOST,
+    RSAWithSHA
+}
+
+const enum EndUserSignType {
+    CAdES_BES,
+    CAdES_T,
+    CAdES_C,
+    CAdES_X_Long
+}
+
+const enum EndUserSignAlgo {
+    DSTU4145WithGOST34311,
+    RSAWithSHA,
+    ECDSAWithSHA
+}
+
+const enum EndUserHashAlgo {
+    GOST34311,
+    SHA160,
+    SHA224,
+    SHA256
+}
 
 export default class EUSignCPPromise extends EUSignCPCore {
 
@@ -18,6 +50,44 @@ export default class EUSignCPPromise extends EUSignCPCore {
         super(m_library);
         this.m_settings = {CAs: []};
     }
+
+    /*MapError(error: EndUserException | IEndUserError) {
+        const endUserError = new EndUserError();
+
+        if (undefined !== error.GetErrorCode && undefined !== error.GetMessage) {
+            endUserError.errorCode = error.GetErrorCode();
+            endUserError.message = error.GetMessage()
+        } else if (undefined !== error.code && undefined !== error.message) {
+            endUserError.errorCode = error.code;
+            endUserError.message = error.message;
+        } else {
+            endUserError.errorCode = EndUserError.ERROR_UNKNOWN;
+            endUserError.message = error.toString();
+        }
+
+        return endUserError
+    }*/
+
+    /*ProcessArray(e, a) {
+        var r = this;
+        return new Promise((resolve, reject) => {
+                const array = any[];
+                let n = 0;
+                const b = function () {
+                    n >= e.length ? resolve(array) : (a(e[n]).then((function (c) {
+                            array.push(c),
+                                b()
+                        }
+                    )).catch((function (c) {
+                            return reject(r.MapError(c))
+                        }
+                    )),
+                        n++)
+                };
+                b()
+            }
+        )
+    }*/
 
     BeginKMOperation() {
         return new Promise<void>((resolve) => {
@@ -92,12 +162,6 @@ export default class EUSignCPPromise extends EUSignCPCore {
         await this.SetCMPSettings(settings3);
     }
 
-    async SaveCertificatesInternal(certificates: Uint8Array[]): Promise<void> {
-        return Promise.all(certificates.map(async (cert) => {
-            await this.SaveCertificate(cert)
-        })).then(() => Promise.resolve());
-    }
-
     async ListJKSPrivateKeys(container: Uint8Array): Promise<string[]> {
         const _JKSPrivateKeysList = [];
         let i = 0;
@@ -140,19 +204,153 @@ export default class EUSignCPPromise extends EUSignCPCore {
         }))
     }
 
-    async CtxReadPrivateKeyInternal(privateKey: Uint8Array, password: string, keyMedia: EndUserKeyMedia | null, certificates: Uint8Array[], issuerCN: string | null): Promise<void> {
-        await this.SaveCertificatesInternal(certificates);
-        await this.SetIssuerSettings(issuerCN);
-        if (privateKey !== null && password !== null) {
-            await this.ReadPrivateKeyBinary(privateKey, password)
-        } else if (keyMedia) {
-            await this.ReadPrivateKeySilently(keyMedia)
-        }
-        const ownerInfo = await this.GetPrivateKeyOwnerInfo();
-        if (issuerCN === null) {
-            return this.SetIssuerSettings(ownerInfo.GetIssuerCN());
+    async SaveCertificatesInternal(certificates: Uint8Array[] | Uint8Array): Promise<void> {
+        if (Array.isArray(certificates)) {
+            return Promise.all(certificates.map(async (cert) => {
+                await this.SaveCertificate(cert)
+            })).then(() => Promise.resolve());
+        } else {
+            await this.SaveCertificate(certificates)
         }
     }
+
+    //todo: check
+    async CtxReadPrivateKeyInternal(m_context: any, privateKey: Uint8Array, password: string, keyMedia: EndUserKeyMedia | null, certificates: Uint8Array[], issuerCN: string | null): Promise<void> {
+        const context = m_context || this.m_context;
+        await this.SaveCertificatesInternal(certificates);
+        await this.SetIssuerSettings(issuerCN);
+        let pkContext;
+        try {
+            if (privateKey !== null && password !== null) {
+                pkContext = await this.ReadPrivateKeyBinary(privateKey, password);//CtxReadPrivateKeyBinary
+            } else if (keyMedia) {
+                pkContext = await this.ReadPrivateKeySilently(keyMedia);//CtxReadPrivateKey
+            }
+            const ownerInfo = await this.GetPrivateKeyOwnerInfo();//GetOwnerInfo
+            if (issuerCN === null) {
+                return this.SetIssuerSettings(ownerInfo.GetIssuerCN());
+            }
+            const settings = this.GetCASettings(ownerInfo.GetIssuerCN());
+            if (!settings || -1 == settings.issuerCNs.indexOf(issuerCN))
+                throw this.m_library.MakeError(EndUserError.ERROR_CERT_NOT_FOUND, "")
+            return pkContext;
+        } catch (e: any) {
+            if (pkContext == null) {
+                if(e.code != EndUserError.ERROR_CERT_NOT_FOUND || issuerCN) {
+                    throw e;
+                } else {
+                    const keyCertificate = await this.SearchPrivateKeyCertificatesWithCMP(privateKey, password, keyMedia);
+                    return this.CtxReadPrivateKeyInternal(m_context, privateKey, password, keyMedia, keyCertificate.certs, keyCertificate.CACommonName);
+                }
+            } else {
+                this.CtxFreePrivateKey(pkContext);
+                throw e;
+            }
+        }
+    }
+
+    async ReadPrivateKeyInternal(privateKey: Uint8Array, password: string, keyMedia: EndUserKeyMedia | null, certificates: Uint8Array[], issuerCN: string | null) {
+        await this.ResetPrivateKeyInternal();
+        this.m_pkContext = await this.CtxReadPrivateKeyInternal(this.m_context, privateKey, password, keyMedia, certificates, issuerCN);
+        return this.m_pkContext.GetOwnerInfo();
+    }
+
+    async ResetPrivateKeyInternal() {
+        if (this.m_pkContext) {
+            await this.m_library.CtxFreePrivateKey(this.m_pkContext);
+            this.m_pkContext = null;
+        }
+    }
+
+    async SearchPrivateKeyCertificatesWithCMP(privateKey: Uint8Array, password: string, keyMedia: EndUserKeyMedia | null, t) {
+        if (null != privateKey && null != password) {
+            await this.GetKeyInfoBinary(privateKey, password);
+            return;
+        }
+        const keyInfo = await this.GetKeyInfo(keyMedia);
+        /*const func = (i, u) => {
+            if (i >= this.m_settings.CAs.length) {
+                throw this.m_library.MakeError(u ? this.m_library.ERROR_CERT_NOT_FOUND : this.m_library.ERROR_TRANSMIT_REQUEST, "");
+            } else {
+
+            }
+        };
+        func(0, false);
+
+
+        var n = this
+            , b = this.m_library
+            , f = this.m_settings.CAs;
+        return new c((function(c, d) {
+                b.GetKeyInfo(i)).then((function(e) {
+                        var a = function(i, u) {
+
+                                var s = t ? l.EndUserCMPCompatibility.DownloadEUCerts : l.EndUserCMPCompatibility.SearchEUCerts;
+                                n.IsCMPCompatible(f[i], s) ? t && -1 == f[i].issuerCNs.indexOf(t) ? a(i + 1, u) : b.GetCertificatesByKeyInfo(e, [f[i].cmpAddress], ["80"]).then((function(e) {
+                                        c({
+                                            certs: e,
+                                            CACommonName: f[i].issuerCNs[0]
+                                        })
+                                    }
+                                )).catch((function(c) {
+                                        var e = c.GetErrorCode();
+                                        if (e == r.EU_ERROR_CERT_NOT_FOUND || e == r.EU_ERROR_TRANSMIT_REQUEST)
+                                            return u = u || e == r.EU_ERROR_CERT_NOT_FOUND,
+                                                void a(i + 1, u);
+                                        d(n.MapError(c))
+                                    }
+                                )) : a(i + 1, u)
+                        };
+                        a(0, !1)
+                    }
+                ))
+            }
+        ))*/
+    }
+
+    /*GetUserCertificatesFromCertificates(e) {
+        var a = this
+            , r = a.m_library;
+        return new c((function(c, i) {
+                var t = new Array
+                    , n = function(b) {
+                    r.GetCertificateFromSignedData(b, e).then((function(e) {
+                            if (null != e) {
+                                var a = new f.EndUserCertificate;
+                                return a.data = e,
+                                    t.push(a),
+                                    r.ParseCertificateEx(e)
+                            }
+                            for (var i = new Array, n = 0; n < t.length; n++)
+                                t[n].infoEx.subjType == r.EU_SUBJECT_TYPE_END_USER && i.push(t[n]);
+                            c(i)
+                        }
+                    )).then((function(c) {
+                            t[b].infoEx = u.a.MapToEndUserCertificateInfoEx(c, new o.a),
+                                n(b + 1)
+                        }
+                    )).catch((function(c) {
+                            return i(a.MapError(c))
+                        }
+                    ))
+                };
+                n(0)
+            }
+        ))
+    }*/
+
+    GetHashAlgoBySignAlgo(type: EndUserSignAlgo) {
+        switch (type) {
+            case EndUserSignAlgo.DSTU4145WithGOST34311:
+                return EndUserHashAlgo.GOST34311;
+            case EndUserSignAlgo.RSAWithSHA:
+            case EndUserSignAlgo.ECDSAWithSHA:
+                return EndUserHashAlgo.SHA256;
+            default:
+            //throw e.MakeError(r.EU_ERROR_BAD_PARAMETER, "")
+        }
+    }
+
     GetHashAlgoForCertificate(info: EndUserCertificateInfoEx) {
         return (info.GetPublicKeyType() === this.m_library.EU_CTX_SIGN_DSTU4145_WITH_GOST34311) ?
             this.m_library.EU_CTX_HASH_ALGO_GOST34311 : this.m_library.EU_CTX_HASH_ALGO_SHA160;
