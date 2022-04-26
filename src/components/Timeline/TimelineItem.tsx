@@ -1,12 +1,12 @@
 import React from "react";
 
-interface TimelineItemInterface {
+type Props = {
+    children?: React.ReactNode
     icon: string
     title: string
     description?: string
-}
-
-const TimelineItem: React.FC<TimelineItemInterface> = ({icon, title, description, children}) => {
+};
+const TimelineItem: React.FC<Props> = ({icon, title, description, children}) => {
     return (
         /*begin::Timeline item*/
         <div className="timeline-item">

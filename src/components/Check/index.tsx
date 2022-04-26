@@ -26,10 +26,10 @@ function PanelCheck() {
         if (euSign && file?.content) {
             (async function () {
                 try {
-                    setIsSignedData(await euSign.IsDataInSignedDataAvailable(file.content));
-                    setSignsCount(await euSign.GetSignsCount(file.content));
-                    setSignTime(await euSign.GetSignTimeInfo(0, file.content));
-                    setSignerInfo(await euSign.GetSignerInfo(0, file.content));
+                    setIsSignedData(await euSign.m_library.IsDataInSignedDataAvailable(file.content));
+                    setSignsCount(await euSign.m_library.GetSignsCount(file.content));
+                    setSignTime(await euSign.m_library.GetSignTimeInfo(0, file.content));
+                    setSignerInfo(await euSign.m_library.GetSignerInfo(0, file.content));
                 } catch (e: any) {
                     console.log(e)
                     setFileError(e.toString());
@@ -48,7 +48,7 @@ function PanelCheck() {
         if (euSign && file?.content && isSignedData) {
             (async function () {
                 try {
-                    const data = await euSign.GetDataFromSignedData(file.content);
+                    const data = await euSign.m_library.GetDataFromSignedData(file.content);
                     setSignedData(Buffer.from(data).toString('base64'));
                 } catch (e: any) {
                     console.log(e)

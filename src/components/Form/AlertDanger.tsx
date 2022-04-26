@@ -1,14 +1,14 @@
 import React from 'react';
 import {ReactComponent as IconGen48} from '../../media/icons/duotune/general/gen048.svg';
 
-interface AlertProps {
+type Props = {
+    children: React.ReactNode
     title?: string
-}
-
-const AlertDanger: React.FC<AlertProps> = ({children, title}) => {
+};
+const AlertDanger: React.FC<Props> = ({title, children}) => {
     const icon = (
         <span className="svg-icon svg-icon-2hx svg-icon-danger me-4">
-            <IconGen48 />
+            <IconGen48/>
         </span>
     );
 

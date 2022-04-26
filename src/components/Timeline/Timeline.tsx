@@ -1,7 +1,10 @@
 import React from "react";
 import TimelineItem from "./TimelineItem";
 
-const Timeline: React.FC = ({children}) => {
+type Props = {
+    children?: React.ReactNode
+};
+const Timeline: React.FC<Props> = ({children}) => {
     return (
         <div className="timeline">
             {children}

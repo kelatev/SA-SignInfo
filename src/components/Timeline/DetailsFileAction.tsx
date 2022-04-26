@@ -1,7 +1,8 @@
 import React from "react";
-import DetailsFile, {DetailsFileProps} from "./DetailsFile";
+import DetailsFile, {Props} from "./DetailsFile";
 
-interface DetailsFileActionProps extends DetailsFileProps{
+interface DetailsFileActionProps extends Props {
+    children?: React.ReactNode
     actionName: string
     onActionClick?: () => void
 }

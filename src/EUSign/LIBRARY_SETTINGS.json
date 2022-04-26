@@ -1,0 +1,37 @@
+{
+  "language": 1,
+  "encoding": "utf-8",
+  "httpProxyServiceURL": "Server/ProxyHandler.php",
+  "directAccess": true,
+  "CAs": "/CAs.json?v=1",
+  "CACertificates": "/CACertificates.p7b?v=1",
+  "allowedKeyMediaTypes": [
+    "криптомод. ІІТ Гряда-61",
+    "е.ключ ІІТ Алмаз-1К",
+    "е.ключ ІІТ Кристал-1",
+    "ID-карта громадянина (БЕН)",
+    "е.ключ ІІТ Алмаз-1К (PKCS#11)",
+    "е.ключ ІІТ Кристал-1 (PKCS#11)",
+    "е.ключ чи смарт-карта Avest (PKCS#11)",
+    "е.ключ Ефіт Key (PKCS#11)",
+    "е.ключ чи смарт-карта Автор (PKCS#11)",
+    "е.ключ чи смарт-карта Автор 338 (PKCS#11)",
+    "смарт-карта Техноконс. TEllipse3 (PKCS#11)",
+    "смарт-карта Техноконс. TEllipse",
+    "смарт-карта Техноконс. TEllipse2/3",
+    "см.-карта чи е.ключ Техноконс. TEllipse2/3/4"
+  ],
+  "mssServiceURL": "Server/KSPSignController.php",
+  "passwordRequirements": null,
+  "KSPs": [
+    {
+      "name": "ДП ДІЯ - хмарний підпис (тестування)",
+      "ksp": 4,
+      "address": "https://ssign.informjust.ua",
+      "port": "443",
+      "directAccess": true
+    }
+  ],
+  "allowMakeNewCertOnNewKeyMedia": false,
+  "allowMakeNewCertOnFileKeyMedia": true
+}

@@ -27,16 +27,20 @@ function SignSelect(props: SignSignFileBlockProps) {
         if (euSign && file?.content) {
             (async function () {
                 try {
-                    setFileContainer(await euSign.BASE64Decode(file.content));
+                    setFileContainer(await euSign.m_library.BASE64Decode(file.content));
                 } catch (e: any) {
                     console.log(e)
                 }
             })();
+        } else {
+            setFileContainer(null);
+            //setUserJKSPrivateKeys(null);
+            //setFileAliasSelect(null);
         }
         setPassword(undefined);
         setKeyRead(false);
         props.onKeyRead(null);
-    }, [euSign, file, props]);
+    }, [euSign, file]);
 
     useEffect(() => {
         if (euSign && fileContainer) {
@@ -69,13 +73,13 @@ function SignSelect(props: SignSignFileBlockProps) {
         if (euSign && privateKey && password) {
             (async function () {
                 try {
-                    if (await euSign.IsPrivateKeyReaded()) {
-                        await euSign.ResetPrivateKey();
+                    if (await euSign.m_library.IsPrivateKeyReaded()) {
+                        await euSign.m_library.ResetPrivateKey();
                     }
                     /* Зчитування ключа */
-                    await euSign.CtxReadPrivateKeyInternal(privateKey.GetPrivateKey(), password, null, privateKey.GetCertificates(), null);
+                    await euSign.CtxReadPrivateKeyInternal(null, privateKey.GetPrivateKey(), password, null, privateKey.GetCertificates(), null);
 
-                    setKeyRead(await euSign.IsPrivateKeyReaded());
+                    setKeyRead(await euSign.m_library.IsPrivateKeyReaded());
                 } catch (e: any) {
                     console.log(e)
                 }
@@ -87,7 +91,7 @@ function SignSelect(props: SignSignFileBlockProps) {
         if (euSign && privateKey && keyRead) {
             props.onKeyRead(privateKey);
         }
-    }, [euSign, privateKey, keyRead, props]);
+    }, [euSign, privateKey, keyRead]);
 
     return (
         <Timeline.Item

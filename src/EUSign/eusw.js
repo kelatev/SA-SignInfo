@@ -88,9 +88,9 @@ var EU_SIGN_CP_IFACE_VERSION				= '1.3.61';
 //================================================================================
 //================================================================================
 
-var EU_SIGN_CP_ENCODING_UTF_8				= 'UTF-8';
-var EU_SIGN_CP_ENCODING_UTF_16_LE			= 'UTF-16LE';
-var EU_SIGN_CP_ENCODING_CP1251				= 'windows-1251';
+export const EU_SIGN_CP_ENCODING_UTF_8				= 'UTF-8';
+export const EU_SIGN_CP_ENCODING_UTF_16_LE			= 'UTF-16LE';
+export const EU_SIGN_CP_ENCODING_CP1251				= 'windows-1251';
 
 //================================================================================
 

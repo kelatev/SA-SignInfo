@@ -191,9 +191,9 @@ export interface EndUserOCSPAccessInfoModeSettings {
 
 // Клас, що містить інформацію про параметри точок доступу до OCSP-серверів
 export interface EndUserOCSPAccessInfoSettings {
-    GetIssuerCN(): boolean
+    GetIssuerCN(): string
 
-    SetIssuerCN(issuerCN: boolean): void
+    SetIssuerCN(issuerCN: string): void
 
     GetAddress(): string
 
@@ -506,6 +506,7 @@ export interface EndUserCertificateInfoEx {
 }
 
 export interface EndUserCertificate {
+
     GetInfoEx(): EndUserCertificateInfoEx
 
     SetInfoEx(infoEx: EndUserCertificateInfoEx): void

@@ -16,7 +16,7 @@ function SignInfo(props: SignSignInfoBlockProps) {
     useEffect(() => {
         if (euSign) {
             try {
-                euSign.GetPrivateKeyOwnerInfo().then(setOwnerInfo);
+                euSign.m_library.GetPrivateKeyOwnerInfo().then(setOwnerInfo);
             } catch (e: any) {
                 console.log(e)
             }

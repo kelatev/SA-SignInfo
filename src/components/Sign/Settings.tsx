@@ -53,11 +53,11 @@ function Settings(props: SignSignSignBlockProps) {
         if (euSign) {
             const list: SelectItem[] = [];
             list.push({
-                key: euSign.m_library.CERT_KEY_TYPE_DSTU4145,
+                key: euSign.m_library.m_library.CERT_KEY_TYPE_DSTU4145,
                 value: "ДСТУ 4145"
             });
             list.push({
-                key: euSign.m_library.CERT_KEY_TYPE_RSA,
+                key: euSign.m_library.m_library.CERT_KEY_TYPE_RSA,
                 value: "RSA"
             });
             setSignAlgoList(list);
@@ -68,15 +68,15 @@ function Settings(props: SignSignSignBlockProps) {
         if (euSign) {
             const list: SelectItem[] = [];
             list.push({
-                key: euSign.m_library.EU_SIGN_TYPE_CADES_X_LONG,
+                key: euSign.m_library.m_library.EU_SIGN_TYPE_CADES_X_LONG,
                 value: "з повними даними для перевірки (CAdES-X-Long)"
             });
             list.push({
-                key: euSign.m_library.EU_SIGN_TYPE_CADES_C,
+                key: euSign.m_library.m_library.EU_SIGN_TYPE_CADES_C,
                 value: "з посиланням на повні дані для перевірки (CAdES-C)"
             });
-            list.push({key: euSign.m_library.EU_SIGN_TYPE_CADES_T, value: "з позначкою часу від КЕП (CAdES-T)"});
-            list.push({key: euSign.m_library.EU_SIGN_TYPE_CADES_BES, value: "базовий (CAdES-BES)"});
+            list.push({key: euSign.m_library.m_library.EU_SIGN_TYPE_CADES_T, value: "з позначкою часу від КЕП (CAdES-T)"});
+            list.push({key: euSign.m_library.m_library.EU_SIGN_TYPE_CADES_BES, value: "базовий (CAdES-BES)"});
             setSignFormatList(list);
         }
     }, [euSign]);

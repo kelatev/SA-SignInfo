@@ -1,4 +1,4 @@
-import {EUSignCP, EndUserArrayList} from "./eusw";
+import {EUSignCP, EndUserArrayList, EndUserLibraryLoader, EndUserError} from "./eusw";
 
 import {
     EndUserCertificate,
@@ -20,7 +20,28 @@ import {
 } from "./types";
 
 export default class EUSignCPCore {
-    constructor(public m_library: EUSignCP) {
+    m_library!: EUSignCP;
+    m_language = 0;
+
+    Load(): Promise<void> {
+        return new Promise<void>((resolve, reject) => {
+            if (this.m_library == null) {
+                const loader = new EndUserLibraryLoader(EndUserLibraryLoader.LIBRARY_TYPE_DEFAULT, "euSign", this.m_language, true, true);
+                loader.onload = (library) => {
+                    this.m_library = library;
+                    resolve()
+                };
+                loader.onerror = (msg, errorCode, libraryOrNull) => {
+                    if (null == libraryOrNull) {
+                        libraryOrNull = new EUSignCP("", "")
+                    }
+                    reject(libraryOrNull.MakeError(errorCode, ""))
+                };
+                loader.load()
+            } else {
+                resolve()
+            }
+        })
     }
 
     GetVersion(): Promise<string> {
@@ -388,13 +409,13 @@ export default class EUSignCPCore {
         })
     }
 
-	GetCertificatesCount(): Promise<number> {
+    GetCertificatesCount(): Promise<number> {
         return new Promise((resolve, reject) => {
             this.m_library.GetCertificatesCount(resolve, reject);
         })
     }
 
-	GetCertificatesCount2(subjectType: number, SubjectSubType: number): Promise<number> {
+    GetCertificatesCount2(subjectType: number, SubjectSubType: number): Promise<number> {
         return new Promise((resolve, reject) => {
             this.m_library.GetCertificatesCount(subjectType, SubjectSubType, resolve, reject);
         })
@@ -513,13 +534,13 @@ export default class EUSignCPCore {
     // ключ(і) користувача. Налаштування proxy-серверу беруться з налаштувань
     // бібліотеки. Завантажений ланцюжок не додається в файлове сховище.
     // Повертається ланцюжок сертифікатів у вигляді масиву байт
-    GetCertificatesByKeyInfo(keyInfo: Uint8Array, cmpServers: EndUserArrayList, cmpServersPorts: EndUserArrayList): Promise<Uint8Array> {
+    GetCertificatesByKeyInfo(keyInfo: EndUserPrivateKeyInfo, cmpServers: string[], cmpServersPorts: string[]): Promise<Uint8Array> {
         return new Promise((resolve, reject) => {
             this.m_library.GetCertificatesByKeyInfo(keyInfo, cmpServers, cmpServersPorts, resolve, reject);
         })
     }
 
-    GetCertificatesFromLDAPByEDRPOUCode(edrpouCode: string, certKeyType: number, certKeyUsage: number, ldapServers: EndUserArrayList): Promise<Uint8Array> {
+    GetCertificatesFromLDAPByEDRPOUCode(edrpouCode: string, certKeyType: number, certKeyUsage: number, ldapServers: string[]): Promise<Uint8Array> {
         return new Promise((resolve, reject) => {
             this.m_library.GetCertificatesFromLDAPByEDRPOUCode(edrpouCode, certKeyType, certKeyUsage, ldapServers, resolve, reject);
         })
@@ -947,6 +968,12 @@ export default class EUSignCPCore {
     CtxSetParameter(context: any, name: string, value: string): Promise<void> {
         return new Promise((resolve, reject) => {
             this.m_library.CtxSetParameter(context, name, value, resolve, reject);
+        })
+    }
+
+    CtxFreePrivateKey(pkContext: any): Promise<void> {
+        return new Promise((resolve, reject) => {
+            this.m_library.CtxFreePrivateKey(pkContext, resolve, reject);
         })
     }
 }

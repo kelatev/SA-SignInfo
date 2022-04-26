@@ -23,14 +23,14 @@ function PanelSign() {
 
     function Sign(data: Uint8Array, signAlgo: number, signType: number): Promise<string | undefined> {
         if (euSign) {
-            if (signAlgo === euSign.m_library.CERT_KEY_TYPE_DSTU4145) {
+            if (signAlgo === euSign.m_library.m_library.CERT_KEY_TYPE_DSTU4145) {
                 if (signType === signTypeCAdESExt) {
-                    return euSign.Sign(data);
+                    return euSign.m_library.Sign(data);
                 } else if (signType === signTypeCAdESInt) {
-                    return euSign.SignInternal(true, data);
+                    return euSign.m_library.SignInternal(true, data);
                 }
-            } else if (signAlgo === euSign.m_library.CERT_KEY_TYPE_RSA) {
-                return euSign.SignRSA(data, true, signType === signTypeCAdESExt);
+            } else if (signAlgo === euSign.m_library.m_library.CERT_KEY_TYPE_RSA) {
+                return euSign.m_library.SignRSA(data, true, signType === signTypeCAdESExt);
             }
             //SignECDSA
             //CreateEmptySign
@@ -42,7 +42,7 @@ function PanelSign() {
         if (euSign && signType && signAlgo && signFormat && fileToSign) {
             (async function () {
                 try {
-                    const data = await euSign.BASE64Decode(fileToSign.content);
+                    const data = await euSign.m_library.BASE64Decode(fileToSign.content);
 
                     setSignedData(await Sign(data, signAlgo, signType));
                 } catch (e: any) {
@@ -68,7 +68,7 @@ function PanelSign() {
                         </Timeline.Item>
                     </>
                 )}
-                {signedData && <TimelineFileData title={'Результат'} base64Data={signedData} fileName={'sign.p7k'}/>}
+                {signedData && <TimelineFileData title={'Результат'} base64Data={signedData} fileName={'sign.p7s'}/>}
             </Timeline>
         </Card>
     );

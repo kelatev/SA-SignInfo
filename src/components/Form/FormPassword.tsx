@@ -30,7 +30,7 @@ function FormPassword(props: PasswordProps) {
             <InputGroup className="mb-3">
                 <FormControl
                     type="password"
-                    placeholder='FormPassword'
+                    placeholder='пароль'
                     value={password}
                     onChange={handleChange}
                     onKeyDown={handleKeyDown}

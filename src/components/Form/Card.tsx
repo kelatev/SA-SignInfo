@@ -1,12 +1,12 @@
 import React from "react";
 import {default as BSCard} from 'react-bootstrap/Card';
 
-interface CardProps {
+type Props = {
+    children?: React.ReactNode
     title: string
     backgroundColor?: string
-}
-
-const Card: React.FC<CardProps> = ({children, title, backgroundColor}) => {
+};
+const Card: React.FC<Props> = ({children, title, backgroundColor}) => {
     return (
         <BSCard style={{backgroundColor: backgroundColor}}>
             <BSCard.Header className="border-0 pt-5">
