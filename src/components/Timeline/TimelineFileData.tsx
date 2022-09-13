@@ -97,7 +97,10 @@ function TimelineFileData(props: FormDataProps) {
                         </Modal.Body>
                         <Modal.Footer>
                             <CopyToClipboard text={dataToShow} onCopy={handleBase64Copy}>
-                                <Button variant="secondary">Copy text</Button>
+                                <Button variant="secondary">Copy (view)</Button>
+                            </CopyToClipboard>
+                            <CopyToClipboard text={props.base64Data ?? data} onCopy={handleBase64Copy}>
+                                <Button variant="secondary">Copy (origin)</Button>
                             </CopyToClipboard>
                             <Button onClick={handleBase64Close} variant="secondary">Close</Button>
                         </Modal.Footer>
