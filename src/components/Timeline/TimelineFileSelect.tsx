@@ -32,11 +32,11 @@ const TimelineFileSelect: React.FC<TimelineItemFileInterface> = ({onFileChange, 
                 <DetailsFileAction
                     icon={IconFil004}
                     file={file}
-                    actionName={'Изменить файл'}
+                    actionName={'Змінити файл'}
                     onActionClick={handleNewFile}/>
             ) : (
                 <>
-                    <FormUploadFile title='Выбрать файл' onChange={handleFileChange} accept={accept}/>
+                    <FormUploadFile title='Вибрати файл' onChange={handleFileChange} accept={accept}/>
                     &nbsp;
                     <FormUploadBase64 title='base64' onChange={handleFileChange}/>
                 </>
