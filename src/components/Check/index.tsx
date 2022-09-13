@@ -61,11 +61,11 @@ function PanelCheck() {
     }, [euSign, file, isSignedData]);
 
     return (
-        <Card title='Проверка подписи' backgroundColor='#CBF0F4'>
+        <Card title='Перевірка підпису' backgroundColor='#CBF0F4'>
             {/*<img className="mw-100 h-100px mb-7 mx-auto"
                  src="/media/illustrations/sigma-1/5.png" />*/}
             <Timeline>
-                <Timeline.Item title='Подпись' icon={IconCoding6}>
+                <Timeline.Item title='Підпис' icon={IconCoding6}>
                     <TimelineFileSelect onFileChange={setFile} error={fileError}/>
                 </Timeline.Item>
                 {isSignedData === true &&
