@@ -1,13 +1,17 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import IconFil3 from "../../media/icons/duotune/files/fil003.svg";
 import TimelineItem from "./TimelineItem";
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import FormControl from "react-bootstrap/FormControl";
+import FormCheckInput from 'react-bootstrap/FormCheckInput';
+import FormCheckLabel from 'react-bootstrap/esm/FormCheckLabel';
+import {FormCheck} from 'react-bootstrap';
 import {Buffer} from 'buffer';
 import {saveAs} from "file-saver";
 import {CopyToClipboard} from 'react-copy-to-clipboard';
 import {fileSizeName} from "../../utils/fileSizeName";
+import {decode} from 'windows-1251';
 
 interface FormDataProps {
     title: string
@@ -36,7 +40,9 @@ function base64Size(text: string | undefined): string {
 
 function TimelineFileData(props: FormDataProps) {
     const [base64Show, setBase64Show] = useState(false);
-    const data = props.base64Data && props.showAsAscii ? base64ToAscii(props.base64Data) : props.base64Data;
+    const [asWin1251, setAsWin1251] = useState(false);
+    const data = props.base64Data && props.showAsAscii ? base64ToAscii(props.base64Data) : props.base64Data ?? '';
+    const [dataToShow, setDataToShow] = useState(data);
 
     const handleFileDownload = () => {
         if (props.base64Data) {
@@ -48,6 +54,17 @@ function TimelineFileData(props: FormDataProps) {
     const handleBase64Copy = () => {
         alert('Скопировано');
     };
+    const handleAsWin1251Change = () => {
+        setAsWin1251((prevState) => !prevState);
+    };
+
+    useEffect(() => {        
+        if (asWin1251) {
+            setDataToShow(decode(data as string));
+        } else {
+            setDataToShow(data);
+        }
+    }, [data, asWin1251]);
 
     return (
         <TimelineItem title={props.title} icon={IconFil3}>
@@ -64,10 +81,11 @@ function TimelineFileData(props: FormDataProps) {
                             <Modal.Title>Base64</Modal.Title>
                         </Modal.Header>
                         <Modal.Body>
-                            <FormControl as="textarea" value={data} rows={8} readOnly={true}/>
+                            <FormCheck label={'as win-1251'} onChange={handleAsWin1251Change} checked={asWin1251} />
+                            <FormControl as="textarea" value={dataToShow} rows={15} readOnly={true}/>
                         </Modal.Body>
                         <Modal.Footer>
-                            <CopyToClipboard text={data} onCopy={handleBase64Copy}>
+                            <CopyToClipboard text={dataToShow} onCopy={handleBase64Copy}>
                                 <Button variant="secondary">Copy text</Button>
                             </CopyToClipboard>
                             <Button onClick={handleBase64Close} variant="secondary">Close</Button>
