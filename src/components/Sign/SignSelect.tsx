@@ -1,19 +1,19 @@
-import React, {useContext, useEffect, useState} from 'react';
-import {EndUserJKSPrivateKey} from "../../EUSign/types";
-import IconCoding6 from "../../media/icons/duotune/coding/cod006.svg";
+import React, { useContext, useEffect, useState } from 'react';
+import { EndUserJKSPrivateKey } from "../../EUSign/types";
 import EUSignContext from "../../context/EUSign";
 import Timeline from "../Timeline/Timeline";
 import TimelineFileSelect from "../Timeline/TimelineFileSelect";
 import FormPassword from "../Form/FormPassword";
 import Form from "react-bootstrap/Form";
-import {FileInterface} from "../../types";
+import { FileInterface } from "../../types";
+import { Cursor } from "@phosphor-icons/react";
 
 interface SignSignFileBlockProps {
     onKeyRead: (key: EndUserJKSPrivateKey | null) => void
 }
 
 function SignSelect(props: SignSignFileBlockProps) {
-    const {euSign} = useContext(EUSignContext);
+    const { euSign } = useContext(EUSignContext);
 
     const [file, setFile] = useState<FileInterface | null>();
     const [fileContainer, setFileContainer] = useState<Uint8Array | null>();
@@ -96,19 +96,19 @@ function SignSelect(props: SignSignFileBlockProps) {
     return (
         <Timeline.Item
             title='Обраний особистий ключ'
-            icon={IconCoding6}
+            icon={<Cursor />}
             description={'Особистий ключ (Key-6.dat, *.pfx, *.pk8, *.zs2 або *.jks)'}
         >
             <TimelineFileSelect onFileChange={setFile}
-                                accept='.dat,.pfx,.pk8,.zs2,.jks'/>
+                accept='.dat,.pfx,.pk8,.zs2,.jks' />
             {file && !keyRead && userJKSPrivateKeys && userJKSPrivateKeys.length > 0 && (
                 <Form.Select className="mb-1"
-                             onChange={(ev) => setFileAliasSelect(ev.currentTarget.value)}>
+                    onChange={(ev) => setFileAliasSelect(ev.currentTarget.value)}>
                     {userJKSPrivateKeys.map((item) => <option
                         key={item.info.alias}>{item.info.alias} ({item.info.certificates[0].GetInfoEx().GetSubjCN()})</option>)}
                 </Form.Select>
             )}
-            {file && !keyRead && <FormPassword title='считать' onEnter={setPassword}/>}
+            {file && !keyRead && <FormPassword title='зчитати' onEnter={setPassword} />}
         </Timeline.Item>
     );
 }

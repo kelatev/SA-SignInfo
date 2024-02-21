@@ -1,7 +1,6 @@
 {
   "language": 1,
   "encoding": "utf-8",
-  "httpProxyServiceURL": "Server/ProxyHandler.php",
   "directAccess": true,
   "CAs": "/CAs.json?v=1",
   "CACertificates": "/CACertificates.p7b?v=1",

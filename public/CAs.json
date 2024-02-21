@@ -1,6 +1,7 @@
 [
 	{
-		"issuerCNs": 				["КНЕДП ІДД ДПС",
+		"issuerCNs": 				["КНЕДП ДПС",
+									"КНЕДП ІДД ДПС",
 									"КНЕДП - ІДД ДПС",
 									"Акредитований центр сертифікації ключів ІДД ДФС",
 									"Акредитований центр сертифікації ключів ІДД Міндоходів",
@@ -75,7 +76,8 @@
 		"tspAddressPort":			"80"
 	},
 	{
-		"issuerCNs": 				["АЦСК АТ КБ «ПРИВАТБАНК»",
+		"issuerCNs": 				["КНЕДП АЦСК АТ КБ \"ПРИВАТБАНК\"",
+									"АЦСК АТ КБ «ПРИВАТБАНК»",
 									"АЦСК ПАТ КБ «ПРИВАТБАНК»",
 									"АЦСК «ПРИВАТБАНК»"],
 		"address": 					"acsk.privatbank.ua",
@@ -89,12 +91,24 @@
 	},
 	{
 		"issuerCNs": 				["КНЕДП АЦСК АТ \"Альфа-Банк\"",
-									"Акредитований центр сертифікації ключів АТ \"Альфа-Банк\""],
+									"Акредитований центр сертифікації ключів АТ \"Альфа-Банк\"",
+									"КНЕДП АТ \"СЕНС БАНК\""],
 		"address": 					"ca.alfabank.kiev.ua",
 		"ocspAccessPointAddress":	"ca.alfabank.kiev.ua/services/ocsp/",
 		"ocspAccessPointPort":		"80",
 		"cmpAddress":				"ca.alfabank.kiev.ua",
 		"tspAddress":				"ca.alfabank.kiev.ua",
+		"tspAddressPort":			"80"
+	},
+	{
+		"issuerCNs": 				["КНЕДП АТ \"СЕНС БАНК\"",
+									"КНЕДП АЦСК АТ \"Альфа-Банк\"",
+									"Акредитований центр сертифікації ключів АТ \"Альфа-Банк\""],
+		"address": 					"ca.sensebank.com.ua",
+		"ocspAccessPointAddress":	"ca.sensebank.com.ua/services/ocsp/",
+		"ocspAccessPointPort":		"80",
+		"cmpAddress":				"ca.sensebank.com.ua",
+		"tspAddress":				"ca.sensebank.com.ua",
 		"tspAddressPort":			"80"
 	},
 	{
@@ -181,10 +195,21 @@
 									"АЦСК МВС України"],
 		"address": 					"ca.mvs.gov.ua",
 		"ocspAccessPointAddress":	"ca.mvs.gov.ua/services/ocsp/",
-		"ocspAccessPointPort":		"80",
+		"ocspAccessPointPort":		"80",	
 		"cmpAddress":				"ca.mvs.gov.ua",
 		"tspAddress":				"ca.mvs.gov.ua",
 		"tspAddressPort":			"80"
+	},
+	{
+		"issuerCNs": 				["КНЕДП Служби зовнішньої розвідки України",
+									"QTSP of Foreign Intelligence Service of Ukraine"],
+		"address": 					"ca.szru.gov.ua",
+		"ocspAccessPointAddress":	"ca.szru.gov.ua/services/ocsp/",
+		"ocspAccessPointPort":		"80",
+		"cmpAddress":				"ca.szru.gov.ua",
+		"tspAddress":				"ca.szru.gov.ua",
+		"tspAddressPort":			"80",
+		"directAccess":				true
 	},
 	{
 		"issuerCNs": 				["АЦСК Національного банку України",
@@ -194,6 +219,27 @@
 		"ocspAccessPointPort":		"80",
 		"cmpAddress":				"canbu.bank.gov.ua",
 		"tspAddress":				"canbu.bank.gov.ua",
+		"tspAddressPort":			"80"
+	},
+	{
+		"issuerCNs": 				["КНЕДП АТ \"ПРАВЕКС БАНК\"",
+									"QTSP-RSA of \"PRAVEX BANK\" JSC",
+									"QTSP-ECDSA of \"PRAVEX BANK\" JSC"],
+		"address": 					"ca.pravex.com.ua",
+		"ocspAccessPointAddress":	"ca.pravex.com.ua/services/ocsp/",
+		"ocspAccessPointPort":		"80",
+		"cmpAddress":				"ca.pravex.com.ua",
+		"tspAddress":				"ca.pravex.com.ua",
+		"tspAddressPort":			"80",
+		"directAccess":				true
+	},
+	{
+		"issuerCNs": 				["КНЕДП АТ \"ТАСКОМБАНК\""],
+		"address": 					"ca.tascombank.ua",
+		"ocspAccessPointAddress":	"ca.tascombank.ua/services/ocsp/",
+		"ocspAccessPointPort":		"80",
+		"cmpAddress":				"ca.tascombank.ua",
+		"tspAddress":				"ca.tascombank.ua",
 		"tspAddressPort":			"80"
 	},
 	{ 
@@ -214,33 +260,25 @@
 									"Кваліфікований надавач ЕДП \"Казначейство\"",
 									"АЦСК Державної казначейської служби України",
 									"ЦСК Державної казначейської служби України"],
-		"address": 					"acsk.treasury.gov.ua",
-		"ocspAccessPointAddress":	"ocsp.treasury.gov.ua/OCSPsrv/ocsp",
-		"ocspAccessPointPort":		"80",
+		"address": 					"ca.treasury.gov.ua",
+		"ocspAccessPointAddress":	"ca.treasury.gov.ua",
+		"ocspAccessPointPort":		"43222",
 		"cmpAddress":				"",
-		"tspAddress":				"ocsp.treasury.gov.ua/TspHTTPServer/tsp",
-		"tspAddressPort":			"80",
+		"tspAddress":				"ca.treasury.gov.ua",
+		"tspAddressPort":			"43221",
 		"certsInKey":				true,
 		"cmpCompatibility":			0
 	},
 	{
-		"issuerCNs":				["АЦСК 'eSign' ТОВ 'Алтерсайн'"],
-		"address": 					"ca.altersign.com.ua",
-		"ocspAccessPointAddress":	"ca.altersign.com.ua/services/ocsp/",
-		"ocspAccessPointPort":		"80",
-		"cmpAddress":				"",
-		"tspAddress":				"",
-		"tspAddressPort":			"",
-		"cmpCompatibility":			0
-	},
-	{
-		"issuerCNs":				["КНЕДП ЦСК АТ «Ощадбанк»",
-			"Акредитований центр сертифікації ключів АТ \"Ощадбанк\""],
+		"issuerCNs":				["КНЕДП АТ \"Ощадбанк\"",
+									"КНЕДП ЦСК АТ \"Ощадбанк\"",
+									"КНЕДП ЦСК АТ «Ощадбанк»",
+									"Акредитований центр сертифікації ключів АТ \"Ощадбанк\""],
 		"address": 					"ca.oschadbank.ua",
 		"ocspAccessPointAddress":	"ca.oschadbank.ua/public/ocsp",
 		"ocspAccessPointPort":		"80",
 		"cmpAddress":				"",
-		"tspAddress":				"ca.oschadbank.ua/public/tsa",
+		"tspAddress":				"ca.oschadbank.ua/public/tsp",
 		"tspAddressPort":			"80",
 		"certsInKey":				true,
 		"cmpCompatibility":			0
@@ -256,10 +294,21 @@
 		"tspAddress":				"ca.gp.gov.ua/tsp",
 		"tspAddressPort":			"80",
 		"certsInKey":				true,
+		"cmpCompatibility":			1
+	},
+	{
+		"issuerCNs":				["КНЕДП СБ України"],
+		"address": 					"va1-knedp.ssu.gov.ua",
+		"ocspAccessPointAddress":	"va1-knedp.ssu.gov.ua/services/ocsp/",
+		"ocspAccessPointPort":		"80",
+		"cmpAddress":				"va1-knedp.ssu.gov.ua/services/cmp/",
+		"tspAddress":				"va1-knedp.ssu.gov.ua/services/tsp/",
+		"tspAddressPort":			"80",
 		"cmpCompatibility":			3
 	},
 	{
-		"issuerCNs":				["\"АЦСК TOB 'Інтер-Метл'\""],
+		"issuerCNs":				["КНЕДП ЦЕЗАРІС TOB \"Інтер-Метл\"",
+									"\"АЦСК TOB 'Інтер-Метл'\""],
 		"address": 					"cesaris.itsway.kiev.ua",
 		"ocspAccessPointAddress":	"cesaris.itsway.kiev.ua/services/ocsp/",
 		"ocspAccessPointPort":		"80",
@@ -284,8 +333,8 @@
 	},
 	{
 		"issuerCNs":				["КНЕДП АТ \"БАНК АЛЬЯНС\"",
-										"QTSP-RSA of JSC \"Bank Alliance\"",
-										"QTSP-ECDSA of JSC \"Bank Alliance\""],
+									"QTSP-RSA of JSC \"Bank Alliance\"",
+									"QTSP-ECDSA of JSC \"Bank Alliance\""],
 		"address": 					"ca.bankalliance.ua",
 		"ocspAccessPointAddress":	"ca.bankalliance.ua/ocsp",
 		"ocspAccessPointPort":		"80",
@@ -297,8 +346,8 @@
 	},
 	{
 		"issuerCNs":				["КНЕДП АБ \"УКРГАЗБАНК\"",
-										"QTSP-RSA of JSB \"UKRGASBANK\"",
-										"QTSP-ECDSA of JSB \"UKRGASBANK\""],
+									"QTSP-RSA of JSB \"UKRGASBANK\"",
+									"QTSP-ECDSA of JSB \"UKRGASBANK\""],
 		"address": 					"qca.ukrgasbank.com",
 		"ocspAccessPointAddress":	"qca.ukrgasbank.com/ocsp",
 		"ocspAccessPointPort":		"80",
@@ -306,6 +355,6 @@
 		"tspAddress":				"qca.ukrgasbank.com/tsp",
 		"tspAddressPort":			"80",
 		"certsInKey":				true,
-		"cmpCompatibility":			3
+		"cmpCompatibility":			1
 	}
-]
+]	

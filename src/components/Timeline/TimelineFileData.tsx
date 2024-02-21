@@ -54,7 +54,7 @@ function TimelineFileData(props: FormDataProps) {
     };
     const handleBase64Show = () => setBase64Show(true);
     const handleBase64Close = () => setBase64Show(false);
-    const handleBase64Copy = () => alert('Скопировано');
+    const handleBase64Copy = () => alert('Скопіювати');
     const handleAsUtf8Change = () => setUtf8((prevState) => !prevState);
     const handleAsWin1251Change = () => setAsWin1251((prevState) => !prevState);
 
@@ -102,7 +102,7 @@ function TimelineFileData(props: FormDataProps) {
                             <CopyToClipboard text={props.base64Data ?? data} onCopy={handleBase64Copy}>
                                 <Button variant="secondary">Copy (origin)</Button>
                             </CopyToClipboard>
-                            <Button onClick={handleBase64Close} variant="secondary">Close</Button>
+                            <Button onClick={handleBase64Close} variant="secondary">Закрити</Button>
                         </Modal.Footer>
                     </Modal>
                 </>

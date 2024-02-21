@@ -10,7 +10,7 @@ function Loader() {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
 
-    const initLibrary = () => {
+    function initLibrary() {
         setLoading(true);
 
         EUSignCPFrontend.loadLibrary()
@@ -20,8 +20,7 @@ function Loader() {
             })
             .then(() => setLoading(false))
             .catch((e) => {
-                console.log(e)
-                setError(e);
+                setError(e.full);
                 setLoading(false);
             });
     }

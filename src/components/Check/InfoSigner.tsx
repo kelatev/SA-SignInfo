@@ -1,12 +1,12 @@
 import React, { useContext, useEffect, useState } from "react";
 import { EndUserCertificateInfoEx, EndUserTimeInfo } from "../../EUSign/types";
-import IconCoding6 from "../../media/icons/duotune/coding/cod006.svg";
 import TimelineItem from "../Timeline/TimelineItem";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import SyntaxHighlighter from "react-syntax-highlighter";
 import { darcula } from "react-syntax-highlighter/dist/esm/styles/hljs";
 import EUSignContext from "../../context/EUSign";
+import { Cursor } from "@phosphor-icons/react";
 
 interface SignerProps {
     data: EndUserCertificateInfoEx;
@@ -52,7 +52,7 @@ function InfoSigner(props: SignerProps) {
         <>
             <TimelineItem
                 title={"Підписувач - " + props.data.GetSubjCN()}
-                icon={IconCoding6}
+                icon={<Cursor />}
             >
                 {props.data.GetSubjDRFOCode() && props.data.GetSubjDRFOCode() !== props.data.GetSubjEDRPOUCode() && (
                     <RowDescription
@@ -73,7 +73,7 @@ function InfoSigner(props: SignerProps) {
             </TimelineItem>
             <TimelineItem
                 title={"Підпис"}
-                icon={IconCoding6}
+                icon={<Cursor />}
             >
                 <RowDescription
                     title={
@@ -97,7 +97,7 @@ function InfoSigner(props: SignerProps) {
             </TimelineItem>
             <TimelineItem
                 title={"Сертифікат"}
-                icon={IconCoding6}
+                icon={<Cursor />}
             >
                 <RowDescription
                     title={"Сертифікат виданий"}

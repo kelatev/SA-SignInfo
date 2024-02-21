@@ -6,7 +6,7 @@ type Props = {
 };
 const Timeline: React.FC<Props> = ({children}) => {
     return (
-        <div className="timeline">
+        <div className="timeline timeline-border-dashed">
             {children}
         </div>
     );

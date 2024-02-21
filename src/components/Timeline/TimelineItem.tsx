@@ -2,41 +2,26 @@ import React from "react";
 
 type Props = {
     children?: React.ReactNode
-    icon: string
+    icon: React.ReactNode
     title: string
-    description?: string
+    description?: string | React.ReactNode
 };
-const TimelineItem: React.FC<Props> = ({icon, title, description, children}) => {
+const TimelineItem: React.FC<Props> = ({ icon, title, description, children }) => {
     return (
-        /*begin::Timeline item*/
         <div className="timeline-item">
-            {/*begin::Timeline line*/}
-            <div className="timeline-line w-40px"/>
-            {/*end::Timeline line*/}
-            {/*begin::Timeline icon*/}
-            <div className="timeline-icon symbol symbol-circle symbol-40px me-4">
-                <div className="symbol-label">
-                    <span className="svg-icon svg-icon-2"><img src={icon} alt="logo"/></span>
-                </div>
+            <div className="timeline-line" />
+            <div className="timeline-icon">
+                <span className="svg-icon svg-icon-2 fs-2 text-gray-500">{icon}</span>
             </div>
-            {/*end::Timeline icon*/}
-            {/*begin::Timeline content*/}
-            <div className="timeline-content mb-8 mt-n1">
-                {/*begin::Timeline heading*/}
+            <div className="timeline-content mb-6 mt-n1">
                 <div className="pe-3 mb-5">
-                    {/*begin::Title*/}
-                    <div className="fs-5 fw-bold mb-2 text-white">{title}</div>
-                    {/*end::Title*/}
-                    {/*begin::Description*/}
-                    {description && <div className="d-flex align-items-center mt-1 fs-6">{description}</div>}
-                    {/*end::Description*/}
+                    <div className="fs-5 fw-semibold mb-2">{title}</div>
+                    <div className="d-flex align-items-center text-gray-600 mt-1 fs-7">
+                        <div className="text-muted me-2 fs-7">{description}</div>
+                    </div>
                 </div>
-                {/*end::Timeline heading*/}
-                {/*begin::Timeline details*/}
-                {children}
-                {/*end::Timeline details*/}
+                {children && <div className="overflow-auto">{children}</div>}
             </div>
-            {/*end::Timeline content*/}
         </div>
     );
 };

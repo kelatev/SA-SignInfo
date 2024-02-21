@@ -1,8 +1,8 @@
 import React, {useContext, useEffect, useState} from 'react';
 import {EndUserJKSPrivateKey, EndUserOwnerInfo} from "../../EUSign/types";
-import IconCoding6 from "../../media/icons/duotune/coding/cod006.svg";
 import EUSignContext from "../../context/EUSign";
 import Timeline from "../Timeline/Timeline";
+import { User } from "@phosphor-icons/react";
 
 interface SignSignInfoBlockProps {
     endUserJKSPrivateKey: EndUserJKSPrivateKey
@@ -26,9 +26,11 @@ function SignInfo(props: SignSignInfoBlockProps) {
     return (
         <>
             {ownerInfo && (
-                <Timeline.Item title={ownerInfo.GetSubjFullName()} icon={IconCoding6}>
-                    <p>Організація: {ownerInfo.GetSubjOrg()}</p>
-                    <p>РНОКПП: {ownerInfo.GetSubjDRFOCode() || ownerInfo.GetSubjEDRPOUCode()}</p>
+                <Timeline.Item title={ownerInfo.GetSubjFullName()} icon={<User />}>
+                    <div className='d-flex align-items-center'>
+                        <span className='badge badge-light-primary'>{ownerInfo.GetSubjOrg()}</span>
+                        <span className='badge badge-light-primary ms-3'>{ownerInfo.GetSubjDRFOCode() || ownerInfo.GetSubjEDRPOUCode()}</span>
+                    </div>
                 </Timeline.Item>)}
         </>
     );

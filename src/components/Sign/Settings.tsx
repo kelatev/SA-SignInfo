@@ -1,8 +1,8 @@
-import React, {useContext, useEffect, useState} from 'react';
-import IconCoding6 from "../../media/icons/duotune/coding/cod006.svg";
+import React, { useContext, useEffect, useState } from 'react';
 import Timeline from "../Timeline/Timeline";
 import Form from "react-bootstrap/Form";
 import EUSignContext from "../../context/EUSign";
+import { GearSix } from "@phosphor-icons/react";
 
 interface SignSignSignBlockProps {
     onSignTypeSelect: (key: number) => void
@@ -20,7 +20,7 @@ export const signTypeCAdESExt = 2;
 export const signTypeASiCS = 3;
 
 function Settings(props: SignSignSignBlockProps) {
-    const {euSign} = useContext(EUSignContext);
+    const { euSign } = useContext(EUSignContext);
 
     const [signAlgoType, setSignTypeList] = useState<SelectItem[]>();
     const [signAlgoList, setSignAlgoList] = useState<SelectItem[]>();
@@ -29,6 +29,8 @@ function Settings(props: SignSignSignBlockProps) {
     const [signType, setSignType] = useState<number>();
     const [signAlgo, setSignAlgo] = useState<number>();
     const [signFormat, setSignFormat] = useState<number>();
+
+    const [editMode, setEditMode] = useState(false);
 
     useEffect(() => {
         if (euSign) {
@@ -75,8 +77,8 @@ function Settings(props: SignSignSignBlockProps) {
                 key: euSign.m_library.m_library.EU_SIGN_TYPE_CADES_C,
                 value: "з посиланням на повні дані для перевірки (CAdES-C)"
             });
-            list.push({key: euSign.m_library.m_library.EU_SIGN_TYPE_CADES_T, value: "з позначкою часу від КЕП (CAdES-T)"});
-            list.push({key: euSign.m_library.m_library.EU_SIGN_TYPE_CADES_BES, value: "базовий (CAdES-BES)"});
+            list.push({ key: euSign.m_library.m_library.EU_SIGN_TYPE_CADES_T, value: "з позначкою часу від КЕП (CAdES-T)" });
+            list.push({ key: euSign.m_library.m_library.EU_SIGN_TYPE_CADES_BES, value: "базовий (CAdES-BES)" });
             setSignFormatList(list);
         }
     }, [euSign]);
@@ -101,10 +103,26 @@ function Settings(props: SignSignSignBlockProps) {
         }
     }, [euSign, signAlgoType, signAlgoList, signFormatList, props, signType, signAlgo, signFormat]);
 
+    const printValue = (text: string) => {
+        return <div><span className='badge badge-light-primary'>{text}</span></div>
+    }
+
+    if (!editMode) {
+        return (
+            <Timeline.Item title="Налаштування електронного підпису" icon={<GearSix />}>
+                <div className="border border-dashed border-gray-300 rounded px-5 py-3 mb-5">
+                    {signAlgoType && signAlgoType.filter(i => i.key === signType).map(i => printValue(i.value))}
+                    {signAlgoList && signAlgoList.map((item) => printValue(item.value))}
+                    {signFormatList && signFormatList.map((item) => printValue(item.value))}
+                </div>
+            </Timeline.Item>
+        )
+    }
+
     return (
-        <Timeline.Item title="Создание електронной подписи" icon={IconCoding6}>
+        <Timeline.Item title="Налаштування електронного підпису" icon={<GearSix />}>
             <Form>
-                <Form.Label>Тип підпису</Form.Label>
+                <Form.Label >Тип підпису</Form.Label>
                 {signAlgoType && signAlgoType.map((item, index) =>
                     <Form.Check
                         type={'radio'}
@@ -117,14 +135,14 @@ function Settings(props: SignSignSignBlockProps) {
 
                 <Form.Label>Алгоритм підпису</Form.Label>
                 <Form.Select className="mb-1"
-                             onChange={(ev) => setSignAlgo(parseInt(ev.currentTarget.value))}>
+                    onChange={(ev) => setSignAlgo(parseInt(ev.currentTarget.value))}>
                     {signAlgoList && signAlgoList.map((item) => <option
                         key={item.key}>{item.value}</option>)}
                 </Form.Select>
 
                 <Form.Label>Формат підпису</Form.Label>
                 <Form.Select className="mb-1"
-                             onChange={(ev) => setSignFormat(parseInt(ev.currentTarget.value))}>
+                    onChange={(ev) => setSignFormat(parseInt(ev.currentTarget.value))}>
                     {signFormatList && signFormatList.map((item) => <option
                         key={item.key}>{item.value}</option>)}
                 </Form.Select>
