@@ -1,11 +1,11 @@
 import React, {useContext, useEffect, useState} from 'react';
-import {EndUserJKSPrivateKey, EndUserOwnerInfo} from "../../EUSign/types";
+import {EndUserPrivateKey, EndUserOwnerInfo} from "../../EUSign/types";
 import EUSignContext from "../../context/EUSign";
 import Timeline from "../Timeline/Timeline";
 import { User } from "@phosphor-icons/react";
 
 interface SignSignInfoBlockProps {
-    endUserJKSPrivateKey: EndUserJKSPrivateKey
+    endUserPrivateKey: EndUserPrivateKey
 }
 
 function SignInfo(props: SignSignInfoBlockProps) {

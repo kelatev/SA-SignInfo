@@ -1,11 +1,13 @@
-import React, {KeyboardEvent, useState} from "react";
+import React, { KeyboardEvent, useState } from "react";
 import InputGroup from 'react-bootstrap/InputGroup';
 import FormControl from 'react-bootstrap/FormControl';
 import Button from 'react-bootstrap/Button';
 
 interface PasswordProps {
     title: string
+    onChange?: () => void
     onEnter: (pass: string) => void
+    loading?: boolean
 }
 
 function FormPassword(props: PasswordProps) {
@@ -13,6 +15,7 @@ function FormPassword(props: PasswordProps) {
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setPassword(e.target.value);
+        props.onChange && props.onChange();
     }
 
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -35,7 +38,7 @@ function FormPassword(props: PasswordProps) {
                     onChange={handleChange}
                     onKeyDown={handleKeyDown}
                 />
-                <Button variant="primary" onClick={handleSubmit}>{props.title}</Button>
+                <Button variant="primary" onClick={handleSubmit}>{props.loading === true ? '1' : null}{props.title}</Button>
             </InputGroup>
         </>
     );

@@ -1,5 +1,4 @@
-import React, {useRef, useState} from 'react';
-import {FileInterface} from "../../types";
+import React, { useRef, useState } from 'react';
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import FormControl from "react-bootstrap/FormControl";
@@ -7,7 +6,7 @@ import FormControl from "react-bootstrap/FormControl";
 interface Base64Props {
     title: string
     accept?: string
-    onChange: (file: FileInterface) => void
+    onChange: (file: File) => void
 }
 
 function FormUploadBase64(props: Base64Props) {
@@ -22,20 +21,24 @@ function FormUploadBase64(props: Base64Props) {
         if (!textInput.current) {
             return
         }
-        const content = textInput.current.value;
-        //content = content.substring(content.indexOf(';base64,') + 8);
 
-        props.onChange({
-            content: content,
-            name: 'application.bin',
-            size: (content.length - 814) / 1.37
-        });
+        const base64 = textInput.current.value;
+        fetch(`data:application/octet-stream;base64,${base64}`)
+            .then(res => res.blob())
+            .then(res => {
+                props.onChange(new File(
+                    [res],
+                    'application.bin'
+                ));
+            })
+
+
     }
 
     return (
         <>
             <Button onClick={handleShow} variant="none"
-                    className="btn btn-secondary btn-active-light-primary hover-elevate-up">{props.title}</Button>
+                className="btn btn-secondary border-hover border-gray-400 btn-active-light-primary hover-elevate-up">{props.title}</Button>
             <Modal show={show} onHide={handleClose} size="xl">
                 <Modal.Header closeButton>
                     <Modal.Title>Base64</Modal.Title>
@@ -43,9 +46,9 @@ function FormUploadBase64(props: Base64Props) {
                 <Modal.Body>
                     <FormControl as="textarea" ref={textInput} />
                 </Modal.Body>
-                <Modal.Footer>
+                <Modal.Footer className='border-0 pt-0'>
                     <Button onClick={handleClose} variant="light">Закрити</Button>
-                    <Button onClick={handleUpload} variant="primary">Закантажити</Button>
+                    <Button onClick={handleUpload} variant="primary">Завантажити</Button>
                 </Modal.Footer>
             </Modal>
         </>

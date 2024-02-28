@@ -20,7 +20,7 @@ const TimelineItem: React.FC<Props> = ({ icon, title, description, children }) =
                         <div className="text-muted me-2 fs-7">{description}</div>
                     </div>
                 </div>
-                {children && <div className="overflow-auto">{children}</div>}
+                {children && <div className="">{children}</div>}
             </div>
         </div>
     );

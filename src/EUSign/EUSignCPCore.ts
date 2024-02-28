@@ -1065,6 +1065,15 @@ export default class EUSignCPCore {
 
   //  А.5.1.7 Функції ЕЦП
 
+  GetSignType(
+    signIndex: number,
+    signature: string | Uint8Array
+  ): Promise<number> {
+    return new Promise((resolve, reject) => {
+      this.m_library.GetSignType(signIndex, signature, resolve, reject);
+    });
+  }
+
   /*Отримання кількості ЕЦП, що містяться в підписаних даних*/
   GetSignsCount(signature: string): Promise<number> {
     return new Promise((resolve, reject) => {

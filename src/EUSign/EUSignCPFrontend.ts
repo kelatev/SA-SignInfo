@@ -30,16 +30,12 @@ export default class EUSignCPFrontend extends EUSignCPPromise {
     }
 
     GetSignAlgo(info: EndUserCertificateInfoEx) {
-        const EU_CERT_KEY_TYPE_DSTU4145 = 0x01;
-        const EU_CERT_KEY_TYPE_RSA = 0x02;
-        const EU_CERT_KEY_TYPE_ECDSA = 0x04;
-
         switch (info.GetPublicKeyType()) {
-            case EU_CERT_KEY_TYPE_DSTU4145:
-                return "ДСТУ-4145";
-            case EU_CERT_KEY_TYPE_RSA:
+            case this.m_library.m_library.EU_CERT_KEY_TYPE_DSTU4145:
+                return "ДСТУ 4145-2002";
+            case this.m_library.m_library.EU_CERT_KEY_TYPE_RSA:
                 return "RSA";
-            case EU_CERT_KEY_TYPE_ECDSA:
+            case this.m_library.m_library.EU_CERT_KEY_TYPE_ECDSA:
                 return "ECDSA";
             default:
                 return '';
@@ -72,8 +68,8 @@ export default class EUSignCPFrontend extends EUSignCPPromise {
         }
     }
 
-    GetCAdESFormat(signFormat: number) {
-        switch (signFormat) {
+    GetCAdESSignLevel(signLevel: number) {
+        switch (signLevel) {
             case this.m_library.m_library.EU_SIGN_TYPE_CADES_BES:
                 return "Базовий (CAdES-BES)";
             case this.m_library.m_library.EU_SIGN_TYPE_CADES_T:
@@ -86,20 +82,39 @@ export default class EUSignCPFrontend extends EUSignCPPromise {
             this.m_library.m_library.EU_SIGN_TYPE_CADES_X_LONG_TRUSTED:
                 return "З повними даними ЦСК для перевірки (CAdES-X Long)";
             default:
-                return 'CAdES';//'Не визначено';!!!!
+                return 'CAdES (Не визначено)';
         }
     }
 
-    GetXAdESFormat(signFormat: number) {
-        switch (signFormat) {
-            case EU_ASIC_SIGN_LEVEL_BES:
-                return "Базовий (XAdES-BES)";
-            case EU_ASIC_SIGN_LEVEL_T:
-                return "З позначкою часу від ЕП (XAdES-T)";
+    GetXAdESSignLevel(signLevel: number) {
+        switch (signLevel) {
+            case this.m_library.m_library.EU_XADES_SIGN_LEVEL_B_B:
+                return "Базовий (XAdES-B-B)";
+            case this.m_library.m_library.EU_XADES_SIGN_LEVEL_B_T:
+                return "З позначкою часу від ЕП (XAdES-B-T)";
+            case this.m_library.m_library.EU_XADES_SIGN_LEVEL_B_LT:
+                return "З повними даними для перевірки (XAdES-B-LT)";
+            case this.m_library.m_library.EU_XADES_SIGN_LEVEL_B_LTA:
+                return "З повними даними для архівного зберігання (XAdES-B-LTA)";
             default:
-                return 'XAdES';//'Не визначено';!!!!
+                return 'XAdES (Не визначено)';
         }
     }
+
+    GetPAdESSignLevel(signLevel: number) {
+        switch (signLevel) {
+            case this.m_library.m_library.EU_PADES_SIGN_LEVEL_B_B:
+                return "Базовий (PAdES-B-B)";
+            case this.m_library.m_library.EU_PADES_SIGN_LEVEL_B_T:
+                return "З позначкою часу від ЕП (PAdES-B-T)";
+            case this.m_library.m_library.EU_PADES_SIGN_LEVEL_B_LT:
+                return "З повними даними для перевірки (PAdES-B-LT)";
+            case this.m_library.m_library.EU_PADES_SIGN_LEVEL_B_LTA:
+                return "З повними даними для архівного зберігання (PAdES-B-LTA)";
+            default:
+                return 'PAdES (Не визначено)';
+        }
+    }	
 
     /*IsUseCRLs(issuerCN) {
         if (!s_settings.CRLs)
@@ -201,7 +216,7 @@ export default class EUSignCPFrontend extends EUSignCPPromise {
             GetSignAlgo(signerCert.GetInfoEx()),
             (signContainerType & EUSignContainerType.XAdES) ?
                 GetXAdESFormat(signFormat) :
-                GetCAdESFormat(signFormat),
+                GetCAdESSignLevel(signFormat),
             GetSignContainerType(signContainerType),
             isAllContentCovered);
     }*/

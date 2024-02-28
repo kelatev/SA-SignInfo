@@ -1,11 +1,10 @@
 import React from "react";
 import { fileSizeName } from "../../utils/fileSizeName";
-import { FileInterface } from "../../types";
 
 export type Props = {
     children?: React.ReactNode
     icon: React.ReactNode
-    file: FileInterface
+    file: File
 };
 const DetailsFile: React.FC<Props> = ({ icon, file, children }) => {
     const sizeName = fileSizeName(file.size);

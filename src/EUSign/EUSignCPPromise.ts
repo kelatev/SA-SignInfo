@@ -256,7 +256,7 @@ export default class EUSignCPPromise {
         }))
     }
 
-    async SaveCertificatesInternal(certificates: Uint8Array[] | Uint8Array | null): Promise<void> {
+    async SaveCertificatesInternal(certificates: Uint8Array[] | Uint8Array | null | undefined): Promise<void> {
         if (Array.isArray(certificates)) {
             return Promise.all(certificates.map(async (cert) => {
                 await this.m_library.SaveCertificate(cert)
@@ -269,7 +269,7 @@ export default class EUSignCPPromise {
     }
 
     //todo: check
-    async CtxReadPrivateKeyInternal(m_context: any, privateKey: Uint8Array, password: string, keyMedia: EndUserKeyMedia | null, certificates: Uint8Array[] | Uint8Array | null, issuerCN: string | null): Promise<void> {
+    async CtxReadPrivateKeyInternal(m_context: any, privateKey: Uint8Array, password: string, keyMedia: EndUserKeyMedia | null, certificates: Uint8Array[] | Uint8Array | null | undefined, issuerCN: string | null): Promise<void> {
         const context = m_context || this.m_context;
         await this.SaveCertificatesInternal(certificates);
         await this.SetSettings(issuerCN);
@@ -290,14 +290,15 @@ export default class EUSignCPPromise {
             return pkContext;
         } catch (e: any) {
             if (pkContext == null) {
-                if (e.code != EndUserError.ERROR_CERT_NOT_FOUND || issuerCN) {
+                if (e.code != EndUserError.ERROR_CERT_NOT_FOUND) {
                     throw e;
                 } else {
                     const keyCertificate = await this.SearchPrivateKeyCertificatesWithCMP(privateKey, password, keyMedia);
                     return this.CtxReadPrivateKeyInternal(m_context, privateKey, password, keyMedia, keyCertificate.certs, keyCertificate.CACommonName);
                 }
             } else {
-                this.m_library.CtxFreePrivateKey(pkContext).then();
+                //this.m_library.CtxFreePrivateKey(pkContext).then();
+                await this.m_library.ResetPrivateKey();
                 throw e;
             }
         }
@@ -330,6 +331,7 @@ export default class EUSignCPPromise {
                 CACommonName: null
             };
         }
+        
         return new Promise((resolve, reject) => {
             const func = (index: number, errorCertNotFound: boolean) => {
                 if (index >= CAs.length) {

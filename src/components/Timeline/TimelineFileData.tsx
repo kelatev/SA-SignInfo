@@ -1,5 +1,4 @@
 import React, {useState, useEffect} from 'react';
-import IconFil3 from "../../media/icons/duotune/files/fil003.svg";
 import TimelineItem from "./TimelineItem";
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
@@ -10,6 +9,7 @@ import {saveAs} from "file-saver";
 import {CopyToClipboard} from 'react-copy-to-clipboard';
 import {fileSizeName} from "../../utils/fileSizeName";
 import {decode} from 'windows-1251';
+import { File } from "@phosphor-icons/react";
 
 interface FormDataProps {
     title: string
@@ -77,15 +77,15 @@ function TimelineFileData(props: FormDataProps) {
     }, [props, data, asWin1251]);
 
     return (
-        <TimelineItem title={props.title} icon={IconFil3}>
+        <TimelineItem title={props.title} icon={<File />}>
             {data && (
                 <>
                     {props.fileName && (
-                        <Button onClick={handleFileDownload} variant="light" size="sm" className="ms-2">Скачать
+                        <Button onClick={handleFileDownload} variant="light" size="sm" className="ms-2 btn-active-light-primary">Скачать
                             файл ({base64Size(props.base64Data)})</Button>
                     )}
                     <Button onClick={handleBase64Show} variant="light" size="sm"
-                            className="ms-2">{props.showAsAscii ? 'ascii' : 'base64'}</Button>
+                            className="ms-2 btn-active-light-primary">{props.showAsAscii ? 'ascii' : 'base64'}</Button>
                     <Modal show={base64Show} onHide={handleBase64Close} size="xl">
                         <Modal.Header closeButton>
                             <Modal.Title>Base64</Modal.Title>

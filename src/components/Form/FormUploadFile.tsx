@@ -1,22 +1,18 @@
 import React from 'react';
-import {FileInterface} from "../../types";
 
 interface FileProps {
     title: string
     accept?: string
-    onChange: (file: FileInterface) => void
+    onChange: (file: File) => void
 }
 
 function FormUploadFile(props: FileProps) {
     let fileReader: FileReader;
     let name: string;
-    let size: number;
 
     function handleFileRead() {
-        let content: any = fileReader.result;
-        content = content.substring(content.indexOf(';base64,') + 8);
-
-        props.onChange({content, name, size});
+        const content = fileReader.result as ArrayBuffer;
+        props.onChange(new File([new Blob([content])], name));
     }
 
     function handleFileChosen(e: any) {
@@ -24,10 +20,9 @@ function FormUploadFile(props: FileProps) {
             const file = e.target.files[0];
 
             name = file.name;
-            size = file.size;
             fileReader = new FileReader();
             fileReader.onloadend = handleFileRead;
-            fileReader.readAsDataURL(file);
+            fileReader.readAsArrayBuffer(file);
 
             e.target.value = null;
         }
@@ -35,8 +30,8 @@ function FormUploadFile(props: FileProps) {
 
     return (
         <label>
-            <input type='file' className='d-none' onChange={handleFileChosen} accept={props.accept}/>
-            <span className="btn btn-secondary btn-active-light-primary hover-elevate-up">
+            <input type='file' className='d-none' onChange={handleFileChosen} accept={props.accept} />
+            <span className="btn btn-secondary border-hover border-gray-400 btn-active-light-primary hover-elevate-up">
                 {props.title}
             </span>
         </label>

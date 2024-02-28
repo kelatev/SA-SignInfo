@@ -4568,6 +4568,35 @@ export const EUSignCP = function(address, port) {
     this.EU_SIGN_TYPE_CADES_X_LONG = 16;
     this.EU_SIGN_TYPE_CADES_X_LONG_TRUSTED = 128;
 
+    this.EU_KEYS_REQUEST_TYPE_UA_DS = 1;
+    this.EU_KEYS_REQUEST_TYPE_UA_KEP = 2;
+    this.EU_KEYS_REQUEST_TYPE_INTERNATIONAL = 3;
+
+    this.EU_ASIC_TYPE_UNKNOWN = 0;
+    this.EU_ASIC_TYPE_S = 1;
+    this.EU_ASIC_TYPE_E = 2;
+
+    this.EU_ASIC_SIGN_TYPE_UNKNOWN = 0;
+    this.EU_ASIC_SIGN_TYPE_CADES = 1;
+    this.EU_ASIC_SIGN_TYPE_XADES = 2;
+
+    this.EU_XADES_TYPE_UNKNOWN = 0;
+    this.EU_XADES_TYPE_DETACHED = 1;
+    this.EU_XADES_TYPE_ENVELOPING = 2;
+    this.EU_XADES_TYPE_ENVELOPED = 3;
+
+    this.EU_XADES_SIGN_LEVEL_UNKNOWN = 0;
+    this.EU_XADES_SIGN_LEVEL_B_B = 1;
+    this.EU_XADES_SIGN_LEVEL_B_T = 4;
+    this.EU_XADES_SIGN_LEVEL_B_LT = 16;
+    this.EU_XADES_SIGN_LEVEL_B_LTA = 32;
+
+    this.EU_PADES_SIGN_LEVEL_UNKNOWN = 0;
+    this.EU_PADES_SIGN_LEVEL_B_B = 1;
+    this.EU_PADES_SIGN_LEVEL_B_T = 4;
+    this.EU_PADES_SIGN_LEVEL_B_LT = 16;
+    this.EU_PADES_SIGN_LEVEL_B_LTA = 32;
+
     this.EU_CHECK_PRIVATE_KEY_CONTEXT_PARAMETER = "CheckPrivateKey";
     this.EU_RESOLVE_OIDS_CONTEXT_PARAMETER = "ResolveOIDs";
     this.EU_EXPORATABLE_CONTEXT_CONTEXT_PARAMETER	= "ExportableContext";
