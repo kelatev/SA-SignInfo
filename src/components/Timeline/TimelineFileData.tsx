@@ -77,8 +77,7 @@ function TimelineFileData(props: FormDataProps) {
                         <Button onClick={handleFileDownload} variant="light" size="sm" className="ms-2 btn-active-light-primary">Скачати
                             файл ({getSize(props.data)})</Button>
                     )}
-                    <Button onClick={handleShow} variant="light" size="sm"
-                        className="ms-2 btn-active-light-primary">Вміст</Button>
+                    <Button onClick={handleShow} variant="light" size="sm" className="ms-2 btn-active-light-primary">Вміст</Button>
                     <Modal show={base64Show} onHide={handleClose} size="xl">
                         <Modal.Header closeButton>
                             <Modal.Title>Вміст</Modal.Title>

@@ -14,7 +14,7 @@ const Layout: React.FC<LayoutProps> = ({ title, subtitle, showOverlay = false, l
             <div className={'page d-flex flex-row flex-column-fluid' + (showOverlay ? ' overlay overlay-block' : '')}>
                 <div className='wrapper d-flex flex-column flex-row-fluid' id='kt_wrapper'>
 
-                    <div id="kt_header" className="app-container  container-xxl d-flex align-items-start ">
+                    <div id="kt_header" className="app-container container-xxl d-flex align-items-start ">
                         <div className="d-flex flex-column flex-row-fluid">
                             <div className="d-flex flex-stack flex-wrap flex-lg-nowrap gap-4 gap-lg-8 pt-6 pb-16 py-lg-10">
                                 <div className="page-title d-flex align-items-center me-3">
@@ -26,7 +26,7 @@ const Layout: React.FC<LayoutProps> = ({ title, subtitle, showOverlay = false, l
                             </div>
                         </div>
                     </div>
-                    <div id='kt_content' className='content d-flex flex-column flex-column-fluid px-10'>
+                    <div id='kt_content' className='container-xxl d-flex flex-column flex-column-fluid'>
                         <div className='row gy-5 g-xl-10'>
                             <div className='col-xl-6'>
                                 {left}
