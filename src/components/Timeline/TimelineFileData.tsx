@@ -1,108 +1,102 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import TimelineItem from "./TimelineItem";
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import FormControl from "react-bootstrap/FormControl";
-import {FormCheck} from 'react-bootstrap';
-import {Buffer} from 'buffer';
-import {saveAs} from "file-saver";
-import {CopyToClipboard} from 'react-copy-to-clipboard';
-import {fileSizeName} from "../../utils/fileSizeName";
-import {decode} from 'windows-1251';
-import { File } from "@phosphor-icons/react";
+import { FormCheck } from 'react-bootstrap';
+import { Buffer } from 'buffer';
+import { saveAs } from "file-saver";
+import { CopyToClipboard } from 'react-copy-to-clipboard';
+import { fileSizeName } from "../../utils/fileSizeName";
+import { decode } from 'windows-1251';
+import { File, Copy } from "@phosphor-icons/react";
 
 interface FormDataProps {
     title: string
-    base64Data: string | undefined
-    showAsAscii?: boolean
+    data: Uint8Array | undefined
     fileName?: string
 }
 
-function base64ToBuffer(text: string): Buffer {
-    return Buffer.from(text, 'base64');
+function toBase64(data: Uint8Array | undefined): string {
+    return (data && Buffer.from(data).toString('base64')) ?? '';
+}
+function toAscii(data: Uint8Array | undefined): string {
+    return (data && Buffer.from(data).toString('ascii')) ?? '';
 }
 
-function base64ToAscii(text: string): string {
-    return base64ToBuffer(text).toString('ascii');
+function toUtf8(data: Uint8Array | undefined): string {
+    return (data && Buffer.from(data).toString('utf8')) ?? '';
 }
 
-function base64ToUtf8(text: string): string {
-    return base64ToBuffer(text).toString('utf8');
-  }
-
-function base64ToBlob(text: string): Blob {
-    const buffer = base64ToBuffer(text);
-    return new Blob([buffer]);
+function toWin1251(data: Uint8Array | undefined): string {
+    return (data && decode(data)) ?? '';
 }
 
-function base64Size(text: string | undefined): string {
-    const bytes = text ? base64ToBuffer(text).length : 0;
+function getSize(data: Uint8Array | undefined): string {
+    const bytes = data ? Buffer.from(data).length : 0;
     return fileSizeName(bytes);
 }
 
 function TimelineFileData(props: FormDataProps) {
     const [base64Show, setBase64Show] = useState(false);
-    const [asUtf8, setUtf8] = useState(false);
-    const [asWin1251, setAsWin1251] = useState(false);
-    const data = props.base64Data && props.showAsAscii ? base64ToAscii(props.base64Data) : props.base64Data ?? '';
-    const [dataToShow, setDataToShow] = useState(data);
+    const [encode, setEncode] = useState<'ascii' | 'utf8' | 'win1251' | null>(null);
+    const content = toBase64(props.data) ?? '';
+    const [dataToShow, setDataToShow] = useState<string>(content);
 
     const handleFileDownload = () => {
-        if (props.base64Data) {
-            saveAs(base64ToBlob(props.base64Data), props.fileName);
+        if (props.data) {
+            saveAs(new Blob([props.data]), props.fileName);
         }
     };
-    const handleBase64Show = () => setBase64Show(true);
-    const handleBase64Close = () => setBase64Show(false);
-    const handleBase64Copy = () => alert('Скопіювати');
-    const handleAsUtf8Change = () => setUtf8((prevState) => !prevState);
-    const handleAsWin1251Change = () => setAsWin1251((prevState) => !prevState);
+    const handleShow = () => setBase64Show(true);
+    const handleClose = () => setBase64Show(false);
+    const handleCopy = () => alert('Скопіювати');
 
-    useEffect(() => {        
-        if (asUtf8) {
-            const data1 = props.base64Data && props.showAsAscii ? base64ToUtf8(props.base64Data) : props.base64Data ?? '';
-            setDataToShow(data1);
-        } else {
-            setDataToShow(data);
+    useEffect(() => {
+        switch (encode) {
+            case 'ascii':
+                setDataToShow(toAscii(props.data));
+                break;
+            case 'utf8':
+                setDataToShow(toUtf8(props.data));
+                break;
+            case 'win1251':
+                setDataToShow(toWin1251(props.data));
+                break;
+            default:
+                setDataToShow(content);
+                break;
         }
-    }, [props, data, asUtf8]);
-
-    useEffect(() => {        
-        if (asWin1251) {
-            const data1 = props.base64Data && props.showAsAscii ? base64ToBuffer(props.base64Data) : props.base64Data ?? '';
-            setDataToShow(decode(data1));
-        } else {
-            setDataToShow(data);
-        }
-    }, [props, data, asWin1251]);
+    }, [props, content, encode]);
 
     return (
         <TimelineItem title={props.title} icon={<File />}>
-            {data && (
+            {content && (
                 <>
                     {props.fileName && (
-                        <Button onClick={handleFileDownload} variant="light" size="sm" className="ms-2 btn-active-light-primary">Скачать
-                            файл ({base64Size(props.base64Data)})</Button>
+                        <Button onClick={handleFileDownload} variant="light" size="sm" className="ms-2 btn-active-light-primary">Скачати
+                            файл ({getSize(props.data)})</Button>
                     )}
-                    <Button onClick={handleBase64Show} variant="light" size="sm"
-                            className="ms-2 btn-active-light-primary">{props.showAsAscii ? 'ascii' : 'base64'}</Button>
-                    <Modal show={base64Show} onHide={handleBase64Close} size="xl">
+                    <Button onClick={handleShow} variant="light" size="sm"
+                        className="ms-2 btn-active-light-primary">Вміст</Button>
+                    <Modal show={base64Show} onHide={handleClose} size="xl">
                         <Modal.Header closeButton>
-                            <Modal.Title>Base64</Modal.Title>
+                            <Modal.Title>Вміст</Modal.Title>
                         </Modal.Header>
                         <Modal.Body>
-                            <FormCheck label={'as utf8'} onChange={handleAsUtf8Change} checked={asUtf8} />
-                            <FormCheck label={'as win1251'} onChange={handleAsWin1251Change} checked={asWin1251} />
-                            <FormControl as="textarea" value={dataToShow} rows={15} readOnly={true}/>
+                            <div className="mb-5 d-flex">
+                                <FormCheck type='radio' label={'base64'} className='me-10' onChange={() => setEncode(null)} checked={encode == null} />
+                                <FormCheck type='radio' label={'ascii'} className='me-10' onChange={() => setEncode('ascii')} checked={encode === 'ascii'} />
+                                <FormCheck type='radio' label={'utf8'} className='me-10' onChange={() => setEncode('utf8')} checked={encode === 'utf8'} />
+                                <FormCheck type='radio' label={'win1251'} className='me-10' onChange={() => setEncode('win1251')} checked={encode === 'win1251'} />
+                            </div>
+                            <FormControl as="textarea" value={dataToShow} rows={13} readOnly={true} />
                         </Modal.Body>
                         <Modal.Footer>
-                            <CopyToClipboard text={dataToShow} onCopy={handleBase64Copy}>
-                                <Button variant="secondary">Copy (view)</Button>
+                            <Button onClick={handleClose} variant="link" className='me-6'>Закрити</Button>
+                            <CopyToClipboard text={dataToShow} onCopy={handleCopy}>
+                                <Button variant="secondary"><Copy className='me-3' />Copy</Button>
                             </CopyToClipboard>
-                            <CopyToClipboard text={props.base64Data ?? data} onCopy={handleBase64Copy}>
-                                <Button variant="secondary">Copy (origin)</Button>
-                            </CopyToClipboard>
-                            <Button onClick={handleBase64Close} variant="secondary">Закрити</Button>
                         </Modal.Footer>
                     </Modal>
                 </>

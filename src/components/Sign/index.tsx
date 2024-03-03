@@ -18,7 +18,7 @@ function PanelSign() {
     const [signAlgo, setSignAlgo] = useState<number>();
     const [signFormat, setSignFormat] = useState<number>();
     const [fileToSign, setFileToSign] = useState<File | null>();
-    const [signedData, setSignedData] = useState<string>();
+    const [signedData, setSignedData] = useState<Uint8Array>();
 
     function Sign(data: Uint8Array, signAlgo: number, signType: number): Promise<string | undefined> {
         if (euSign) {
@@ -66,7 +66,7 @@ function PanelSign() {
                             </Timeline.Item>
                         </>
                     )}
-                    {signedData && <TimelineFileData title={'Результат'} base64Data={signedData} fileName={'sign.p7s'} />}
+                    {signedData && <TimelineFileData title={'Результат'} data={signedData} fileName={'sign.p7s'} />}
                 </Timeline>
             </Card>
         </PrivatKeyContext.Provider>

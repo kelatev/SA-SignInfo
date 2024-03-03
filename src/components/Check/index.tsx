@@ -5,7 +5,6 @@ import TimelineFileSelect from "../Timeline/TimelineFileSelect";
 import InfoSigner from "./InfoSigner";
 import TimelineFileData from "../Timeline/TimelineFileData";
 import TimelineSpinner from "../Timeline/TimelineSpinner";
-import { Buffer } from 'buffer';
 import { useEUSignContext } from '../../context/EUSignContext';
 import { FileArchive, FileDashed } from "@phosphor-icons/react";
 import { EUVerifyResult } from '../../hooks/withEUSignCommand';
@@ -18,7 +17,7 @@ function PanelCheck() {
     const [file, setFile] = useState<File | null>();
 
     const [verifyResult, setVerifyResult] = useState<EUVerifyResult>();
-    const [signedData, setSignedData] = useState<string>();
+    const [signedData, setSignedData] = useState<Uint8Array>();
 
     useEffect(() => {
         setError(undefined);
@@ -29,7 +28,7 @@ function PanelCheck() {
                     .then((result) => {
                         setLoading(false);
                         setVerifyResult(result);
-                        result.data && setSignedData(Buffer.from(result.data).toString('base64'));
+                        result.data && setSignedData(result.data);
                     }).catch((err) => {
                         setLoading(false);
                         setError(err.toString());
@@ -61,8 +60,7 @@ function PanelCheck() {
                 {signedData &&
                     <TimelineFileData
                         title={'Дані окремим файлом'}
-                        base64Data={signedData}
-                        showAsAscii={true}
+                        data={signedData}
                         fileName={file?.name.replace('.p7s', '')}
                     />}
                 {verifyResult && <InfoSigner data={verifyResult} />}
