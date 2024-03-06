@@ -28,7 +28,7 @@ const TimelineFileSelect: React.FC<TimelineItemFileInterface> = ({ onFileChange,
             setFile(file);
             onFileChange(file);
         }
-    }, []);
+    }, [onFileChange, storagePrefix, storageKey]);
 
     function handleFileChange(file: File) {
         setFile(file);

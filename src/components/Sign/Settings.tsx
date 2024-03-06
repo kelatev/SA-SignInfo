@@ -111,6 +111,7 @@ function Settings(props: SignSignSignBlockProps) {
         return (
             <Timeline.Item title="Налаштування електронного підпису" icon={<GearSix />}>
                 <div className="border border-dashed border-gray-300 rounded px-5 py-3 mb-5">
+                    <button type='button' onClick={() => setEditMode(true)}>edit</button>
                     {signAlgoType && signAlgoType.filter(i => i.key === signType).map(i => printValue(i.value))}
                     {signAlgoList && signAlgoList.map((item) => printValue(item.value))}
                     {signFormatList && signFormatList.map((item) => printValue(item.value))}

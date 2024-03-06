@@ -1,11 +1,9 @@
-import React, { useContext, useEffect, useState } from "react";
-import { EndUserCertificateInfoEx, EndUserTimeInfo } from "../../EUSign/types";
+import React, { useEffect, useState } from "react";
 import TimelineItem from "../Timeline/TimelineItem";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import SyntaxHighlighter from "react-syntax-highlighter";
 import { darcula } from "react-syntax-highlighter/dist/esm/styles/hljs";
-import EUSignContext from "../../context/EUSign";
 import { Cursor, User, Copy, Certificate } from "@phosphor-icons/react";
 import { EUVerifyResult } from '../../hooks/withEUSignCommand';
 
@@ -26,8 +24,6 @@ const RowDescription: React.FC<{ title: string; description: string }> = ({
 };
 
 function InfoSigner(props: Props) {
-    const { euSign } = useContext(EUSignContext);
-
     const [show, setShow] = useState(false);
     const [json, setJson] = useState("");
 

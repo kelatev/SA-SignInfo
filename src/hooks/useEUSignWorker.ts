@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import withEUSignCommand, { EUSignCommandType } from "./withEUSignCommand";
 
 export interface Props {
@@ -23,7 +23,7 @@ export default function useEUSignWorker(
     const [isInitialized, setIsInitialized] = useState(false);
     const [error, setError] = useState<string>();
 
-    const onMessage = (event: MessageEvent) => {
+    const onMessage = useCallback((event: MessageEvent) => {
         const data = event.data;
         const params = data.params;
 
@@ -43,9 +43,9 @@ export default function useEUSignWorker(
         } else if (itemCallback) {
             itemCallback.onError(new Error(`${data.error.message} (${data.error.errorCode})`));
         }
-    };
+    }, []);
 
-    const onError = (event?: ErrorEvent) => {
+    const onError = useCallback((event?: ErrorEvent) => {
         event && console.log("onError", event);
 
         callbacks.current.forEach(item => {
@@ -56,7 +56,7 @@ export default function useEUSignWorker(
             );
         });
         callbacks.current = [];
-    };
+    }, [callbacks]);
 
     const postMessage = (cmd: string, params?: any) => {
         return new Promise((resolve, reject) => {
@@ -81,12 +81,12 @@ export default function useEUSignWorker(
         return item;
     };
 
-    const killWorker = () => {
+    const killWorker = useCallback(() => {
         worker.current?.terminate();
         worker.current = undefined;
         onError(); //close callback
         setTimeout(() => setError(undefined), 0);
-    };
+    }, [worker, onError]);
 
     useEffect(() => {
         if (worker.current) {
@@ -114,7 +114,7 @@ export default function useEUSignWorker(
         return () => {
             killWorker();
         };
-    }, []);
+    }, [killWorker, onMessage, onError, props.settings]);
 
     return [isInitialized, error, withEUSignCommand(postMessage)];
 }

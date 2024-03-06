@@ -51808,7 +51808,7 @@ label.rating-label:hover~.rating-label>.svg-icon,label.rating-label:hover~.ratin
 
 .stepper.stepper-pills.stepper-column .stepper-nav {
     flex-direction: column;
-    align-items: start
+    align-items: flex-start
 }
 
 .stepper.stepper-pills.stepper-column .stepper-item {
@@ -53491,7 +53491,7 @@ label.rating-label:hover~.rating-label>.svg-icon,label.rating-label:hover~.ratin
 
 .flex-start {
     justify-content: start;
-    align-items: start
+    align-items: flex-start
 }
 
 .flex-end {
@@ -53533,7 +53533,7 @@ label.rating-label:hover~.rating-label>.svg-icon,label.rating-label:hover~.ratin
 
     .flex-sm-start {
         justify-content: start;
-        align-items: start
+        align-items: flex-start
     }
 
     .flex-sm-end {
@@ -53576,7 +53576,7 @@ label.rating-label:hover~.rating-label>.svg-icon,label.rating-label:hover~.ratin
 
     .flex-md-start {
         justify-content: start;
-        align-items: start
+        align-items: flex-start
     }
 
     .flex-md-end {
@@ -53619,7 +53619,7 @@ label.rating-label:hover~.rating-label>.svg-icon,label.rating-label:hover~.ratin
 
     .flex-lg-start {
         justify-content: start;
-        align-items: start
+        align-items: flex-start
     }
 
     .flex-lg-end {
@@ -53662,7 +53662,7 @@ label.rating-label:hover~.rating-label>.svg-icon,label.rating-label:hover~.ratin
 
     .flex-xl-start {
         justify-content: start;
-        align-items: start
+        align-items: flex-start
     }
 
     .flex-xl-end {
@@ -53705,7 +53705,7 @@ label.rating-label:hover~.rating-label>.svg-icon,label.rating-label:hover~.ratin
 
     .flex-xxl-start {
         justify-content: start;
-        align-items: start
+        align-items: flex-start
     }
 
     .flex-xxl-end {
@@ -55179,7 +55179,7 @@ a:hover {
     padding-left: 1.25rem;
     display: flex;
     flex-direction: column;
-    align-items: start
+    align-items: flex-start
 }
 
 .tree .tree-sub {

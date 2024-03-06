@@ -38,7 +38,7 @@ function PanelCheck() {
                 setSignedData(undefined);
             }
         }
-    }, [isInitialized, file]);
+    }, [isInitialized, file, commands]);
 
     return (
         <Card title='Перевірка підпису' backgroundColor='#CBF0F4' className='bgi-no-repeat bgi-position-x-end' backgroundImage='url("/wave-bg-blue.svg")'>
