@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import withEUSignCommand, { EUSignCommandType } from "./withEUSignCommand";
 
 export interface Props {

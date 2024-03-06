@@ -1,5 +1,5 @@
 import React from 'react';
-import Loader from "../EUSign/Loader";
+import Loader from "../components/Loader";
 import PanelCheck from "../components/Check";
 import PanelSign from "../components/Sign";
 import Layout from "../components/Layout";

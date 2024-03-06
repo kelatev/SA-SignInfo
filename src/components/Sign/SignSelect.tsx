@@ -2,7 +2,6 @@ import React, { useContext, useEffect, useState } from 'react';
 import { EndUserJKSPrivateKey, EndUserPrivateKey } from "../../EUSign/types";
 import EUSignContext from "../../context/EUSign";
 import Timeline from "../Timeline/Timeline";
-import TimelineFileSelect from "../Timeline/TimelineFileSelect";
 import FormPassword from "../Form/FormPassword";
 import Form from "react-bootstrap/Form";
 import { FileLock } from "@phosphor-icons/react";
@@ -39,7 +38,7 @@ function SignSelect() {
         setPassword(undefined);
         setIsPrivateKeyReaded(false);
         setPrivateKey(undefined);
-    }, [euSign, file, setPrivateKey]);
+    }, [euSign, file]);
 
     useEffect(() => {
         setError(undefined);
@@ -118,7 +117,7 @@ function SignSelect() {
             icon={<FileLock />}
             description={'Key-6.dat, *.pfx, *.pk8, *.zs2 або *.jks'}
         >
-            <TimelineFileSelect
+            <Timeline.FileSelect
                 onFileChange={setFile}
                 storagePrefix={storagePrefix}
                 accept='.dat,.pfx,.pk8,.zs2,.jks'

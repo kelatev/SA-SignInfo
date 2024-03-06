@@ -6,8 +6,7 @@ import SignInfo from "./SignInfo";
 import SignSelect from "./SignSelect";
 import Settings, { signTypeCAdESExt, signTypeCAdESInt } from "./Settings";
 import TimelineFileSelect from "../Timeline/TimelineFileSelect";
-import TimelineFileData from "../Timeline/TimelineFileData";
-import { Cursor } from "@phosphor-icons/react";
+import { Cursor, FileDashed } from "@phosphor-icons/react";
 import { PrivatKeyContext, PrivatKeyType } from '../../context/PrivatKey';
 
 function PanelSign() {
@@ -62,11 +61,12 @@ function PanelSign() {
                             <Settings onSignTypeSelect={setSignType} onSignAlgoSelect={setSignAlgo}
                                 onSignFormatSelect={setSignFormat} />
                             <Timeline.Item title='Файл для підпису' icon={<Cursor />}>
-                                <TimelineFileSelect onFileChange={setFileToSign} />
+                                <Timeline.FileSelect onFileChange={setFileToSign} />
                             </Timeline.Item>
+                            {fileToSign && !signedData && <Timeline.Spinner title="Підписування файлу" icon={<FileDashed />} />}
+                            {signedData && <Timeline.FileData title={'Результат'} data={signedData} fileName={'sign.p7s'} />}
                         </>
                     )}
-                    {signedData && <TimelineFileData title={'Результат'} data={signedData} fileName={'sign.p7s'} />}
                 </Timeline>
             </Card>
         </PrivatKeyContext.Provider>

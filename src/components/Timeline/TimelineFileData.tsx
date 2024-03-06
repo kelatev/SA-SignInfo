@@ -8,28 +8,13 @@ import { Buffer } from 'buffer';
 import { saveAs } from "file-saver";
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { fileSizeName } from "../../utils/fileSizeName";
-import { decode } from 'windows-1251';
 import { File, Copy } from "@phosphor-icons/react";
+import { Uint8toBase64, Uint8toAscii, Uint8toUtf8, Uint8toWin1251 } from '../../utils/encode';
 
 interface FormDataProps {
     title: string
     data: Uint8Array | undefined
     fileName?: string
-}
-
-function toBase64(data: Uint8Array | undefined): string {
-    return (data && Buffer.from(data).toString('base64')) ?? '';
-}
-function toAscii(data: Uint8Array | undefined): string {
-    return (data && Buffer.from(data).toString('ascii')) ?? '';
-}
-
-function toUtf8(data: Uint8Array | undefined): string {
-    return (data && Buffer.from(data).toString('utf8')) ?? '';
-}
-
-function toWin1251(data: Uint8Array | undefined): string {
-    return (data && decode(data)) ?? '';
 }
 
 function getSize(data: Uint8Array | undefined): string {
@@ -40,7 +25,7 @@ function getSize(data: Uint8Array | undefined): string {
 function TimelineFileData(props: FormDataProps) {
     const [base64Show, setBase64Show] = useState(false);
     const [encode, setEncode] = useState<'ascii' | 'utf8' | 'win1251' | null>(null);
-    const content = toBase64(props.data) ?? '';
+    const content = Uint8toBase64(props.data) ?? '';
     const [dataToShow, setDataToShow] = useState<string>(content);
 
     const handleFileDownload = () => {
@@ -55,13 +40,13 @@ function TimelineFileData(props: FormDataProps) {
     useEffect(() => {
         switch (encode) {
             case 'ascii':
-                setDataToShow(toAscii(props.data));
+                setDataToShow(Uint8toAscii(props.data) ?? '');
                 break;
             case 'utf8':
-                setDataToShow(toUtf8(props.data));
+                setDataToShow(Uint8toUtf8(props.data) ?? '');
                 break;
             case 'win1251':
-                setDataToShow(toWin1251(props.data));
+                setDataToShow(Uint8toWin1251(props.data) ?? '');
                 break;
             default:
                 setDataToShow(content);
