@@ -49,7 +49,7 @@ export default class EndUserInstance {
         return this.m_info;
     };
 
-    Load = (callback: any) => {
+    Load = (callback?: any) => {
         this.m_loading = true;
         return new Promise<void>((resolve, reject) => {
             this.m_library

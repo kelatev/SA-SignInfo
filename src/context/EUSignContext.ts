@@ -1,9 +1,12 @@
 import { createContext, useContext } from "react";
-import { EUSignCommandType } from "../hooks/withEUSignCommand";
+import { KeyMediaType } from "../hooks/useEndUserController";
+import EndUserInstance, { EndUserLibraryType } from "../EUSign/EndUserInstance";
 
 interface EUSignContextType {
-    isInitialized: boolean | null;
-    commands: EUSignCommandType;
+    keyMediaType: KeyMediaType;
+    setKeyMediaType: React.Dispatch<React.SetStateAction<KeyMediaType>>;
+    findLibrary: (type: EndUserLibraryType) => EndUserInstance | undefined;
+    currentLibrary: EndUserInstance | undefined;
 }
 
 export const EUSignContext = createContext<EUSignContextType>({} as EUSignContextType);

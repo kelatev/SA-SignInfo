@@ -6,9 +6,11 @@ import InfoSigner from "./InfoSigner";
 import { useEUSignContext } from '../../context/EUSignContext';
 import { FileArchive, FileDashed } from "@phosphor-icons/react";
 import { EUVerifyResult } from '../../hooks/withEUSignCommand';
+import { EndUserLibraryType } from '../../EUSign/EndUserInstance';
 
 function PanelCheck() {
-    const { isInitialized, commands } = useEUSignContext();
+    const { findLibrary } = useEUSignContext();
+    const librarySW = findLibrary(EndUserLibraryType.SW);
 
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string>();
@@ -21,10 +23,10 @@ function PanelCheck() {
         setError(undefined);
         setVerifyResult(undefined);
         setSignedData(undefined);
-        if (isInitialized) {
+        if (librarySW?.IsLoaded()) {
             if (file) {
                 setLoading(true);
-                commands.VerifyFiles([file])
+                /* librarySW.GetLibrary().VerifyFiles([file])
                     .then((result) => {
                         setLoading(false);
                         setVerifyResult(result);
@@ -32,12 +34,12 @@ function PanelCheck() {
                     }).catch((err) => {
                         setLoading(false);
                         setError(err.toString());
-                    });
+                    }); */
             } else {
                 setLoading(false);
             }
         }
-    }, [isInitialized, file, commands]);
+    }, [librarySW, file]);
 
     return (
         <Card title='Перевірка підпису' backgroundColor='#CBF0F4' className='bgi-no-repeat bgi-position-x-end' backgroundImage='url("/wave-bg-blue.svg")'>

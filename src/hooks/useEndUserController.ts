@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from "react";
 import EndUserInstance, { EndUserLibraryType } from "../EUSign/EndUserInstance";
 import EndUserWorker from "../EUSign/EndUserWorker";
 
-enum KeyMediaType {
+export enum KeyMediaType {
     File,
     Hardware,
 }
@@ -32,7 +32,7 @@ export default function useEndUserController() {
         const typeToFind =
             keyMediaType === KeyMediaType.Hardware ? EndUserLibraryType.JS : EndUserLibraryType.SW;
         setCurrentLibrary(findLibrary(typeToFind));
-    }, [keyMediaType, findLibrary]);
+    }, [keyMediaType, findLibrary, libraries]);
 
-    return { keyMediaType, setKeyMediaType, libraries, findLibrary, currentLibrary };
+    return { keyMediaType, setKeyMediaType, findLibrary, currentLibrary };
 }

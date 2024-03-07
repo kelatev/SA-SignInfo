@@ -17,25 +17,6 @@ export default class EUSignCPWorker {
         this.m_pathname = window.location.pathname;
     }
 
-    onMessage(event: MessageEvent) {
-        const data = event.data;
-        const itemCallback = this.m_promises[data.callback_id - 1];
-
-        if (itemCallback) {
-            delete this.m_promises[data.callback_id - 1];
-            if (data.error == null) {
-                itemCallback.onSuccess(data.result);
-            } else {
-                itemCallback.onError(data.error);
-            }
-        }
-    }
-
-    onError(event?: ErrorEvent) {
-        this.m_promises.forEach(item => item.onError(event?.error));
-        this.m_promises = [];
-    }
-
     postMessage(cmd: string, params?: any) {
         return new Promise((resolve, reject) => {
             const callback_data = {
@@ -57,8 +38,23 @@ export default class EUSignCPWorker {
     loadWorker() {
         const instance = new Worker(process.env.PUBLIC_URL + "/eusign/euscp.worker.js");
 
-        instance.onmessage = this.onMessage;
-        instance.onerror = this.onError;
+        instance.onmessage = (event: MessageEvent) => {
+            const data = event.data;
+            const itemCallback = this.m_promises[data.callback_id - 1];
+
+            if (itemCallback) {
+                delete this.m_promises[data.callback_id - 1];
+                if (data.error == null) {
+                    itemCallback.onSuccess(data.result);
+                } else {
+                    itemCallback.onError(data.error);
+                }
+            }
+        };
+        instance.onerror = (event: ErrorEvent) => {
+            this.m_promises.forEach(item => item.onError(event?.error));
+            this.m_promises = [];
+        };
 
         return instance;
     }
