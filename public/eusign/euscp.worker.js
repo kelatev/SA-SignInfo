@@ -116,13 +116,13 @@ var s_maxFileSize = EU_MAX_DATA_SIZE_MB * EU_ONE_MB;
 
 //==============================================================================
 
-function sendMessage(data, e, params) {
+function sendMessage(data, e, result) {
     var error = e != null ? { errorCode: e.errorCode, message: e.message } : null;
     self.postMessage({
         cmd: data.cmd,
         callback_id: data.callback_id,
         error: error,
-        params: params,
+        result: result,
     });
 }
 
@@ -530,24 +530,6 @@ function Initialize(data) {
         sendMessage(data, e, null);
         return;
     }
-}
-
-//==============================================================================
-
-function GetDataFromSignedFile(data) {
-    var signedFile = data.params.signedFile;
-
-    var _onSuccess = function (signedFileData) {
-        var params = { data: signedFileData };
-        self.sendMessage(data, null, params);
-        signedFileData = null;
-    };
-
-    var _onError = function (e) {
-        sendMessage(data, e, null);
-    };
-
-    euSign.GetDataFromSignedFile(signedFile, _onSuccess, _onError);
 }
 
 //==============================================================================
@@ -1408,8 +1390,7 @@ function VerifyFiles(data) {
     }
 
     var _onSuccess = function (result) {
-        var params = { result: result };
-        sendMessage(data, null, params);
+        sendMessage(data, null, result);
         return;
     };
 
@@ -1491,10 +1472,6 @@ onmessage = function (e) {
     switch (data.cmd) {
         case "Initialize":
             Initialize(data);
-            break;
-
-        case "GetDataFromSignedFile":
-            GetDataFromSignedFile(data);
             break;
 
         case "VerifyFiles":

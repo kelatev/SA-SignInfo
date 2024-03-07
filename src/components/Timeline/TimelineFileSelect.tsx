@@ -3,7 +3,7 @@ import FormUploadFile from "../Form/FormUploadFile";
 import AlertDanger from "../Form/AlertDanger";
 import FormUploadBase64 from "../Form/FormUploadBase64";
 import DetailsFileAction from "./DetailsFileAction";
-import { File } from "@phosphor-icons/react";
+import { File as IconFile } from "@phosphor-icons/react";
 import { blobToBase64, dataURLtoFile } from '../../utils/encode';
 
 interface TimelineItemFileInterface {
@@ -12,9 +12,10 @@ interface TimelineItemFileInterface {
     accept?: string
     error?: string
     icon?: React.ReactNode
+    withToken?: boolean
 }
 
-const TimelineFileSelect: React.FC<TimelineItemFileInterface> = ({ onFileChange, storagePrefix, accept, error, icon }) => {
+const TimelineFileSelect: React.FC<TimelineItemFileInterface> = ({ onFileChange, storagePrefix, accept, error, icon, withToken }) => {
 
     const [file, setFile] = useState<File>();
     const storageKey = `${storagePrefix}-file`;
@@ -51,7 +52,7 @@ const TimelineFileSelect: React.FC<TimelineItemFileInterface> = ({ onFileChange,
         <>
             {file ? (
                 <DetailsFileAction
-                    icon={icon || <File size={30} />}
+                    icon={icon || <IconFile size={30} />}
                     file={file}
                     actionName={'Змінити файл'}
                     onActionClick={handleNewFile} />
@@ -60,6 +61,11 @@ const TimelineFileSelect: React.FC<TimelineItemFileInterface> = ({ onFileChange,
                     <FormUploadFile title='Обрати файл' onChange={handleFileChange} accept={accept} />
                     &nbsp;
                     <FormUploadBase64 title='Base64' onChange={handleFileChange} />
+                    {withToken && <>
+                        &nbsp;
+                        <button onClick={() => handleFileChange(new File([], 'Токен'))}
+                            className="btn btn-secondary border-hover border-gray-400 btn-active-light-primary hover-elevate-up">Токен</button>
+                    </>}3
                 </>
             )}
 

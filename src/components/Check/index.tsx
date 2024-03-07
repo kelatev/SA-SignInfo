@@ -1,10 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import Card from "../Form/Card";
 import Timeline from "../Timeline/Timeline";
 import TimelineFileSelect from "../Timeline/TimelineFileSelect";
 import InfoSigner from "./InfoSigner";
-import TimelineFileData from "../Timeline/TimelineFileData";
-import TimelineSpinner from "../Timeline/TimelineSpinner";
 import { useEUSignContext } from '../../context/EUSignContext';
 import { FileArchive, FileDashed } from "@phosphor-icons/react";
 import { EUVerifyResult } from '../../hooks/withEUSignCommand';
@@ -21,6 +19,8 @@ function PanelCheck() {
 
     useEffect(() => {
         setError(undefined);
+        setVerifyResult(undefined);
+        setSignedData(undefined);
         if (isInitialized) {
             if (file) {
                 setLoading(true);
@@ -34,8 +34,7 @@ function PanelCheck() {
                         setError(err.toString());
                     });
             } else {
-                setVerifyResult(undefined);
-                setSignedData(undefined);
+                setLoading(false);
             }
         }
     }, [isInitialized, file, commands]);
@@ -52,13 +51,13 @@ function PanelCheck() {
                     />
                 </Timeline.Item>
                 {loading &&
-                    <TimelineSpinner
+                    <Timeline.Spinner
                         title='Перевірка файлу'
                         icon={<FileDashed />}
                     />
                 }
                 {signedData &&
-                    <TimelineFileData
+                    <Timeline.FileData
                         title={'Дані окремим файлом'}
                         data={signedData}
                         fileName={file?.name.replace('.p7s', '')}

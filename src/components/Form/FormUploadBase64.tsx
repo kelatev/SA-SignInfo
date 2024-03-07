@@ -37,8 +37,8 @@ function FormUploadBase64(props: Base64Props) {
 
     return (
         <>
-            <Button onClick={handleShow} variant="none"
-                className="btn btn-secondary border-hover border-gray-400 btn-active-light-primary hover-elevate-up">{props.title}</Button>
+            <button onClick={handleShow}
+                className="btn btn-secondary border-hover border-gray-400 btn-active-light-primary hover-elevate-up">{props.title}</button>
             <Modal show={show} onHide={handleClose} size="xl">
                 <Modal.Header closeButton>
                     <Modal.Title>Base64</Modal.Title>

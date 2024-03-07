@@ -1,0 +1,65 @@
+export default class EUSignCPWorker {
+    m_worker: Worker & { _url?: string };
+    m_promises: any[];
+    m_origin: string;
+    m_pathname: string;
+
+    constructor() {
+        this.m_worker = this.loadWorker();
+        this.m_promises = [];
+
+        this.m_origin = window.location.origin
+            ? window.location.origin
+            : window.location.protocol +
+              "//" +
+              window.location.hostname +
+              (window.location.port ? ":" + window.location.port : "");
+        this.m_pathname = window.location.pathname;
+    }
+
+    onMessage(event: MessageEvent) {
+        const data = event.data;
+        const itemCallback = this.m_promises[data.callback_id - 1];
+
+        if (itemCallback) {
+            delete this.m_promises[data.callback_id - 1];
+            if (data.error == null) {
+                itemCallback.onSuccess(data.result);
+            } else {
+                itemCallback.onError(data.error);
+            }
+        }
+    }
+
+    onError(event?: ErrorEvent) {
+        this.m_promises.forEach(item => item.onError(event?.error));
+        this.m_promises = [];
+    }
+
+    postMessage(cmd: string, params?: any) {
+        return new Promise((resolve, reject) => {
+            const callback_data = {
+                onSuccess: resolve,
+                onError: reject,
+            };
+            const callback_id = this.m_promises.push(callback_data);
+
+            this.m_worker.postMessage({
+                cmd,
+                params,
+                callback_id,
+                origin: this.m_origin,
+                pathname: this.m_pathname,
+            });
+        });
+    }
+
+    loadWorker() {
+        const instance = new Worker(process.env.PUBLIC_URL + "/eusign/euscp.worker.js");
+
+        instance.onmessage = this.onMessage;
+        instance.onerror = this.onError;
+
+        return instance;
+    }
+}

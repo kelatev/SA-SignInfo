@@ -4,14 +4,15 @@ import PanelCheck from "../components/Check";
 import PanelSign from "../components/Sign";
 import Layout from "../components/Layout";
 import { EUSignContext } from '../context/EUSignContext';
-import useEUSignWorker from '../hooks/useEUSignWorker';
+import EUSignCPWorker from '../EUSign/EUSignCPWorker';
 
 function Home() {
-    const [isInitialized, error, commands] = useEUSignWorker({
+    const [isInitialized, error, commands] = EUSignCPWorker({
         settings: {
+            language: 1,
+            encoding: 'utf-8',
             CAs: '/eusign/data/CAs.json',
             CACertificates: '/eusign/data/CACertificates.p7b',
-            language: 1,
             verifySettings: {
                 ocspResponseExpireTime: 100
             },

@@ -1,3 +1,4 @@
+import { Buffer } from 'buffer';
 import { decode } from 'windows-1251';
 
 export function blobToBase64(blob: Blob) {

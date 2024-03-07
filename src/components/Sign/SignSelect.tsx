@@ -121,7 +121,8 @@ function SignSelect() {
                 onFileChange={setFile}
                 storagePrefix={storagePrefix}
                 accept='.dat,.pfx,.pk8,.zs2,.jks'
-                error={error} />
+                error={error}
+                withToken={true} />
             {file && !IsPrivateKeyReaded && userJKSPrivateKeys && userJKSPrivateKeys.length > 0 && (
                 <Form.Select className="mb-1"
                     onChange={(ev) => setFileAliasSelect(ev.currentTarget.value)}>

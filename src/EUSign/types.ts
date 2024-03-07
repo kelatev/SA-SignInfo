@@ -1,3 +1,28 @@
+enum EndUserLanguage {
+  EU_DEFAULT_LANG = 0,
+  EU_UA_LANG = 1,
+  EU_RU_LANG = 2,
+  EU_EN_LANG = 3,
+}
+
+export interface EndUserSettings {
+  settings: {
+      language: EndUserLanguage;
+      encoding: "utf-8";
+      directAccess: boolean;
+      CAs: string;
+      CACertificates: string;
+      signInfoTmpl?: string;
+      httpProxyServiceURL: string;
+      verifySettings: {
+          ocspResponseExpireTime: number;
+      };
+      TSLAddress: string | null;
+      mssServiceURL?: string;
+      KSPs?: any[];
+  };
+}
+
 export interface EndUserException {
   GetErrorCode(): number;
   GetMessage(): string;
