@@ -1,5 +1,5 @@
 import React, {useContext, useEffect, useState} from 'react';
-import {EndUserPrivateKey, EndUserOwnerInfo} from "../../EUSign/types";
+import {EndUserPrivateKey, EndUserOwnerInfo} from "../../EUSign/eusign.types";
 import EUSignContext from "../../context/EUSign";
 import Timeline from "../Timeline/Timeline";
 import { User } from "@phosphor-icons/react";

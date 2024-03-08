@@ -5,7 +5,7 @@ import Modal from "react-bootstrap/Modal";
 import SyntaxHighlighter from "react-syntax-highlighter";
 import { darcula } from "react-syntax-highlighter/dist/esm/styles/hljs";
 import { Cursor, User, Copy, Certificate } from "@phosphor-icons/react";
-import { EUVerifyResult } from '../../EUSign/EndUserWorker';
+import { EUVerifyResult } from '../../hooks/useVerifyFiles';
 
 interface Props {
     data: EUVerifyResult;
@@ -40,8 +40,8 @@ function InfoSigner(props: Props) {
 
     return (
         <>
-            {props.data.signsInfos.map((item0, index0) => item0.map((item, index) =>
-                <div key={index0 + '_' + index}>
+            {props.data.signsInfos.map((item, index) =>
+                <div key={index}>
                     <TimelineItem
                         title={"Підписувач - " + item.signerInfo.subjCN}
                         icon={<User />}
@@ -78,7 +78,6 @@ function InfoSigner(props: Props) {
                                 }
                                 description={item.signTimeInfo.time.toISOString()}
                             />
-                            {/*<RowDescription title={'Тип носія особистого ключа'} description={''}/>*/}
                             <RowDescription
                                 title={"Алгоритм підпису"}
                                 description={item.signAlgo}
@@ -91,14 +90,6 @@ function InfoSigner(props: Props) {
                                 title={"Формат"}
                                 description={item.signContainerType}
                             />
-                            {/*<RowDescription title={'Тип підпису'} description={''}/>
-            <RowDescription title={'Тип контейнера'} description={''}/>
-            <RowDescription title={'Формат підпису'} description={''}/>
-            <RowDescription title={'Сертифікат'} description={''}/>*/}
-                            {/*
-            keyUsageType
-            subjType
-            subjSubType*/}
                         </div>
                     </TimelineItem>
                     <TimelineItem
@@ -108,7 +99,7 @@ function InfoSigner(props: Props) {
                         <div className="d-flex flex-wrap">
                             <RowDescription
                                 title={"Сертифікат виданий"}
-                                description={item.signerInfo.issuer}
+                                description={item.signerInfo.issuerCN}
                             />
                             <RowDescription
                                 title={"Серійний номер"}
@@ -136,7 +127,7 @@ function InfoSigner(props: Props) {
                         </Modal>
                     </TimelineItem>
                 </div>
-            ))}
+            )}
         </>
     );
 }

@@ -54,192 +54,155 @@ export interface EndUserKeyMedia {
     SetPassword(password: string): void;
 }
 
-// Клас, що містить інформацію про параметри файлового сховища (див. табл. 3.1)
 export interface EndUserFileStoreSettings {
     GetPath(): string;
-
     SetPath(path: string): void;
 
     GetCheckCRLs(): boolean;
-
     SetCheckCRLs(checkCRLs: boolean): void;
 
     GetAutoRefresh(): boolean;
-
     SetAutoRefresh(autoRefresh: boolean): void;
 
     GetOwnCRLsOnly(): boolean;
-
     SetOwnCRLsOnly(ownCRLsOnly: boolean): void;
 
     GetFullAndDeltaCRLs(): boolean;
-
     SetFullAndDeltaCRLs(fullAndDeltaCRLs: boolean): void;
 
     GetAutoDownloadCRLs(): boolean;
-
     SetAutoDownloadCRLs(autoDownloadCRLs: boolean): void;
 
     GetSaveLoadedCerts(): boolean;
-
     SetSaveLoadedCerts(saveLoadedCerts: boolean): void;
 
     GetExpireTime(): number;
-
     SetExpireTime(expireTime: number): void;
 }
 
 export interface EndUserProxySettings {
+    useProxy: boolean;
     GetUseProxy(): boolean;
-
     SetUseProxy(useProxy: boolean): void;
-
+    anonymous: boolean;
     GetAnonymous(): boolean;
-
     SetAnonymous(anonymous: boolean): void;
-
+    address: string;
     GetAddress(): string;
-
     SetAddress(address: string): void;
-
+    port: string;
     GetPort(): string;
-
     SetPort(port: string): void;
-
+    user: string;
     GetUser(): string;
-
     SetUser(user: string): void;
-
+    password: string;
     GetPassword(): string;
-
     SetPassword(password: string): void;
-
+    savePassword: boolean;
     GetSavePassword(): boolean;
-
     SetSavePassword(savePassword: boolean): void;
 }
 
 // Клас, що містить інформацію про параметри TSP-сервера (див. табл. 3.1)
 export interface EndUserTSPSettings {
+    getStamps: boolean;
     GetGetStamps(): boolean;
-
     SetGetStamps(getStamps: boolean): void;
-
+    address: string;
     GetAddress(): string;
-
     SetAddress(address: string): void;
-
+    port: string;
     GetPort(): string;
-
     SetPort(port: string): void;
 }
 
 // Клас, що містить інформацію про параметри OCSP-сервера (див. табл. 3.1)
 export interface EndUserOCSPSettings {
     GetUseOCSP(): boolean;
-
     SetUseOCSP(useOCSP: boolean): void;
 
     GetBeforeStore(): boolean;
-
     SetBeforeStore(beforeStore: boolean): void;
 
     GetAddress(): string;
-
     SetAddress(address: string): void;
 
     GetPort(): string;
-
     SetPort(port: string): void;
 }
 
 // Клас, що містить інформацію про параметри LDAP-сервера (див. табл. 3.1)
 export interface EndUserLDAPSettings {
     GetUseLDAP(): boolean;
-
     SetUseLDAP(useCMP: boolean): void;
 
     GetAddress(): string;
-
     SetAddress(address: string): void;
 
     GetPort(): string;
-
     SetPort(port: string): void;
 
     GetAnonymous(): boolean;
-
     SetAnonymous(anonymous: boolean): void;
 
     GetUser(): string;
-
     SetUser(user: string): void;
 
     GetPassword(): string;
-
     SetPassword(password: string): void;
 }
 
 // Клас, що містить інформацію про параметри CMP-сервера (див. табл. 3.1)
 export interface EndUserCMPSettings {
     GetUseCMP(): boolean;
-
     SetUseCMP(useCMP: boolean): void;
 
     GetAddress(): string;
-
     SetAddress(address: string): void;
 
     GetPort(): string;
-
     SetPort(port: string): void;
 
     GetCommonName(): string;
-
     SetCommonName(commonName: string): void;
 }
 
 // Клас, що містить інформацію про взаємодію з серверами ЦСК
 export interface EndUserModeSettings {
+    offlineMode: boolean;
     GetOfflineMode(): boolean;
-
     SetOfflineMode(offlineMode: boolean): void;
 }
 
 // Клас, що містить інформацію про параметри використання точок
 // доступу до OCSP-серверів
 export interface EndUserOCSPAccessInfoModeSettings {
+    enabled: boolean;
     GetEnabled(): boolean;
-
     SetEnabled(enabled: boolean): void;
 }
 
 // Клас, що містить інформацію про параметри точок доступу до OCSP-серверів
 export interface EndUserOCSPAccessInfoSettings {
     GetIssuerCN(): string;
-
     SetIssuerCN(issuerCN: string): void;
 
     GetAddress(): string;
-
     SetAddress(address: string): void;
 
     GetPort(): string;
-
     SetPort(port: string): void;
 }
 
 export interface EndUserKeyMediaSettings {
     GetSourceType(): number;
-
     SetSourceType(sourceType: number): void;
 
     GetShowErrors(): boolean;
-
     SetShowErrors(showErrors: boolean): void;
 
     GetKeyMedia(): EndUserKeyMedia;
-
     SetKeyMedia(keyMedia: EndUserKeyMedia): void;
 }
 
@@ -282,36 +245,38 @@ export interface EndUserOwnerInfo {
 }
 
 export interface EndUserTimeInfo {
+    version: number;
     GetVersion(): number;
-
+    isTimeAvail: boolean;
     IsTimeAvail(): boolean;
-
+    isTimeStamp: boolean;
     IsTimeStamp(): boolean;
-
+    time: Date;
     GetTime(): Date;
-
+    isSignTimeStampAvail: boolean;
     IsSignTimeStampAvail(): boolean;
-
+    signTimeStamp: Date;
     GetSignTimeStamp(): Date;
 }
 
 export interface EndUserSignInfo {
+    ownerInfo: EndUserOwnerInfo;
     GetOwnerInfo(): EndUserOwnerInfo;
-
+    timeInfo: EndUserTimeInfo;
     GetTimeInfo(): EndUserTimeInfo;
-
+    data: Uint8Array;
     GetData(): Uint8Array;
-
     GetDataString(charset?: string): string;
+    signLevel?: number;
 }
 
 export interface EndUserSenderInfo {
+    ownerInfo: EndUserOwnerInfo;
     GetOwnerInfo(): EndUserOwnerInfo;
-
+    timeInfo: EndUserTimeInfo;
     GetTimeInfo(): EndUserTimeInfo;
-
+    data: Uint8Array;
     GetData(): Uint8Array;
-
     GetDataString(charset?: string): string;
 }
 
@@ -408,134 +373,134 @@ export interface EndUserCertificateInfo {
 }
 
 export interface EndUserCertificateInfoEx {
+    isFilled: boolean;
     IsFilled(): boolean;
-
+    version: number;
     GetVersion(): number;
-
+    issuer: string;
     GetIssuer(): string;
-
+    issuerCN: string;
     GetIssuerCN(): string;
-
+    serial: string;
     GetSerial(): string;
-
+    subject: string;
     GetSubject(): string;
-
+    subjCN: string;
     GetSubjCN(): string;
-
+    subjOrg: string;
     GetSubjOrg(): string;
-
+    subjOrgUnit: string;
     GetSubjOrgUnit(): string;
-
+    subjTitle: string;
     GetSubjTitle(): string;
-
+    subjState: string;
     GetSubjState(): string;
-
+    subjLocality: string;
     GetSubjLocality(): string;
-
+    subjFullName: string;
     GetSubjFullName(): string;
-
+    subjAddress: string;
     GetSubjAddress(): string;
-
+    subjPhone: string;
     GetSubjPhone(): string;
-
+    subjEMail: string;
     GetSubjEMail(): string;
-
+    subjDNS: string;
     GetSubjDNS(): string;
-
+    subjEDRPOUCode: string;
     GetSubjEDRPOUCode(): string;
-
+    subjDRFOCode: string;
     GetSubjDRFOCode(): string;
-
+    subjNBUCode: string;
     GetSubjNBUCode(): string;
-
+    subjSPFMCode: string;
     GetSubjSPFMCode(): string;
-
+    subjOCode: string;
     GetSubjOCode(): string;
-
+    subjOUCode: string;
     GetSubjOUCode(): string;
-
+    subjUserCode: string;
     GetSubjUserCode(): string;
-
+    certBeginTime: Date;
     GetCertBeginTime(): Date;
-
+    certEndTime: Date;
     GetCertEndTime(): Date;
-
+    isPrivKeyTimesAvail: boolean;
     IsPrivKeyTimesAvail(): boolean;
-
+    privKeyBeginTime: Date;
     GetPrivKeyBeginTime(): Date;
-
+    privKeyEndTime: Date;
     GetPrivKeyEndTime(): Date;
-
+    publicKeyBits: number;
     GetPublicKeyBits(): number;
-
+    publicKey: string;
     GetPublicKey(): string;
-
+    publicKeyID: string;
     GetPublicKeyID(): string;
-
+    issuerPublicKeyID: string;
     GetIssuerPublicKeyID(): string;
-
+    keyUsage: string;
     GetKeyUsage(): string;
-
+    extKeyUsages: string;
     GetExtKeyUsages(): string;
-
+    getPolicies: string;
     GetPolicies(): string;
-
+    getCrlDistribPoint1: string;
     GetCrlDistribPoint1(): string;
-
+    getCrlDistribPoint2: string;
     GetCrlDistribPoint2(): string;
-
+    isPowerCert: boolean;
     IsPowerCert(): boolean;
-
+    isSubjTypeAvail: boolean;
     IsSubjTypeAvail(): boolean;
-
+    isSubjCA: boolean;
     IsSubjCA(): boolean;
-
+    chainLength: number;
     GetChainLength(): number;
-
+    UPN: string;
     GetUPN(): string;
-
+    publicKeyType: number;
     GetPublicKeyType(): number;
-
+    keyUsageType: number;
     GetKeyUsageType(): number;
-
+    RSAModul: string;
     GetRSAModul(): string;
-
+    RSAExponent: string;
     GetRSAExponent(): string;
-
+    OCSPAccessInfo: string;
     GetOCSPAccessInfo(): string;
-
+    issuerAccessInfo: string;
     GetIssuerAccessInfo(): string;
-
+    TSPAccessInfo: string;
     GetTSPAccessInfo(): string;
-
+    isLimitValueAvail: boolean;
     IsLimitValueAvail(): boolean;
-
+    limitValue: number;
     GetLimitValue(): number;
-
+    limitValueCurrency: string;
     GetLimitValueCurrency(): string;
-
+    subjType: number;
     GetSubjType(): number;
-
+    subjSubType: number;
     GetSubjSubType(): number;
-
+    subjUNZR: string;
     GetSubjUNZR(): string;
-
+    subjCountry: string;
     GetSubjCountry(): string;
-
+    fingerpint: string;
     GetFingerpint(): string;
-
+    isQSCD: boolean;
     IsQSCD(): boolean;
-
+    subjUserID: string;
     GetSubjUserID(): string;
 }
 
 export interface EndUserCertificate {
+    infoEx: EndUserCertificateInfoEx;
     GetInfoEx(): EndUserCertificateInfoEx;
-
     SetInfoEx(infoEx: EndUserCertificateInfoEx): void;
-
+    data: Uint8Array;
     GetData(): Uint8Array;
-
     SetData(data: Uint8Array): void;
 }
 

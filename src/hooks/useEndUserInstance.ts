@@ -1,5 +1,6 @@
 import { useState, useCallback } from "react";
 import EndUserLibrary, { EndUserEventType, LibraryInfo } from "../EUSign/EndUserLibrary";
+import Settings from "../EUSign/LIBRARY_SETTINGS.json";
 
 export enum EndUserLibraryType {
     SW,
@@ -18,6 +19,7 @@ export interface EndUserInstance {
     loading: boolean;
     error: string | undefined;
     Load: (callback?: any) => Promise<void>;
+    Initialize: () => Promise<void>;
 }
 
 export default function useEndUserInstance(props: Props): EndUserInstance {
@@ -51,5 +53,15 @@ export default function useEndUserInstance(props: Props): EndUserInstance {
         [props.library],
     );
 
-    return { type: props.type, library: props.library, info, loading, error, Load };
+    const Initialize = useCallback(() => {
+        return new Promise<void>((resolve, reject) => {
+            props.library
+                .IsInitialized()
+                .then(init => (init ? resolve() : props.library.Initialize(Settings as any)))
+                .then(() => resolve())
+                .catch(reject);
+        });
+    }, [props.library]);
+
+    return { type: props.type, library: props.library, info, loading, error, Load, Initialize };
 }

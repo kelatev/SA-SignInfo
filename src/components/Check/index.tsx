@@ -1,43 +1,16 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import Card from "../Form/Card";
 import Timeline from "../Timeline/Timeline";
 import TimelineFileSelect from "../Timeline/TimelineFileSelect";
 import InfoSigner from "./InfoSigner";
 import { useEUSignContext } from '../../context/EUSignContext';
 import { FileArchive, FileDashed } from "@phosphor-icons/react";
-import { EUVerifyResult } from '../../EUSign/EndUserWorker';
+import useVerifyFiles from '../../hooks/useVerifyFiles';
 
 function PanelCheck() {
     const { librarySW } = useEUSignContext();
-
-    const [loading, setLoading] = useState(false);
-    const [error, setError] = useState<string>();
-    const [file, setFile] = useState<File | null>();
-
-    const [verifyResult, setVerifyResult] = useState<EUVerifyResult>();
-    const [signedData, setSignedData] = useState<Uint8Array>();
-
-    useEffect(() => {
-        setError(undefined);
-        setVerifyResult(undefined);
-        setSignedData(undefined);
-        if (librarySW?.loading) {
-            if (file) {
-                setLoading(true);
-                /* librarySW.GetLibrary().VerifyFiles([file])
-                    .then((result) => {
-                        setLoading(false);
-                        setVerifyResult(result);
-                        result.data && setSignedData(result.data);
-                    }).catch((err) => {
-                        setLoading(false);
-                        setError(err.toString());
-                    }); */
-            } else {
-                setLoading(false);
-            }
-        }
-    }, [librarySW?.loading, file]);
+    const [file, setFile] = useState<File | null>(null);
+    const { loading, error, verifyResult, signedData } = useVerifyFiles({ library: librarySW, file: file });
 
     return (
         <Card title='Перевірка підпису' backgroundColor='#CBF0F4' className='bgi-no-repeat bgi-position-x-end' backgroundImage='url("/wave-bg-blue.svg")'>

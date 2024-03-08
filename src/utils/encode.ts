@@ -43,3 +43,7 @@ export function Uint8toUtf8(data: Uint8Array | undefined): string | undefined {
 export function Uint8toWin1251(data: Uint8Array | undefined): string | undefined {
     return data && decode(data);
 }
+
+export async function FileToUint8(file: File): Promise<Uint8Array> {
+    return new Uint8Array(await file.arrayBuffer());
+}

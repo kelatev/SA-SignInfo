@@ -57,7 +57,7 @@ function PanelSign() {
                     <SignSelect />
                     {privateKey && (
                         <>
-                            <SignInfo endUserPrivateKey={privateKey} />
+                            {/* <SignInfo endUserPrivateKey={privateKey} /> */}
                             <Settings onSignTypeSelect={setSignType} onSignAlgoSelect={setSignAlgo}
                                 onSignFormatSelect={setSignFormat} />
                             <Timeline.Item title='Файл для підпису' icon={<Cursor />}>

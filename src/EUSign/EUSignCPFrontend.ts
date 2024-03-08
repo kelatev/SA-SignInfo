@@ -1,6 +1,6 @@
 import EUSignCPPromise from "./EUSignCPPromise";
 import {EUSignCP, EndUserLibraryLoader} from "./eusw";
-import {EndUserCertificateInfoEx} from "./types";
+import {EndUserCertificateInfoEx} from "./eusign.types";
 
 const EUSignContainerType = {
     Unknown: 0x0000,

@@ -2,8 +2,9 @@
   "language": 1,
   "encoding": "utf-8",
   "directAccess": true,
-  "CAs": "/CAs.json?v=1",
-  "CACertificates": "/CACertificates.p7b?v=1",
+  "httpProxyServiceURL": "",
+  "CAs": "/eusign/data/CAs.json?v=1",
+  "CACertificates": "/eusign/data/CACertificates.p7b?v=1",
   "allowedKeyMediaTypes": [
     "е.ключ BIFIT iToken",
     "криптомод. ІІТ Гряда-61",
@@ -22,6 +23,7 @@
     "смарт-карта Техноконс. TEllipse",
     "смарт-карта Техноконс. TEllipse2/3"
   ],
+  "connectionTimeout": 10000,
   "passwordRequirements": null,
   "KSPs": [
     {

@@ -23,7 +23,7 @@ import {
   EndUserPrivateKeyInfo,
   EndUserTimeInfo,
   EndUserTSPSettings,
-} from "./types";
+} from "./eusign.types";
 
 export default class EUSignCPCore {
   m_library!: EUSignCP;

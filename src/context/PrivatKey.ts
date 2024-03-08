@@ -1,5 +1,5 @@
 import {createContext, useContext} from 'react';
-import { EndUserPrivateKeyContext } from "../EUSign/types";
+import { EndUserPrivateKeyContext } from "../EUSign/eusign.types";
 
 export type PrivatKeyType = {
     privateKey: Uint8Array;

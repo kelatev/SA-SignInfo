@@ -5,7 +5,9 @@ import {
     EndUserPrivateKeyContext,
     EndUserKeyMedia,
     EndUserParams,
-} from "./types";
+    EndUserCertificate,
+    EndUserSignInfo,
+} from "./eusign.types";
 
 export enum EndUserEventType {
     "None" = 0,
@@ -17,6 +19,12 @@ export interface LibraryInfo {
     version: string;
     supported: boolean;
     loaded: boolean;
+}
+
+export interface SignContainerInfo {
+    type: number;
+    subType: number;
+    asicSignType: number;
 }
 
 export default interface EndUserLibrary {
@@ -71,7 +79,11 @@ export default interface EndUserLibrary {
     //GetKeyInfoBinary
     //GetClientRegistrationTokenKSP
     //HashData
-    //GetSigner
+    GetSigner: (
+        sign: Uint8Array,
+        signIndex: number,
+        resolveOIDs?: boolean,
+    ) => Promise<EndUserCertificate>;
     //SignData
     //SignDataInternal
     //SignHash
@@ -79,8 +91,8 @@ export default interface EndUserLibrary {
     //AppendSign
     //AppendSignHash
     //VerifyHash
-    //VerifyData
-    //VerifyDataInternal
+    VerifyData: (data: Uint8Array, sign: Uint8Array, signIndex: number) => Promise<EndUserSignInfo>;
+    VerifyDataInternal: (sign: Uint8Array, signIndex: number) => Promise<EndUserSignInfo>;
     //EnvelopData
     //DevelopData
     //ProtectDataByPassword
@@ -113,5 +125,5 @@ export default interface EndUserLibrary {
     //XAdESGetSigner
     //XAdESSignData
     //XAdESVerifyData
-    //GetSignContainerInfo
+    GetSignContainerInfo: (signature: Uint8Array) => Promise<SignContainerInfo>;
 }

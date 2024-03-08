@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { EndUserJKSPrivateKey, EndUserPrivateKey } from "../../EUSign/types";
+import { EndUserJKSPrivateKey, EndUserPrivateKey } from "../../EUSign/eusign.types";
 import EUSignContext from "../../context/EUSign";
 import Timeline from "../Timeline/Timeline";
 import FormPassword from "../Form/FormPassword";
@@ -54,7 +54,7 @@ function SignSelect() {
                     if (userJKSPrivateKeys.length > 0) {
                         setFileAliasSelect(userJKSPrivateKeys[0].info.alias);
                     } else {
-                        setPrivateKey({ privateKey: fileContainer, certificates: null });
+                        setPrivateKey({ privateKey: fileContainer, certificates: null, alias: '', digitalStamp: false });
                     }
                 } catch (e: any) {
                     console.log(e);
@@ -69,7 +69,7 @@ function SignSelect() {
             try {
                 const JKSPrivateKey = userJKSPrivateKeys.filter((item) => item.info.alias === fileAliasSelect);
 
-                setPrivateKey({ privateKey: JKSPrivateKey[0].GetPrivateKey(), certificates: JKSPrivateKey[0].GetCertificates() });
+                setPrivateKey({ privateKey: JKSPrivateKey[0].GetPrivateKey(), certificates: JKSPrivateKey[0].GetCertificates(), alias: '', digitalStamp: false });
             } catch (e: any) {
                 console.log(e);
                 setError(e.toString());
