@@ -5,7 +5,7 @@ import TimelineFileSelect from "../Timeline/TimelineFileSelect";
 import InfoSigner from "./InfoSigner";
 import { useEUSignContext } from '../../context/EUSignContext';
 import { FileArchive, FileDashed } from "@phosphor-icons/react";
-import { EUVerifyResult } from '../../hooks/withEUSignCommand';
+import { EUVerifyResult } from '../../EUSign/EndUserWorker';
 
 function PanelCheck() {
     const { librarySW } = useEUSignContext();

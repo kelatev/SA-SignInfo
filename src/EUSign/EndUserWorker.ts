@@ -1,4 +1,11 @@
-import { EndUserSettings } from "./types";
+import {
+    EndUserSettings,
+    EndUserProxySettings,
+    EndUserPrivateKey,
+    EndUserPrivateKeyContext,
+    EndUserKeyMedia,
+    EndUserParams,
+} from "./types";
 import EUSignCPWorker from "./EUSignCPWorker";
 import EndUserLibrary, { EndUserEventType, LibraryInfo } from "./EndUserLibrary";
 
@@ -126,7 +133,7 @@ export default class EndUserWorker implements EndUserLibrary {
         this.m_eventListeners = [];
     }
 
-    command<T>(cmd: string, params?: any[]): Promise<T> {
+    command<T>(cmd: string, ...params: any[]): Promise<T> {
         return new Promise<any>((resolve, reject) => {
             this.m_worker.postMessage(cmd, params).then(resolve).catch(reject);
         });
@@ -155,15 +162,101 @@ export default class EndUserWorker implements EndUserLibrary {
             default:
                 this.m_eventListeners[eventType] = callback;
         }
-        return this.command<void>("AddEventListener", [eventType]);
+        return this.command<void>("AddEventListener", eventType);
     }
     GetLibraryInfo(downloadsURL?: string) {
-        return this.command<LibraryInfo>("GetLibraryInfo", [downloadsURL]);
+        return this.command<LibraryInfo>("GetLibraryInfo", downloadsURL);
     }
     IsInitialized() {
         return this.command<boolean>("IsInitialized");
     }
     Initialize(settings: EndUserSettings) {
-        return this.command<void>("Initialize", [settings]);
+        return this.command<void>("Initialize", settings);
+    }
+    SetRuntimeParameter(name: string, value: number) {
+        return this.command<void>("SetRuntimeParameter", name, value);
+    }
+    GetStorageParameter(name: string, protectedItem: boolean) {
+        return this.command<number>("GetStorageParameter", name, protectedItem);
+    }
+    SetStorageParameter(name: string, value: number, protectedItem: boolean) {
+        return this.command<void>("SetStorageParameter", name, value, protectedItem);
+    }
+    GetCAs() {
+        return this.command<any[]>("GetCAs");
+    }
+    GetProxySettings() {
+        return this.command<EndUserProxySettings>("GetProxySettings");
+    }
+    SetProxySettings(settings: EndUserProxySettings) {
+        return this.command<void>("SetProxySettings", settings);
+    }
+    GetKeyMedias() {
+        return this.command<any>("GetKeyMedias");
+    }
+    GetJKSPrivateKeys(jks: Uint8Array) {
+        return this.command<EndUserPrivateKey[]>("GetJKSPrivateKeys", jks);
+    }
+    IsPrivateKeyReaded() {
+        return this.command<boolean>("IsPrivateKeyReaded");
+    }
+    ResetPrivateKey() {
+        return this.command<void>("ResetPrivateKey");
+    }
+    ResetOperationKSP() {
+        return this.command<void>("ResetOperationKSP");
+    }
+    ReadPrivateKey(
+        keyMedia: EndUserKeyMedia,
+        certs: Uint8Array[] | Uint8Array | null,
+        CACommonName: string | null,
+    ) {
+        return this.command<EndUserPrivateKeyContext>(
+            "ReadPrivateKey",
+            keyMedia,
+            certs,
+            CACommonName,
+        );
+    }
+    ReadPrivateKeyBinary(
+        privateKey: Uint8Array,
+        password: string,
+        certs: Uint8Array[] | Uint8Array | null,
+        CACommonName: string | null,
+    ) {
+        return this.command<EndUserPrivateKeyContext>(
+            "ReadPrivateKeyBinary",
+            privateKey,
+            password,
+            certs,
+            CACommonName,
+        );
+    }
+    ReadPrivateKeySIM(msisdn: string, operator: string | number, getCerts: boolean, keyId: number) {
+        return this.command<EndUserPrivateKeyContext>(
+            "ReadPrivateKeySIM",
+            msisdn,
+            operator,
+            getCerts,
+            keyId,
+        );
+    }
+    ReadPrivateKeyKSP(userId: string, ksp: string | number, getCerts: boolean, keyId: number) {
+        return this.command<EndUserPrivateKeyContext>(
+            "ReadPrivateKeyKSP",
+            userId,
+            ksp,
+            getCerts,
+            keyId,
+        );
+    }
+    GetOwnCertificates() {
+        return this.command<Uint8Array[]>("GetOwnCertificates");
+    }
+    GetOwnEUserParams() {
+        return this.command<EndUserParams>("GetOwnEUserParams");
+    }
+    ChangeOwnCertificatesStatus(requestType: number, revocationReason: number) {
+        return this.command<void>("ChangeOwnCertificatesStatus", requestType, revocationReason);
     }
 }
