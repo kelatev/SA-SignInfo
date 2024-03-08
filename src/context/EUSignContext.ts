@@ -1,11 +1,11 @@
 import { createContext, useContext } from "react";
 import { KeyMediaType } from "../hooks/useEndUserController";
-import EndUserInstance, { EndUserLibraryType } from "../EUSign/EndUserInstance";
+import { EndUserInstance } from "../hooks/useEndUserInstance";
 
 interface EUSignContextType {
     keyMediaType: KeyMediaType;
     setKeyMediaType: React.Dispatch<React.SetStateAction<KeyMediaType>>;
-    findLibrary: (type: EndUserLibraryType) => EndUserInstance | undefined;
+    librarySW: EndUserInstance;
     currentLibrary: EndUserInstance | undefined;
 }
 

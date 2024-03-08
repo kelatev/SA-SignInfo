@@ -1,12 +1,10 @@
-import React from 'react';
+import { useEffect } from 'react';
 import Loader from "../components/Loader";
 import PanelCheck from "../components/Check";
 import PanelSign from "../components/Sign";
 import Layout from "../components/Layout";
 import { EUSignContext } from '../context/EUSignContext';
-import { EndUserLibraryType } from '../EUSign/EndUserInstance';
 import useEndUserController from '../hooks/useEndUserController';
-import useEndUserLoading from '../hooks/useEndUserLoading';
 
 function Home() {
     const settings = {
@@ -21,18 +19,21 @@ function Home() {
         directAccess: true,
         TSLAddress: null
     }
-    const { keyMediaType, setKeyMediaType, findLibrary, currentLibrary } = useEndUserController();
-    const { loading, error } = useEndUserLoading({ library: findLibrary(EndUserLibraryType.SW) });
+    const { keyMediaType, setKeyMediaType, librarySW, currentLibrary } = useEndUserController();
 
-
+    useEffect(() => {
+        if (!librarySW.info?.loaded && !librarySW.loading) {
+            librarySW.Load();
+        }
+    }, [librarySW]);
 
     return (
-        <EUSignContext.Provider value={{ keyMediaType, setKeyMediaType, findLibrary, currentLibrary }}>
-            {!loading && <Loader error={error} />}
+        <EUSignContext.Provider value={{ keyMediaType, setKeyMediaType, librarySW, currentLibrary }}>
+            {librarySW.loading && <Loader error={librarySW.error} />}
             <Layout
                 title="SA - UA Sign"
                 subtitle="ЕЦП (ДСТУ 4145-2002)"
-                showOverlay={!loading}
+                showOverlay={librarySW.loading}
                 left={<PanelCheck />}
                 right={<PanelSign />}
             />

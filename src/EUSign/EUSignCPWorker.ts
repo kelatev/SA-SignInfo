@@ -28,7 +28,7 @@ export default class EUSignCPWorker {
             this.m_worker.postMessage({
                 cmd,
                 params,
-                callback_id,
+                id: callback_id,
                 origin: this.m_origin,
                 pathname: this.m_pathname,
             });
@@ -40,10 +40,10 @@ export default class EUSignCPWorker {
 
         instance.onmessage = (event: MessageEvent) => {
             const data = event.data;
-            const itemCallback = this.m_promises[data.callback_id - 1];
+            const itemCallback = this.m_promises[data.id - 1];
 
             if (itemCallback) {
-                delete this.m_promises[data.callback_id - 1];
+                delete this.m_promises[data.id - 1];
                 if (data.error == null) {
                     itemCallback.onSuccess(data.result);
                 } else {

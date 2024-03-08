@@ -126,14 +126,14 @@ export default class EndUserWorker implements EndUserLibrary {
         this.m_eventListeners = [];
     }
 
-    command<T>(cmd: string, params?: any): Promise<T> {
+    command<T>(cmd: string, params?: any[]): Promise<T> {
         return new Promise<any>((resolve, reject) => {
             this.m_worker.postMessage(cmd, params).then(resolve).catch(reject);
         });
     }
 
     VerifyFiles(files: File[]) {
-        return this.command<EUVerifyResult>("VerifyFiles", { files });
+        return this.command<EUVerifyResult>("VerifyFiles", [files]);
     }
 
     OnEvent(event: any) {
@@ -158,12 +158,12 @@ export default class EndUserWorker implements EndUserLibrary {
         return this.command<void>("AddEventListener", [eventType]);
     }
     GetLibraryInfo(downloadsURL?: string) {
-        return this.command<LibraryInfo>("GetLibraryInfo", downloadsURL);
+        return this.command<LibraryInfo>("GetLibraryInfo", [downloadsURL]);
     }
     IsInitialized() {
         return this.command<boolean>("IsInitialized");
     }
     Initialize(settings: EndUserSettings) {
-        return this.command<void>("Initialize", { settings });
+        return this.command<void>("Initialize", [settings]);
     }
 }

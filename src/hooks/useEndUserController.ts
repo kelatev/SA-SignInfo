@@ -1,5 +1,6 @@
-import { useState, useEffect, useCallback } from "react";
-import EndUserInstance, { EndUserLibraryType } from "../EUSign/EndUserInstance";
+import { useState, useEffect, useCallback, useMemo } from "react";
+import useEndUserInstance, { EndUserLibraryType, EndUserInstance } from "./useEndUserInstance";
+import EndUserLibrary from "../EUSign/EndUserLibrary";
 import EndUserWorker from "../EUSign/EndUserWorker";
 
 export enum KeyMediaType {
@@ -9,8 +10,11 @@ export enum KeyMediaType {
 
 export default function useEndUserController() {
     const [keyMediaType, setKeyMediaType] = useState<KeyMediaType>(KeyMediaType.File);
-    const [libraries, setLibraries] = useState<EndUserInstance[]>([]);
-    const [currentLibrary, setCurrentLibrary] = useState<EndUserInstance>();
+
+    const librarySW = useMemo<EndUserLibrary>(() => new EndUserWorker(), []);
+    const instanceSW = useEndUserInstance({ type: EndUserLibraryType.SW, library: librarySW });
+    const [libraries] = useState<EndUserInstance[]>([instanceSW]);
+    const [currentLibrary, setCurrentLibrary] = useState<EndUserInstance | undefined>(instanceSW);
 
     const m_isPKActionDone = false;
     const m_KM = null;
@@ -19,12 +23,8 @@ export default function useEndUserController() {
     const m_readedPKey = null;
     const m_KMs = [];
 
-    useEffect(() => {
-        setLibraries([new EndUserInstance(EndUserLibraryType.SW, new EndUserWorker())]);
-    }, []);
-
     const findLibrary = useCallback(
-        (type: EndUserLibraryType) => libraries.find(item => item.GetType() === type),
+        (type: EndUserLibraryType) => libraries.find(item => item.type === type),
         [libraries],
     );
 
@@ -34,5 +34,5 @@ export default function useEndUserController() {
         setCurrentLibrary(findLibrary(typeToFind));
     }, [keyMediaType, findLibrary, libraries]);
 
-    return { keyMediaType, setKeyMediaType, findLibrary, currentLibrary };
+    return { keyMediaType, setKeyMediaType, librarySW: instanceSW, currentLibrary };
 }

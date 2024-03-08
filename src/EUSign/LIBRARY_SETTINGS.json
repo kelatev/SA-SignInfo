@@ -5,9 +5,12 @@
   "CAs": "/CAs.json?v=1",
   "CACertificates": "/CACertificates.p7b?v=1",
   "allowedKeyMediaTypes": [
+    "е.ключ BIFIT iToken",
     "криптомод. ІІТ Гряда-61",
     "е.ключ ІІТ Алмаз-1К",
+    "е.ключ ІІТ Алмаз-1К (Bluetooth)",
     "е.ключ ІІТ Кристал-1",
+    "криптомод. ІІТ Гряда-301",
     "ID-карта громадянина (БЕН)",
     "е.ключ ІІТ Алмаз-1К (PKCS#11)",
     "е.ключ ІІТ Кристал-1 (PKCS#11)",
@@ -17,18 +20,117 @@
     "е.ключ чи смарт-карта Автор 338 (PKCS#11)",
     "смарт-карта Техноконс. TEllipse3 (PKCS#11)",
     "смарт-карта Техноконс. TEllipse",
-    "смарт-карта Техноконс. TEllipse2/3",
-    "см.-карта чи е.ключ Техноконс. TEllipse2/3/4"
+    "смарт-карта Техноконс. TEllipse2/3"
   ],
-  "mssServiceURL": "Server/KSPSignController.php",
   "passwordRequirements": null,
   "KSPs": [
     {
-      "name": "ДП ДІЯ - хмарний підпис (тестування)",
+      "name": "ДіЯ",
+      "ksp": 7,
+      "address": "Server/KSPSignController.php",
+      "port": "",
+      "directAccess": true,
+      "mobileAppName": "ДіЯ",
+      "systemId": "https://ca.diia.gov.ua/"
+    },
+    {
+      "name": "DepositSign - хмарний підпис",
       "ksp": 4,
-      "address": "https://ssign.informjust.ua",
+      "address": "https://depositsign.com/api/v1/informjust/sign-server",
+      "port": "",
+      "directAccess": true,
+      "systemId": "https://ca.diia.gov.ua/"
+    },
+    {
+      "name": "Приватбанк - хмарний підпис \"SmartID\"",
+      "ksp": 6,
+      "address": "https://acsk.privatbank.ua/cloud/api/back/",
+      "port": "",
+      "directAccess": true,
+      "clientIdPrefix": "IEIS_",
+      "confirmationURL": "https://www.privat24.ua/rd/kep",
+      "mobileAppName": "Приват24",
+      "systemId": "https://ca.diia.gov.ua/"
+    },
+    {
+      "name": "Вчасно - хмарний підпис",
+      "ksp": 4,
+      "address": "https://cs.vchasno.ua/ss/",
+      "port": "",
+      "directAccess": true,
+      "systemId": "https://ca.diia.gov.ua/"
+    },
+    {
+      "name": "ТОВ «ЦСК «Україна» - хмарний підпис CloudKey",
+      "ksp": 6,
+      "address": "https://sid.uakey.com.ua/smartid/iit/",
+      "port": "",
+      "directAccess": true,
+      "clientIdPrefix": "DIIA_2",
+      "confirmationURL": "https://sid.uakey.com.ua/kep?hash=rd/kep",
+      "mobileAppName": "CloudKey",
+      "systemId": "https://ca.diia.gov.ua/"
+    },
+    {
+      "name": "ESign - хмарний підпис",
+      "ksp": 4,
+      "address": "https://cabinet.e-life.com.ua/api/EDG/Sign",
+      "port": "",
+      "directAccess": true,
+      "systemId": "https://ca.diia.gov.ua/"
+    },
+    {
+      "name": "ПУМБ - хмарний підпис",
+      "ksp": 6,
+      "address": "https://apiext.pumb.ua/hogsmeade/striga/v1",
+      "port": "",
+      "directAccess": false,
+      "clientIdPrefix": "DIIA_3",
+      "confirmationURL": "https://www.pumb.ua/qes",
+      "mobileAppName": "",
+      "systemId": "https://ca.diia.gov.ua/"
+    },
+    {
+      "name": "ДПС - хмарний підпис",
+      "ksp": 4,
+      "address": "https://smart-sign.tax.gov.ua/",
       "port": "443",
-      "directAccess": true
+      "directAccess": true,
+      "clientIdType": 1,
+      "systemId": "https://ca.diia.gov.ua/"
+    },
+    {
+      "name": "Укргазбанк - хмарний підпис «EcoSign»",
+      "ksp": 6,
+      "address": "https://vtms-api-qca.ukrgasbank.com/iit-signer/api/v1",
+      "port": "",
+      "directAccess": false,
+      "clientIdPrefix": "UGB_PROD",
+      "confirmationURL": "https://cihsm-commiter-qca.ukrgasbank.com",
+      "mobileAppName": "",
+      "systemId": "https://ca.diia.gov.ua/"
+    },
+    {
+      "name": "Банк Альянс - хмарний підпис",
+      "ksp": 6,
+      "address": "https://cihsm-api.bankalliance.ua/iit-signer/api/v1",
+      "port": "",
+      "directAccess": false,
+      "clientIdPrefix": "ALLIANCE_PROD",
+      "confirmationURL": "https://cihsm-commiter.bankalliance.ua",
+      "mobileAppName": "",
+      "systemId": "https://ca.diia.gov.ua/"
+    },
+    {
+      "name": "КНЕДП органів прокуратури - хмарний підпис",
+      "ksp": 6,
+      "address": "https://cihsm-api.gp.gov.ua/iit-signer/api/v1",
+      "port": "",
+      "directAccess": false,
+      "clientIdPrefix": "OGP_PROD",
+      "confirmationURL": "https://cihsm-commiter.gp.gov.ua",
+      "mobileAppName": "",
+      "systemId": "https://ca.diia.gov.ua/"
     }
   ],
   "allowMakeNewCertOnNewKeyMedia": false,
