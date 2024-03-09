@@ -15,7 +15,8 @@ function PanelCheck() {
     return (
         <Card title='Перевірка підпису' backgroundColor='#CBF0F4' className='bgi-no-repeat bgi-position-x-end' backgroundImage='url("/wave-bg-blue.svg")'>
             <Timeline>
-                <Timeline.Item title='Підписаний файл' icon={<FileArchive />} description={'p7s, pdf, xml, asics або asice'}>
+                {/*, pdf, xml, asics або asice*/}
+                <Timeline.Item title='Підписаний файл' icon={<FileArchive />} description={'p7s'}>
                     <TimelineFileSelect
                         onFileChange={setFile}
                         storagePrefix='check'

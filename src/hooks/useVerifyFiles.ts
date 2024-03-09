@@ -1,7 +1,8 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { EndUserInstance } from "../hooks/useEndUserInstance";
 import { FileToUint8 } from "../utils/encode";
 import { EndUserCertificateInfoEx, EndUserTimeInfo } from "../EUSign/eusign.types";
+import { SignContainerInfo } from "../EUSign/EndUserLibrary";
 
 type EUVerifyErrorCode = {
     NoError: 0;
@@ -43,14 +44,6 @@ interface Props {
     library: EndUserInstance;
     file: File | null;
 }
-
-const EU_CADES_TYPE_DETACHED = 1;
-const EU_CADES_TYPE_ENVELOPED = 3;
-
-const EU_SIGN_CONTAINER_TYPE_CADES = 1;
-const EU_SIGN_CONTAINER_TYPE_XADES = 2;
-const EU_SIGN_CONTAINER_TYPE_PADES = 3;
-const EU_SIGN_CONTAINER_TYPE_ASIC = 4;
 
 const UA_OID_EXT_KEY_USAGE_STAMP = "1.2.804.2.1.1.1.3.9";
 function IsSignerDigitalTimeStamp(info: EndUserCertificateInfoEx) {
@@ -144,6 +137,38 @@ function GetPAdESSignLevel(signLevel: number) {
     }
 }
 
+function decodeSignContainerType(info: SignContainerInfo) {
+    console.log(info);
+    const EU_CADES_TYPE_DETACHED = 1;
+    const EU_CADES_TYPE_ENVELOPED = 3;
+
+    const EU_SIGN_CONTAINER_TYPE_CADES = 1;
+    const EU_SIGN_CONTAINER_TYPE_XADES = 2;
+    const EU_SIGN_CONTAINER_TYPE_PADES = 3;
+    const EU_SIGN_CONTAINER_TYPE_ASIC = 4;
+
+    let signContainerType = 0;
+    switch (info.type) {
+        case EU_SIGN_CONTAINER_TYPE_CADES:
+            signContainerType = EUSignContainerType.CAdES;
+            signContainerType |=
+                info.subType === EU_CADES_TYPE_DETACHED
+                    ? EUSignContainerType.Detached
+                    : EUSignContainerType.Enveloped;
+            break;
+        case EU_SIGN_CONTAINER_TYPE_XADES:
+            signContainerType = EUSignContainerType.XAdES;
+            break;
+        case EU_SIGN_CONTAINER_TYPE_PADES:
+            signContainerType = EUSignContainerType.PAdES;
+            break;
+        case EU_SIGN_CONTAINER_TYPE_ASIC:
+            signContainerType = EUSignContainerType.ASiCE;
+            break;
+    }
+    return signContainerType;
+}
+
 export default function useVerifyFiles(props: Props) {
     const [file, setFile] = useState<Uint8Array>();
     const [loading, setLoading] = useState(false);
@@ -154,83 +179,72 @@ export default function useVerifyFiles(props: Props) {
     useEffect(() => {
         if (props.file) {
             FileToUint8(props.file).then(data => setFile(data));
+        } else {
+            setLoading(false);
+            setError(undefined);
+            setVerifyResult(undefined);
+            setSignedData(undefined);
         }
     }, [props.file]);
 
-    const VerifyFiles = (file: Uint8Array) => {
-        (async function () {
-            try {
-                if (props.library.library && props.file) {
-                    await props.library.Initialize();
-                    const signContainer = await props.library.library.GetSignContainerInfo(file);
-                    const signInfo = await props.library.library.VerifyDataInternal(file, 0);
-                    const signerCert = await props.library.library.GetSigner(file, 0);
-                    console.log(signContainer, signInfo, signerCert);
+    const VerifyFiles = useCallback(
+        (file: Uint8Array) => {
+            (async function () {
+                try {
+                    if (props.library.library && file) {
+                        await props.library.Initialize();
+                        const signContainer = await props.library.library.GetSignContainerInfo(
+                            file,
+                        );
+                        const signInfo = await props.library.library.VerifyDataInternal(file, 0);
+                        const signerCert = await props.library.library.GetSigner(file, 0);
 
-                    const signContainerType = 0;//TODO: signContainer decode
-                    const signFormat = signInfo.signLevel || 0;
+                        const signContainerType = decodeSignContainerType(signContainer);
+                        const signFormat = signInfo.signLevel || 0;
 
+                        setLoading(false);
+                        setVerifyResult({
+                            signFile: new Blob([signerCert.data]),
+                            signType: signContainer.type,
+                            signsInfos: [
+                                {
+                                    signerInfo: signerCert.infoEx,
+                                    signTimeInfo: signInfo.timeInfo,
+                                    isDigitalStamp: IsSignerDigitalTimeStamp(signerCert.infoEx),
+                                    signAlgo: GetSignAlgo(signerCert.infoEx),
+                                    signFormat:
+                                        signContainerType & EUSignContainerType.XAdES
+                                            ? GetXAdESSignLevel(signFormat)
+                                            : signContainerType & EUSignContainerType.PAdES
+                                            ? GetPAdESSignLevel(signFormat)
+                                            : GetCAdESSignLevel(signFormat),
+                                    signContainerType: GetSignContainerType(signContainerType),
+                                },
+                            ],
+                        });
+                        signInfo.data && setSignedData(signInfo.data);
+                    }
+                } catch (e: any) {
+                    console.log(e);
+                    setError(`${e.message} (${e.code})`);
                     setLoading(false);
-                    setVerifyResult({
-                        signFile: new Blob([signerCert.data]),
-                        signType: signContainer.type,
-                        signsInfos: [
-                            {
-                                signerInfo: signerCert.infoEx,
-                                signTimeInfo: signInfo.timeInfo,
-                                isDigitalStamp: IsSignerDigitalTimeStamp(signerCert.infoEx),
-                                signAlgo: GetSignAlgo(signerCert.infoEx),
-                                signFormat:
-                                    signContainerType & EUSignContainerType.XAdES
-                                        ? GetXAdESSignLevel(signFormat)
-                                        : signContainerType & EUSignContainerType.PAdES
-                                        ? GetPAdESSignLevel(signFormat)
-                                        : GetCAdESSignLevel(signFormat),
-                                signContainerType: GetSignContainerType(signContainerType),
-                            },
-                        ],
-                    });
-                    signInfo.data && setSignedData(signInfo.data);
                 }
-            } catch (e: any) {
-                console.log(e);
-                setError(`${e.message} (${e.code})`);
-                setLoading(false);
-            }
-        })();
-        /* if (IsASiC(props.file)) {
-                VerifyFileWithASiC();
-            } else if (IsPAdES(props.file)) {
-                VerifyFileWithPDF();
-            } else if (IsXAdES(props.file)) {
-                VerifyFileWithXAdES();
-            } else {
-                VerifyFileWithInternalSign();
-            } */
-    };
+            })();
+        },
+        [props.library],
+    );
 
     useEffect(() => {
         setError(undefined);
         setVerifyResult(undefined);
         setSignedData(undefined);
-        if (props.library.info?.loaded) {
-            if (file) {
-                setLoading(true);
-                VerifyFiles(file);
-                /* props.library.GetLibrary().VerifyFiles([file])
-                    .then((result) => {
-                        setLoading(false);
-                        setVerifyResult(result);
-                        result.data && setSignedData(result.data);
-                    }).catch((err) => {
-                        setLoading(false);
-                        setError(err.toString());
-                    }); */
-            } else {
-                setLoading(false);
-            }
+        if (props.library.info?.loaded && file) {
+            setLoading(true);
+            VerifyFiles(file);
+        } else {
+            setLoading(false);
         }
-    }, [props.library.info?.loaded, file]);
+    }, [props.library.info?.loaded, file, VerifyFiles]);
 
     return { loading, error, verifyResult, signedData };
 }

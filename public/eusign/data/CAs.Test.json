@@ -1,14 +1,19 @@
 [
 	{
-		"issuerCNs":				["Тестовий надавач електронних довірчих послуг",
-									"Адміністратор ІТС ЦЗО (CA TEST)",
-									"Administrator ITS CCA (CA TEST)"],
-		"address": 					"ca-test.czo.gov.ua",
-		"ocspAccessPointAddress":	"ca-test.czo.gov.ua/services/ocsp/",
-		"ocspAccessPointPort":		"80",
-		"cmpAddress":				"ca-test.czo.gov.ua",
-		"tspAddress":				"ca-test.czo.gov.ua",
-		"tspAddressPort":			"80",
-		"directAccess":				true
+		"issuerCNs": [
+			"Тестовий надавач електронних довірчих послуг",
+			"Адміністратор ІТС ЦЗО (CA TEST)",
+			"Administrator ITS CCA (CA TEST)",
+			"Тестовий ЦСК",
+			"Test CA"
+		],
+		"address": "ca-test.czo.gov.ua",
+		"ocspAccessPointAddress": "ca-test.czo.gov.ua/services/ocsp/",
+		"ocspAccessPointPort": "80",
+		"cmpAddress": "ca-test.czo.gov.ua",
+		"tspAddress": "ca-test.czo.gov.ua",
+		"tspAddressPort": "80",
+		"directAccess": true,
+		"qscdSNInCert": true
 	}
 ]

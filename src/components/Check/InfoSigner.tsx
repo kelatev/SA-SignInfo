@@ -112,7 +112,7 @@ function InfoSigner(props: Props) {
                         </Button>
                         <Modal show={show} onHide={handleClose} size="xl">
                             <Modal.Header closeButton>
-                                <Modal.Title>Подписант</Modal.Title>
+                                <Modal.Title>JSON</Modal.Title>
                             </Modal.Header>
                             <Modal.Body>
                                 <SyntaxHighlighter
