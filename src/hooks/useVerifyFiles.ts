@@ -4,12 +4,12 @@ import { FileToUint8 } from "../utils/encode";
 import { EndUserCertificateInfoEx, EndUserTimeInfo } from "../EUSign/eusign.types";
 import { SignContainerInfo } from "../EUSign/EndUserLibrary";
 
-type EUVerifyErrorCode = {
+/* type EUVerifyErrorCode = {
     NoError: 0;
     NoFileWithData: 1;
     InvalidFileFormat: 2;
     FileTooBig: 3;
-};
+}; */
 
 enum EUSignContainerType {
     Unknown = 0x0000,
@@ -138,7 +138,7 @@ interface Props {
 
 function decodeSignContainerType(info: SignContainerInfo) {
     const EU_CADES_TYPE_DETACHED = 1;
-    const EU_CADES_TYPE_ENVELOPED = 3;
+    //const EU_CADES_TYPE_ENVELOPED = 3;
 
     const EU_SIGN_CONTAINER_TYPE_CADES = 1;
     const EU_SIGN_CONTAINER_TYPE_XADES = 2;

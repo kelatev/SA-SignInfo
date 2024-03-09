@@ -19,12 +19,12 @@ export default function useEndUserController() {
     const [libraries] = useState<EndUserInstance[]>([instanceSW]);
     const [currentLibrary, setCurrentLibrary] = useState<EndUserInstance | undefined>(instanceSW);
 
-    const m_isPKActionDone = false;
+    /* const m_isPKActionDone = false;
     const m_KM = null;
     const m_updateKM = false;
     const m_updatingKM = false;
     const m_readedPKey = null;
-    const m_KMs = [];
+    const m_KMs = []; */
 
     const findLibrary = useCallback(
         (type: EndUserLibraryType) => libraries.find(item => item.type === type),

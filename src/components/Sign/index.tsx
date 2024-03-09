@@ -1,5 +1,4 @@
-import { useContext, useEffect, useState } from "react";
-import EUSignContext from '../../context/EUSign';
+import { useEffect, useState } from "react";
 import Timeline from "../Timeline/Timeline";
 import Card from "../Form/Card";
 import SignInfo from "./SignInfo";
@@ -11,7 +10,6 @@ import { useEUSignContext } from '../../context/EUSignContext';
 
 function PanelSign() {
     const { currentLibrary } = useEUSignContext();
-    const { euSign } = useContext(EUSignContext);
 
     const [privateKey, setPrivateKey] = useState<PrivatKeyType>();
     const [signType, setSignType] = useState<number>();
@@ -38,7 +36,7 @@ function PanelSign() {
     } */
 
     useEffect(() => {
-        if (euSign && signType && signAlgo && signFormat && fileToSign) {
+        if (currentLibrary?.library && signType && signAlgo && signFormat && fileToSign) {
             (async function () {
                 try {
                     //const data = await euSign.m_library.BASE64Decode(fileToSign.content);
@@ -50,7 +48,7 @@ function PanelSign() {
                 }
             })();
         }
-    }, [euSign, signType, signAlgo, signFormat, fileToSign]);
+    }, [currentLibrary?.library, signType, signAlgo, signFormat, fileToSign]);
 
     return (
         <PrivatKeyContext.Provider value={{ privateKey, setPrivateKey }}>

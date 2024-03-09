@@ -47,7 +47,7 @@ function SignSelect() {
     }, [keyMediaType, file, setKeyMediaType]);
 
     useEffect(() => {
-        if (currentLibrary && file) {
+        if (currentLibrary?.info?.loaded && file) {
             FileToUint8(file).then(data => setFileContainer(data)).catch(err => console.log(err));
         } else {
             setFileContainer(undefined);
@@ -58,10 +58,10 @@ function SignSelect() {
         setPassword(undefined);
         setKeySelect(undefined);
         setPrivateKey(undefined);
-    }, [currentLibrary, file, setPrivateKey]);
+    }, [currentLibrary?.info?.loaded, file, setPrivateKey]);
 
     useEffect(() => {
-        if (currentLibrary && fileContainer) {
+        if (currentLibrary?.library && fileContainer) {
             (async function () {
                 try {
                     setError(undefined);
@@ -78,10 +78,10 @@ function SignSelect() {
                 }
             })();
         }
-    }, [currentLibrary, fileContainer]);
+    }, [currentLibrary?.library, fileContainer]);
 
     useEffect(() => {
-        if (currentLibrary && fileContainer && jksPrivateKeys && aliasSelect) {
+        if (jksPrivateKeys && aliasSelect) {
             try {
                 const JKSPrivateKey = jksPrivateKeys.find((item) => item.alias === aliasSelect);
                 if (JKSPrivateKey) {
@@ -92,10 +92,10 @@ function SignSelect() {
                 setError(e.toString());
             }
         }
-    }, [currentLibrary, fileContainer, jksPrivateKeys, aliasSelect]);
+    }, [jksPrivateKeys, aliasSelect]);
 
     useEffect(() => {
-        if (currentLibrary && keySelect && password && !privateKey) {
+        if (currentLibrary?.library && keySelect && password && !privateKey) {
             (async function () {
                 try {
                     setError(undefined);
@@ -123,7 +123,7 @@ function SignSelect() {
                 }
             })();
         }
-    }, [currentLibrary, keySelect, password, privateKey, setPrivateKey]);
+    }, [currentLibrary?.library, keySelect, password, privateKey, setPrivateKey]);
 
     const handlePassChange = () => {
         if (error) {
