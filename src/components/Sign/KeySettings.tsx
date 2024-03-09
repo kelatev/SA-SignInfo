@@ -1,14 +1,10 @@
-import React, { useContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import Timeline from "../Timeline/Timeline";
 import Form from "react-bootstrap/Form";
-import EUSignContext from "../../context/EUSign";
+import { useEUSignContext } from '../../EUSign/EUSignContext';
+import { useKeyContext } from './KeyContext';
 import { GearSix } from "@phosphor-icons/react";
-
-interface SignSignSignBlockProps {
-    onSignTypeSelect: (key: number) => void
-    onSignAlgoSelect: (key: number) => void
-    onSignFormatSelect: (key: number) => void
-}
+import { SignType, SignAlgo, SignFormat } from './types'
 
 interface SelectItem {
     key: number
@@ -17,10 +13,10 @@ interface SelectItem {
 
 export const signTypeCAdESInt = 1;
 export const signTypeCAdESExt = 2;
-export const signTypeASiCS = 3;
 
-function Settings(props: SignSignSignBlockProps) {
-    const { euSign } = useContext(EUSignContext);
+function Settings() {
+    const { currentLibrary } = useEUSignContext();
+    const { privateKey, setPrivateKey } = useKeyContext();
 
     const [signAlgoType, setSignTypeList] = useState<SelectItem[]>();
     const [signAlgoList, setSignAlgoList] = useState<SelectItem[]>();
@@ -33,75 +29,52 @@ function Settings(props: SignSignSignBlockProps) {
     const [editMode, setEditMode] = useState(false);
 
     useEffect(() => {
-        if (euSign) {
-            const list: SelectItem[] = [];
-            list.push({
-                key: signTypeCAdESInt,
+        setSignTypeList([
+            {
+                key: SignType.Int,
                 value: "Дані та підпис в одному файлі (формат CAdES)"
-            });
-            list.push({
-                key: signTypeCAdESExt,
+            },
+            {
+                key: SignType.Ext,
                 value: "Дані та підпис окремими файлами (формат CAdES)"
-            });
-            /*list.push({
-                key: signTypeASiCS,
-                value: "Дані та підпис в архіві (формат ASiC-S)"
-            });*/
-            setSignTypeList(list);
-        }
-    }, [euSign]);
+            }
+        ]);
+        setSignType(SignType.Int);
+    }, []);
 
     useEffect(() => {
-        if (euSign) {
-            const list: SelectItem[] = [];
-            list.push({
-                key: euSign.m_library.m_library.CERT_KEY_TYPE_DSTU4145,
-                value: "ДСТУ 4145"
-            });
-            list.push({
-                key: euSign.m_library.m_library.CERT_KEY_TYPE_RSA,
-                value: "RSA"
-            });
-            setSignAlgoList(list);
-        }
-    }, [euSign]);
+        const list: SelectItem[] = [];
+        list.push({
+            key: SignAlgo.DSTU4145,
+            value: "ДСТУ 4145"
+        });
+        list.push({
+            key: SignAlgo.RSA,
+            value: "RSA"
+        });
+        list.push({
+            key: SignAlgo.ECDSA,
+            value: "ECDSA"
+        });
+        setSignAlgoList(list);
+        setSignAlgo(SignAlgo.DSTU4145);
+    }, []);
 
     useEffect(() => {
-        if (euSign) {
-            const list: SelectItem[] = [];
-            list.push({
-                key: euSign.m_library.m_library.EU_SIGN_TYPE_CADES_X_LONG,
+        setSignFormatList([
+            {
+                key: SignFormat.CADES_X_LONG,
                 value: "з повними даними для перевірки (CAdES-X-Long)"
-            });
-            list.push({
-                key: euSign.m_library.m_library.EU_SIGN_TYPE_CADES_C,
+            },
+            {
+                key: SignFormat.CADES_C,
                 value: "з посиланням на повні дані для перевірки (CAdES-C)"
-            });
-            list.push({ key: euSign.m_library.m_library.EU_SIGN_TYPE_CADES_T, value: "з позначкою часу від КЕП (CAdES-T)" });
-            list.push({ key: euSign.m_library.m_library.EU_SIGN_TYPE_CADES_BES, value: "базовий (CAdES-BES)" });
-            setSignFormatList(list);
-        }
-    }, [euSign]);
-
-    useEffect(() => {
-        euSign && signType && props.onSignTypeSelect(signType);
-    }, [euSign, signType, props]);
-
-    useEffect(() => {
-        euSign && signAlgo && props.onSignAlgoSelect(signAlgo);
-    }, [euSign, signAlgo, props]);
-
-    useEffect(() => {
-        euSign && signFormat && props.onSignFormatSelect(signFormat);
-    }, [euSign, signFormat, props]);
-
-    useEffect(() => {
-        if (euSign && signAlgoType && signAlgoList && signFormatList && !signType && !signAlgo && !signFormat) {
-            setSignType(signAlgoType[0].key);
-            setSignAlgo(signAlgoList[0].key);
-            setSignFormat(signFormatList[0].key);
-        }
-    }, [euSign, signAlgoType, signAlgoList, signFormatList, props, signType, signAlgo, signFormat]);
+            },
+            { key: SignFormat.CADES_T, value: "з позначкою часу від КЕП (CAdES-T)" },
+            { key: SignFormat.CADES_BES, value: "базовий (CAdES-BES)" }
+        ]);
+        setSignFormat(SignFormat.CADES_X_LONG);
+    }, []);
 
     const printValue = (text: string) => {
         return <div><span className='badge badge-light-primary'>{text}</span></div>

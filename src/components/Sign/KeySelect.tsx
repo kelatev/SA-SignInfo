@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
 import { EndUserPrivateKey } from "../../EUSign/eusign.types";
-import { useEUSignContext } from '../../context/EUSignContext';
-import { usePrivatKeyContext } from '../../context/PrivatKey';
+import { useEUSignContext } from '../../EUSign/EUSignContext';
+import { useKeyContext } from './KeyContext';
 import Form from "react-bootstrap/Form";
-import { KeyMediaType } from '../../hooks/useEndUserController';
+import { KeyMediaType } from '../../EUSign/useEndUserController';
 import Timeline from "../Timeline/Timeline";
 import FormPassword from "../Form/FormPassword";
 import { FileToUint8 } from '../../utils/encode';
@@ -11,7 +11,7 @@ import { FileLock, Password } from "@phosphor-icons/react";
 
 function SignSelect() {
     const { keyMediaType, setKeyMediaType, currentLibrary } = useEUSignContext();
-    const { privateKey, setPrivateKey } = usePrivatKeyContext();
+    const { privateKey, setPrivateKey } = useKeyContext();
 
     const storagePrefix = 'sign';
 

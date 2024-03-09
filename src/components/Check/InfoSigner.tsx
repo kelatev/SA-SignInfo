@@ -5,7 +5,7 @@ import Modal from "react-bootstrap/Modal";
 import SyntaxHighlighter from "react-syntax-highlighter";
 import { darcula } from "react-syntax-highlighter/dist/esm/styles/hljs";
 import { Cursor, User, Copy, Certificate } from "@phosphor-icons/react";
-import { EUVerifyResult } from '../../hooks/useVerifyFiles';
+import { EUVerifyResult } from './useVerifyFiles';
 
 interface Props {
     data: EUVerifyResult;

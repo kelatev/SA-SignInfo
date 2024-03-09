@@ -1,6 +1,6 @@
 import { createContext, useContext } from "react";
-import { KeyMediaType } from "../hooks/useEndUserController";
-import { EndUserInstance } from "../hooks/useEndUserInstance";
+import { KeyMediaType } from "./useEndUserController";
+import { EndUserInstance } from "./useEndUserInstance";
 
 interface EUSignContextType {
     keyMediaType: KeyMediaType;

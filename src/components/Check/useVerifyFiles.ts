@@ -1,8 +1,8 @@
 import { useState, useEffect, useCallback } from "react";
-import { EndUserInstance } from "../hooks/useEndUserInstance";
-import { FileToUint8 } from "../utils/encode";
-import { EndUserCertificateInfoEx, EndUserTimeInfo } from "../EUSign/eusign.types";
-import { SignContainerInfo } from "../EUSign/EndUserLibrary";
+import { EndUserInstance } from "../../EUSign/useEndUserInstance";
+import { FileToUint8 } from "../../utils/encode";
+import { EndUserCertificateInfoEx, EndUserTimeInfo } from "../../EUSign/eusign.types";
+import { SignContainerInfo } from "../../EUSign/EndUserLibrary";
 
 /* type EUVerifyErrorCode = {
     NoError: 0;

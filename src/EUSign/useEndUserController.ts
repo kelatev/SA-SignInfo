@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback, useMemo } from "react";
 import useEndUserInstance, { EndUserLibraryType, EndUserInstance } from "./useEndUserInstance";
-import EndUserLibrary from "../EUSign/EndUserLibrary";
-import EndUserWorker from "../EUSign/EndUserWorker";
+import EndUserLibrary from "./EndUserLibrary";
+import EndUserWorker from "./EndUserWorker";
 
 export enum KeyMediaType {
     File = 1,

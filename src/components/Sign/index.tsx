@@ -1,65 +1,46 @@
 import { useEffect, useState } from "react";
 import Timeline from "../Timeline/Timeline";
 import Card from "../Form/Card";
-import SignInfo from "./SignInfo";
+import KeyInfo from "./KeyInfo";
 import KeySelect from "./KeySelect";
-import Settings from "./Settings";
+import KeySettings from "./KeySettings";
 import { Cursor, FileDashed } from "@phosphor-icons/react";
-import { PrivatKeyContext, PrivatKeyType } from '../../context/PrivatKey';
-import { useEUSignContext } from '../../context/EUSignContext';
+import { KeyContext, PrivatKeyType } from './KeyContext';
+import { useEUSignContext } from '../../EUSign/EUSignContext';
+import { FileToUint8 } from "../../utils/encode";
+import { SignType } from './types'
 
 function PanelSign() {
     const { currentLibrary } = useEUSignContext();
 
     const [privateKey, setPrivateKey] = useState<PrivatKeyType>();
-    const [signType, setSignType] = useState<number>();
-    const [signAlgo, setSignAlgo] = useState<number>();
-    const [signFormat, setSignFormat] = useState<number>();
     const [fileToSign, setFileToSign] = useState<File | null>();
     const [signedData, setSignedData] = useState<Uint8Array>();
 
-    /* function Sign(data: Uint8Array, signAlgo: number, signType: number): Promise<string | undefined> {
-        if (euSign) {
-            if (signAlgo === euSign.m_library.m_library.CERT_KEY_TYPE_DSTU4145) {
-                if (signType === signTypeCAdESExt) {
-                    return euSign.m_library.Sign(data);
-                } else if (signType === signTypeCAdESInt) {
-                    return euSign.m_library.SignInternal(true, data);
-                }
-            } else if (signAlgo === euSign.m_library.m_library.CERT_KEY_TYPE_RSA) {
-                return euSign.m_library.SignRSA(data, true, signType === signTypeCAdESExt);
-            }
-            //SignECDSA
-            //CreateEmptySign
-        }
-        return Promise.resolve(undefined);
-    } */
-
     useEffect(() => {
-        if (currentLibrary?.library && signType && signAlgo && signFormat && fileToSign) {
+        if (currentLibrary?.library && fileToSign) {
             (async function () {
                 try {
-                    //const data = await euSign.m_library.BASE64Decode(fileToSign.content);
-
-                    //setSignedData(await Sign(data, signAlgo, signType));
-                    setSignedData(undefined);
+                    const data = await FileToUint8(fileToSign);
+                    const result = await currentLibrary.library?.SignDataEx(1, data, privateKey?.settings?.signType === SignType.Ext, true);
+                    setSignedData(result);
                 } catch (e: any) {
-                    console.log(e)
+                    console.log(e);
+                    setSignedData(undefined);
                 }
             })();
         }
-    }, [currentLibrary?.library, signType, signAlgo, signFormat, fileToSign]);
+    }, [currentLibrary?.library, privateKey?.settings?.signType, fileToSign]);
 
     return (
-        <PrivatKeyContext.Provider value={{ privateKey, setPrivateKey }}>
+        <KeyContext.Provider value={{ privateKey, setPrivateKey }}>
             <Card title='Підписати файл' backgroundColor='#CBD4F4' className='bgi-no-repeat bgi-position-x-end' backgroundImage='url("/wave-bg-purple.svg")'>
                 <Timeline>
                     <KeySelect />
                     {privateKey && (
                         <>
-                            <SignInfo />
-                            <Settings onSignTypeSelect={setSignType} onSignAlgoSelect={setSignAlgo}
-                                onSignFormatSelect={setSignFormat} />
+                            <KeyInfo />
+                            <KeySettings />
                             <Timeline.Item title='Файл для підпису' icon={<Cursor />}>
                                 <Timeline.FileSelect onFileChange={setFileToSign} />
                             </Timeline.Item>
@@ -69,7 +50,7 @@ function PanelSign() {
                     )}
                 </Timeline>
             </Card>
-        </PrivatKeyContext.Provider>
+        </KeyContext.Provider>
     );
 }
 

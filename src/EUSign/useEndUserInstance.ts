@@ -1,6 +1,6 @@
 import { useState, useCallback } from "react";
-import EndUserLibrary, { EndUserEventType, LibraryInfo } from "../EUSign/EndUserLibrary";
-import Settings from "../EUSign/LIBRARY_SETTINGS.json";
+import EndUserLibrary, { EndUserEventType, LibraryInfo } from "./EndUserLibrary";
+import Settings from "./LIBRARY_SETTINGS.json";
 
 export enum EndUserLibraryType {
     SW,

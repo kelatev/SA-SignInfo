@@ -3,9 +3,9 @@ import Card from "../Form/Card";
 import Timeline from "../Timeline/Timeline";
 import TimelineFileSelect from "../Timeline/TimelineFileSelect";
 import InfoSigner from "./InfoSigner";
-import { useEUSignContext } from '../../context/EUSignContext';
+import { useEUSignContext } from '../../EUSign/EUSignContext';
 import { FileArchive, FileDashed } from "@phosphor-icons/react";
-import useVerifyFiles from '../../hooks/useVerifyFiles';
+import useVerifyFiles from './useVerifyFiles';
 
 function PanelCheck() {
     const { librarySW } = useEUSignContext();

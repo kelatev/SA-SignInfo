@@ -3,8 +3,8 @@ import Loader from "../components/Loader";
 import PanelCheck from "../components/Check";
 import PanelSign from "../components/Sign";
 import Layout from "../components/Layout";
-import { EUSignContext } from '../context/EUSignContext';
-import useEndUserController from '../hooks/useEndUserController';
+import { EUSignContext } from '../EUSign/EUSignContext';
+import useEndUserController from '../EUSign/useEndUserController';
 
 function Home() {
     /* const settings = {

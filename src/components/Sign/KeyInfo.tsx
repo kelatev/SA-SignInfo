@@ -1,11 +1,10 @@
 import React from 'react';
-import { usePrivatKeyContext } from '../../context/PrivatKey';
 import Timeline from "../Timeline/Timeline";
+import { useKeyContext } from './KeyContext';
 import { User } from "@phosphor-icons/react";
 
-function SignInfo() {
-    const { privateKey } = usePrivatKeyContext();
-
+function KeyInfo() {
+    const { privateKey } = useKeyContext();
     const ownerInfo = privateKey?.ownerInfo;
 
     return (
@@ -21,4 +20,4 @@ function SignInfo() {
     );
 }
 
-export default SignInfo;
+export default KeyInfo;
