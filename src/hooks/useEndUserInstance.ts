@@ -19,7 +19,6 @@ export interface EndUserInstance {
     loading: boolean;
     error: string | undefined;
     Load: (callback?: any) => Promise<void>;
-    Initialize: () => Promise<void>;
 }
 
 export default function useEndUserInstance(props: Props): EndUserInstance {
@@ -38,9 +37,10 @@ export default function useEndUserInstance(props: Props): EndUserInstance {
                     .then(() => {
                         return props.library.GetLibraryInfo(/* LIBRARY_SETTINGS.downloadsURL */);
                     })
-                    .then(libInfo => {
+                    .then(libInfo => setInfo(libInfo))
+                    .then(() => props.library.Initialize(Settings as any))
+                    .then(() => {
                         setLoading(false);
-                        setInfo(libInfo);
                         resolve();
                     })
                     .catch(error => {
@@ -53,15 +53,5 @@ export default function useEndUserInstance(props: Props): EndUserInstance {
         [props.library],
     );
 
-    const Initialize = useCallback(() => {
-        return new Promise<void>((resolve, reject) => {
-            props.library
-                .IsInitialized()
-                .then(init => (init ? resolve() : props.library.Initialize(Settings as any)))
-                .then(() => resolve())
-                .catch(reject);
-        });
-    }, [props.library]);
-
-    return { type: props.type, library: props.library, info, loading, error, Load, Initialize };
+    return { type: props.type, library: props.library, info, loading, error, Load };
 }

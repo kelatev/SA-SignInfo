@@ -2,6 +2,7 @@ import {
     EndUserSettings,
     EndUserProxySettings,
     EndUserPrivateKey,
+    EndUserOwnerInfo,
     EndUserPrivateKeyContext,
     EndUserKeyMedia,
     EndUserParams,
@@ -19,6 +20,19 @@ export interface LibraryInfo {
     version: string;
     supported: boolean;
     loaded: boolean;
+}
+
+export interface ClientRegistrationTokenKSP {
+    version: string;
+    type: string;
+    serverId: string;
+    serverName: string;
+    clientType: string;
+    clientName: string;
+    rawSign: string;
+    expiration: Date;
+    token: string;
+    qrCode: string;
 }
 
 export interface SignContainerInfo {
@@ -47,13 +61,13 @@ export default interface EndUserLibrary {
         keyMedia: EndUserKeyMedia,
         certs: Uint8Array[] | Uint8Array | null,
         CACommonName: string | null,
-    ) => Promise<EndUserPrivateKeyContext>;
+    ) => Promise<EndUserOwnerInfo>;
     ReadPrivateKeyBinary: (
         privateKey: Uint8Array,
         password: string,
         certs: Uint8Array[] | Uint8Array | null,
         CACommonName: string | null,
-    ) => Promise<EndUserPrivateKeyContext>;
+    ) => Promise<EndUserOwnerInfo>;
     ReadPrivateKeySIM: (
         msisdn: string,
         operator: string | number,
@@ -75,22 +89,49 @@ export default interface EndUserLibrary {
     //ChangePrivateKeyPasswordBinary
     //GeneratePrivateKey
     //GeneratePrivateKeyBinary
-    //GetKeyInfo
-    //GetKeyInfoBinary
-    //GetClientRegistrationTokenKSP
-    //HashData
+    GetKeyInfo: (keyMedia: EndUserKeyMedia) => Promise<Uint8Array>;
+    GetKeyInfoBinary: (privateKey: Uint8Array, password: string) => Promise<Uint8Array>;
+    GetClientRegistrationTokenKSP: (ksp: string | number) => Promise<ClientRegistrationTokenKSP>;
+    HashData: (hashAlgo: number, data: Uint8Array, asBase64String?: boolean) => Promise<Uint8Array>;
     GetSigner: (
         sign: Uint8Array,
         signIndex: number,
         resolveOIDs?: boolean,
     ) => Promise<EndUserCertificate>;
-    //SignData
-    //SignDataInternal
-    //SignHash
-    //SignDataEx
-    //AppendSign
-    //AppendSignHash
-    //VerifyHash
+    SignData: (data: Uint8Array | string, asBase64String?: boolean) => Promise<Uint8Array>;
+    SignDataInternal: (
+        appendCert: boolean,
+        data: Uint8Array | string,
+        asBase64String?: boolean,
+    ) => Promise<Uint8Array>;
+    SignHash: (
+        signAlgo: number,
+        hash: Uint8Array,
+        appendCert: boolean,
+        asBase64String?: boolean,
+    ) => Promise<Uint8Array>;
+    SignDataEx: (
+        signAlgo: number,
+        data: Uint8Array,
+        external: boolean,
+        appendCert: boolean,
+        asBase64String?: boolean,
+    ) => Promise<Uint8Array>;
+    AppendSign: (
+        signAlgo: number,
+        data: Uint8Array,
+        previousSign: Uint8Array,
+        appendCert: boolean,
+        asBase64String?: boolean,
+    ) => Promise<Uint8Array>;
+    AppendSignHash: (
+        signAlgo: number,
+        hash: Uint8Array,
+        previousSign: Uint8Array,
+        appendCert: boolean,
+        asBase64String?: boolean,
+    ) => Promise<Uint8Array>;
+    VerifyHash: (hash: Uint8Array, sign: Uint8Array, signIndex: number) => Promise<EndUserSignInfo>;
     VerifyData: (data: Uint8Array, sign: Uint8Array, signIndex: number) => Promise<EndUserSignInfo>;
     VerifyDataInternal: (sign: Uint8Array, signIndex: number) => Promise<EndUserSignInfo>;
     //EnvelopData

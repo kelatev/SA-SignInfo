@@ -282,9 +282,9 @@ export default class EUSignCPPromise {
             }
             const ownerInfo = await this.m_library.GetPrivateKeyOwnerInfo();//GetOwnerInfo
             if (issuerCN === null) {
-                return this.SetSettings(ownerInfo.GetIssuerCN());
+                return this.SetSettings(ownerInfo.issuerCN);
             }
-            const settings = this.GetCASettings(ownerInfo.GetIssuerCN());
+            const settings = this.GetCASettings(ownerInfo.issuerCN);
             if (!settings || -1 == settings.issuerCNs.indexOf(issuerCN))
                 throw this.m_library.m_library.MakeError(EndUserError.ERROR_CERT_NOT_FOUND, "")
             return pkContext;

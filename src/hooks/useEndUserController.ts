@@ -4,8 +4,11 @@ import EndUserLibrary from "../EUSign/EndUserLibrary";
 import EndUserWorker from "../EUSign/EndUserWorker";
 
 export enum KeyMediaType {
-    File,
-    Hardware,
+    File = 1,
+    Hardware = 2,
+    KSP = 4,
+    DIIA_UA = 5,
+    DIIA_EU = 6,
 }
 
 export default function useEndUserController() {

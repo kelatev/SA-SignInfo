@@ -7,7 +7,7 @@ import { EUSignContext } from '../context/EUSignContext';
 import useEndUserController from '../hooks/useEndUserController';
 
 function Home() {
-    const settings = {
+    /* const settings = {
         language: 1,
         encoding: 'utf-8',
         CAs: '/eusign/data/CAs.json',
@@ -18,14 +18,14 @@ function Home() {
         httpProxyServiceURL: "",
         directAccess: true,
         TSLAddress: null
-    }
+    } */
     const { keyMediaType, setKeyMediaType, librarySW, currentLibrary } = useEndUserController();
 
     useEffect(() => {
-        if (!librarySW.info?.loaded && !librarySW.loading) {
-            librarySW.Load();
+        if (currentLibrary && !currentLibrary.info?.loaded && !currentLibrary.loading) {
+            currentLibrary.Load();
         }
-    }, [librarySW]);
+    }, [currentLibrary]);
 
     return (
         <EUSignContext.Provider value={{ keyMediaType, setKeyMediaType, librarySW, currentLibrary }}>

@@ -14,7 +14,7 @@ const DetailsFile: React.FC<Props> = ({ icon, file, children }) => {
             {icon}
             <div className="ms-4 fw-semibold">
                 <span className="fs-6 text-hover-primary fw-bold">{file.name}</span>
-                <div className="text-gray-500">{sizeName}</div>
+                {sizeName !== 'n/a' ? <div className="text-gray-500">{sizeName}</div> : ''}
             </div>
             {children}
         </div>

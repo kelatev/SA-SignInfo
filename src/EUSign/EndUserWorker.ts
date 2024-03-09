@@ -2,6 +2,7 @@ import {
     EndUserSettings,
     EndUserProxySettings,
     EndUserPrivateKey,
+    EndUserOwnerInfo,
     EndUserPrivateKeyContext,
     EndUserKeyMedia,
     EndUserParams,
@@ -9,7 +10,12 @@ import {
     EndUserSignInfo,
 } from "./eusign.types";
 import EUSignCPWorker from "./EUSignCPWorker";
-import EndUserLibrary, { EndUserEventType, LibraryInfo, SignContainerInfo } from "./EndUserLibrary";
+import EndUserLibrary, {
+    EndUserEventType,
+    LibraryInfo,
+    ClientRegistrationTokenKSP,
+    SignContainerInfo,
+} from "./EndUserLibrary";
 
 export default class EndUserWorker implements EndUserLibrary {
     m_worker;
@@ -94,7 +100,7 @@ export default class EndUserWorker implements EndUserLibrary {
         certs: Uint8Array[] | Uint8Array | null,
         CACommonName: string | null,
     ) {
-        return this.command<EndUserPrivateKeyContext>(
+        return this.command<EndUserOwnerInfo>(
             "ReadPrivateKey",
             keyMedia,
             certs,
@@ -107,7 +113,7 @@ export default class EndUserWorker implements EndUserLibrary {
         certs: Uint8Array[] | Uint8Array | null,
         CACommonName: string | null,
     ) {
-        return this.command<EndUserPrivateKeyContext>(
+        return this.command<EndUserOwnerInfo>(
             "ReadPrivateKeyBinary",
             privateKey,
             password,
@@ -142,8 +148,86 @@ export default class EndUserWorker implements EndUserLibrary {
     ChangeOwnCertificatesStatus(requestType: number, revocationReason: number) {
         return this.command<void>("ChangeOwnCertificatesStatus", requestType, revocationReason);
     }
+    //MakeNewCertificate
+    //MakeDeviceCertificate
+    //ChangePrivateKeyPassword
+    //ChangePrivateKeyPasswordBinary
+    //GeneratePrivateKey
+    //GeneratePrivateKeyBinary
+    GetKeyInfo(keyMedia: EndUserKeyMedia) {
+        return this.command<Uint8Array>("GetKeyInfo", keyMedia);
+    }
+    GetKeyInfoBinary(privateKey: Uint8Array, password: string) {
+        return this.command<Uint8Array>("GetKeyInfoBinary", privateKey, password);
+    }
+    GetClientRegistrationTokenKSP(ksp: string | number) {
+        return this.command<ClientRegistrationTokenKSP>("GetClientRegistrationTokenKSP", ksp);
+    }
+    HashData(hashAlgo: number, data: Uint8Array, asBase64String?: boolean) {
+        return this.command<Uint8Array>("HashData", hashAlgo, data, asBase64String);
+    }
     GetSigner(sign: Uint8Array, signIndex: number, resolveOIDs?: boolean) {
         return this.command<EndUserCertificate>("GetSigner", sign, signIndex, resolveOIDs);
+    }
+    SignData(data: Uint8Array | string, asBase64String?: boolean) {
+        return this.command<Uint8Array>("SignData", data, asBase64String);
+    }
+    SignDataInternal(appendCert: boolean, data: Uint8Array | string, asBase64String?: boolean) {
+        return this.command<Uint8Array>("SignDataInternal", appendCert, data, asBase64String);
+    }
+    SignHash(signAlgo: number, hash: Uint8Array, appendCert: boolean, asBase64String?: boolean) {
+        return this.command<Uint8Array>("SignHash", signAlgo, hash, appendCert, asBase64String);
+    }
+    SignDataEx(
+        signAlgo: number,
+        data: Uint8Array,
+        external: boolean,
+        appendCert: boolean,
+        asBase64String?: boolean,
+    ) {
+        return this.command<Uint8Array>(
+            "SignDataEx",
+            signAlgo,
+            data,
+            external,
+            appendCert,
+            asBase64String,
+        );
+    }
+    AppendSign(
+        signAlgo: number,
+        data: Uint8Array,
+        previousSign: Uint8Array,
+        appendCert: boolean,
+        asBase64String?: boolean,
+    ) {
+        return this.command<Uint8Array>(
+            "AppendSign",
+            signAlgo,
+            data,
+            previousSign,
+            appendCert,
+            asBase64String,
+        );
+    }
+    AppendSignHash(
+        signAlgo: number,
+        hash: Uint8Array,
+        previousSign: Uint8Array,
+        appendCert: boolean,
+        asBase64String?: boolean,
+    ) {
+        return this.command<Uint8Array>(
+            "AppendSignHash",
+            signAlgo,
+            hash,
+            previousSign,
+            appendCert,
+            asBase64String,
+        );
+    }
+    VerifyHash(hash: Uint8Array, sign: Uint8Array, signIndex: number) {
+        return this.command<EndUserSignInfo>("VerifyHash", hash, sign, signIndex);
     }
     VerifyData(data: Uint8Array, sign: Uint8Array, signIndex: number) {
         return this.command<EndUserSignInfo>("VerifyData", data, sign, signIndex);
@@ -151,6 +235,38 @@ export default class EndUserWorker implements EndUserLibrary {
     VerifyDataInternal(sign: Uint8Array, signIndex: number) {
         return this.command<EndUserSignInfo>("VerifyDataInternal", sign, signIndex);
     }
+    //EnvelopData
+    //DevelopData
+    //ProtectDataByPassword
+    //UnprotectDataByPassword
+    //CreateAuthData
+    //GetTSPByAccessInfo
+    //CheckTSP
+    //CtxCreate
+    //CtxFree
+    //CtxSetParameter
+    //CtxReadPrivateKey
+    //CtxReadPrivateKeyBinary
+    //CtxFreePrivateKey
+    //CtxGetOwnCertificates
+    //CtxSignHash
+    //CtxSignData
+    //CtxAppendSignHash
+    //CtxAppendSign
+    //CtxEnvelopData
+    //CtxDevelopData
+    //ProtectTaxReports
+    //UnprotectTaxReceipts
+    //ASiCGetSigner
+    //ASiCSignData
+    //ASiCAppendSign
+    //ASiCVerifyData
+    //PDFGetSigner
+    //PDFSignData
+    //PDFVerifyData
+    //XAdESGetSigner
+    //XAdESSignData
+    //XAdESVerifyData
     GetSignContainerInfo(signature: Uint8Array) {
         return this.command<SignContainerInfo>("GetSignContainerInfo", signature);
     }

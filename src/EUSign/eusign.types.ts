@@ -207,41 +207,24 @@ export interface EndUserKeyMediaSettings {
 }
 
 export interface EndUserOwnerInfo {
-    IsFilled(): boolean;
-
-    GetIssuer(): string;
-
-    GetIssuerCN(): string;
-
-    GetSerial(): string;
-
-    GetSubject(): string;
-
-    GetSubjCN(): string;
-
-    GetSubjOrg(): string;
-
-    GetSubjOrgUnit(): string;
-
-    GetSubjTitle(): string;
-
-    GetSubjState(): string;
-
-    GetSubjLocality(): string;
-
-    GetSubjFullName(): string;
-
-    GetSubjAddress(): string;
-
-    GetSubjPhone(): string;
-
-    GetSubjEMail(): string;
-
-    GetSubjDNS(): string;
-
-    GetSubjEDRPOUCode(): string;
-
-    GetSubjDRFOCode(): string;
+    isFilled: boolean;
+    issuer: string;
+    issuerCN: string;
+    serial: string;
+    subject: string;
+    subjCN: string;
+    subjOrg: string;
+    subjOrgUnit: string;
+    subjTitle: string;
+    subjState: string;
+    subjLocality: string;
+    subjFullName: string;
+    subjAddress: string;
+    subjPhone: string;
+    subjEMail: string;
+    subjDNS: string;
+    subjEDRPOUCode: string;
+    subjDRFOCode: string;
 }
 
 export interface EndUserTimeInfo {
@@ -550,7 +533,7 @@ export interface EndUserPrivateKeyInfo {
 
 export interface EndUserPrivateKey {
     alias: string;
-    certificates: Uint8Array[] | null;
+    certificates: EndUserCertificate[];
     privateKey: Uint8Array;
     digitalStamp: boolean;
 }
@@ -559,9 +542,7 @@ export interface EndUserJKSPrivateKey extends EndUserPrivateKey {
     GetPrivateKey(): Uint8Array;
 
     GetCertificate(index: number): Uint8Array;
-
     GetCertificatesCount(): number;
-
     GetCertificates(): Uint8Array[];
 
     info: {

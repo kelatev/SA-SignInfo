@@ -38,7 +38,7 @@ function FormPassword(props: PasswordProps) {
                     onChange={handleChange}
                     onKeyDown={handleKeyDown}
                 />
-                <Button variant="primary" onClick={handleSubmit}>{props.loading === true ? '1' : null}{props.title}</Button>
+                <Button variant="primary" onClick={handleSubmit} disabled={props.loading}>{props.title}</Button>
             </InputGroup>
         </>
     );

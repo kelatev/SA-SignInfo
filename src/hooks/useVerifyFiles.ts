@@ -40,11 +40,6 @@ export interface EUVerifyResult {
     signsInfos: Array<EUVerifySignInfo>;
 }
 
-interface Props {
-    library: EndUserInstance;
-    file: File | null;
-}
-
 const UA_OID_EXT_KEY_USAGE_STAMP = "1.2.804.2.1.1.1.3.9";
 function IsSignerDigitalTimeStamp(info: EndUserCertificateInfoEx) {
     return (
@@ -136,9 +131,12 @@ function GetPAdESSignLevel(signLevel: number) {
             return "PAdES (Не визначено)";
     }
 }
+interface Props {
+    library: EndUserInstance;
+    file: File | null;
+}
 
 function decodeSignContainerType(info: SignContainerInfo) {
-    console.log(info);
     const EU_CADES_TYPE_DETACHED = 1;
     const EU_CADES_TYPE_ENVELOPED = 3;
 
@@ -192,7 +190,6 @@ export default function useVerifyFiles(props: Props) {
             (async function () {
                 try {
                     if (props.library.library && file) {
-                        await props.library.Initialize();
                         const signContainer = await props.library.library.GetSignContainerInfo(
                             file,
                         );

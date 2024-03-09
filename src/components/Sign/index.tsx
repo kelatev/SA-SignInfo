@@ -3,12 +3,14 @@ import EUSignContext from '../../context/EUSign';
 import Timeline from "../Timeline/Timeline";
 import Card from "../Form/Card";
 import SignInfo from "./SignInfo";
-import SignSelect from "./SignSelect";
+import KeySelect from "./KeySelect";
 import Settings from "./Settings";
 import { Cursor, FileDashed } from "@phosphor-icons/react";
 import { PrivatKeyContext, PrivatKeyType } from '../../context/PrivatKey';
+import { useEUSignContext } from '../../context/EUSignContext';
 
 function PanelSign() {
+    const { currentLibrary } = useEUSignContext();
     const { euSign } = useContext(EUSignContext);
 
     const [privateKey, setPrivateKey] = useState<PrivatKeyType>();
@@ -54,10 +56,10 @@ function PanelSign() {
         <PrivatKeyContext.Provider value={{ privateKey, setPrivateKey }}>
             <Card title='Підписати файл' backgroundColor='#CBD4F4' className='bgi-no-repeat bgi-position-x-end' backgroundImage='url("/wave-bg-purple.svg")'>
                 <Timeline>
-                    <SignSelect />
+                    <KeySelect />
                     {privateKey && (
                         <>
-                            {/* <SignInfo endUserPrivateKey={privateKey} /> */}
+                            <SignInfo />
                             <Settings onSignTypeSelect={setSignType} onSignAlgoSelect={setSignAlgo}
                                 onSignFormatSelect={setSignFormat} />
                             <Timeline.Item title='Файл для підпису' icon={<Cursor />}>

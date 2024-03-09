@@ -65,6 +65,9 @@ const TimelineFileSelect: React.FC<TimelineItemFileInterface> = ({ onFileChange,
                         &nbsp;
                         <button onClick={() => handleFileChange(new File([], 'Токен'))}
                             className="btn btn-secondary border-hover border-gray-400 btn-active-light-primary hover-elevate-up">Токен</button>
+                        &nbsp;
+                        <button onClick={() => handleFileChange(new File([], 'Хмарний'))}
+                            className="btn btn-secondary border-hover border-gray-400 btn-active-light-primary hover-elevate-up">Хмарний</button>
                     </>}
                 </>
             )}
