@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { EndUserPrivateKey } from "../../EUSign/eusign.types";
 import { useEUSignContext } from '../../EUSign/EUSignContext';
 import { useKeyContext } from './KeyContext';
@@ -10,7 +10,7 @@ import { FileToUint8 } from '../../utils/encode';
 import { FileLock, Password } from "@phosphor-icons/react";
 
 function SignSelect() {
-    const { keyMediaType, setKeyMediaType, currentLibrary } = useEUSignContext();
+    const { keyMediaType, setKeyMediaType, librarySW, currentLibrary } = useEUSignContext();
     const { privateKey, setPrivateKey } = useKeyContext();
 
     const storagePrefix = 'sign';
@@ -47,7 +47,7 @@ function SignSelect() {
     }, [keyMediaType, file, setKeyMediaType]);
 
     useEffect(() => {
-        if (currentLibrary?.info?.loaded && file) {
+        if (currentLibrary?.info.loaded && file) {
             FileToUint8(file).then(data => setFileContainer(data)).catch(err => console.log(err));
         } else {
             setFileContainer(undefined);
@@ -58,10 +58,10 @@ function SignSelect() {
         setPassword(undefined);
         setKeySelect(undefined);
         setPrivateKey(undefined);
-    }, [currentLibrary?.info?.loaded, file, setPrivateKey]);
+    }, [currentLibrary?.info.loaded, file, setPrivateKey]);
 
     useEffect(() => {
-        if (currentLibrary?.library && fileContainer) {
+        if (currentLibrary?.info.loaded && fileContainer) {
             (async function () {
                 try {
                     setError(undefined);
@@ -78,7 +78,7 @@ function SignSelect() {
                 }
             })();
         }
-    }, [currentLibrary?.library, fileContainer]);
+    }, [currentLibrary?.info.loaded, currentLibrary?.library, fileContainer]);
 
     useEffect(() => {
         if (jksPrivateKeys && aliasSelect) {
@@ -104,7 +104,7 @@ function SignSelect() {
                         await currentLibrary.library?.ResetPrivateKey();
                     }
                     /* Зчитування ключа */
-                    //CtxReadPrivateKeyBinary-вернет еонтекст
+                    //CtxReadPrivateKeyBinary-вернет контекст
                     const ownerInfo = await currentLibrary.library?.ReadPrivateKeyBinary(keySelect.privatKey, password, keySelect.certificates ?? null, null);
                     const isPrivateKeyReaded = await currentLibrary.library?.IsPrivateKeyReaded();
                     if (isPrivateKeyReaded) {
@@ -119,18 +119,18 @@ function SignSelect() {
                 } catch (e: any) {
                     setLoading(false);
                     console.log(e);
-                    setError(e.toString());
+                    setError(`${e.message} (${e.code})`);
                 }
             })();
         }
     }, [currentLibrary?.library, keySelect, password, privateKey, setPrivateKey]);
 
-    const handlePassChange = () => {
+    const handlePassChange = useCallback(() => {
         if (error) {
             setError(undefined);
             setPassword(undefined);
         }
-    }
+    }, [error]);
 
     return (
         <>
@@ -155,7 +155,7 @@ function SignSelect() {
                 {file && !privateKey && <FormPassword
                     title='зчитати'
                     onChange={() => handlePassChange()}
-                    onEnter={(pass) => { handlePassChange(); setPassword(pass) }}
+                    onSubmit={(pass) => { handlePassChange(); setPassword(pass) }}
                     loading={loading} />}
             </Timeline.Item>
             {loading &&

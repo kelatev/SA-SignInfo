@@ -1,5 +1,5 @@
-import { useState, useEffect, useCallback, useMemo } from "react";
-import useEndUserInstance, { EndUserLibraryType, EndUserInstance } from "./useEndUserInstance";
+import { useState, useMemo } from "react";
+import useEndUserInstance, { EndUserLibraryType } from "./useEndUserInstance";
 import EndUserLibrary from "./EndUserLibrary";
 import EndUserWorker from "./EndUserWorker";
 
@@ -16,8 +16,10 @@ export default function useEndUserController() {
 
     const librarySW = useMemo<EndUserLibrary>(() => new EndUserWorker(), []);
     const instanceSW = useEndUserInstance({ type: EndUserLibraryType.SW, library: librarySW });
-    const [libraries] = useState<EndUserInstance[]>([instanceSW]);
-    const [currentLibrary, setCurrentLibrary] = useState<EndUserInstance | undefined>(instanceSW);
+    const instanceJS = useEndUserInstance({ type: EndUserLibraryType.SW, library: librarySW });
+    const currentLibrary = useMemo(() => {
+        return keyMediaType === KeyMediaType.Hardware ? instanceJS : instanceSW;
+    }, [keyMediaType, instanceJS, instanceSW]);
 
     /* const m_isPKActionDone = false;
     const m_KM = null;
@@ -25,17 +27,6 @@ export default function useEndUserController() {
     const m_updatingKM = false;
     const m_readedPKey = null;
     const m_KMs = []; */
-
-    const findLibrary = useCallback(
-        (type: EndUserLibraryType) => libraries.find(item => item.type === type),
-        [libraries],
-    );
-
-    useEffect(() => {
-        const typeToFind =
-            keyMediaType === KeyMediaType.Hardware ? EndUserLibraryType.JS : EndUserLibraryType.SW;
-        setCurrentLibrary(findLibrary(typeToFind));
-    }, [keyMediaType, findLibrary, libraries]);
 
     return { keyMediaType, setKeyMediaType, librarySW: instanceSW, currentLibrary };
 }

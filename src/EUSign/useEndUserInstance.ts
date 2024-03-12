@@ -15,14 +15,18 @@ interface Props {
 export interface EndUserInstance {
     type: EndUserLibraryType;
     library: EndUserLibrary | undefined;
-    info: LibraryInfo | undefined;
+    info: LibraryInfo;
     loading: boolean;
     error: string | undefined;
     Load: (callback?: any) => Promise<void>;
 }
 
 export default function useEndUserInstance(props: Props): EndUserInstance {
-    const [info, setInfo] = useState<LibraryInfo>();
+    const [info, setInfo] = useState<LibraryInfo>({
+        version: "",
+        supported: false,
+        loaded: false,
+    });
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string>();
 

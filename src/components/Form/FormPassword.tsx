@@ -6,7 +6,7 @@ import Button from 'react-bootstrap/Button';
 interface PasswordProps {
     title: string
     onChange?: () => void
-    onEnter: (pass: string) => void
+    onSubmit: (pass: string) => void
     loading?: boolean
 }
 
@@ -25,7 +25,7 @@ function FormPassword(props: PasswordProps) {
     }
 
     const handleSubmit = () => {
-        props.onEnter(password);
+        props.onSubmit(password);
     }
 
     return (

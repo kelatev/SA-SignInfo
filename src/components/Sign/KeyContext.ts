@@ -4,7 +4,7 @@ import { SettingsType } from "./types";
 
 export type PrivatKeyType =
     | {
-          privateKey: Uint8Array;
+          privateKey?: Uint8Array;
           certificates?: Uint8Array[];
           ownerInfo?: EndUserOwnerInfo;
           pkContext?: EndUserPrivateKeyContext;

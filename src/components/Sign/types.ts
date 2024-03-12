@@ -18,7 +18,7 @@ export enum SignFormat {
 }
 
 export interface SettingsType {
-    signType: SignType;
-    signAlgo: SignAlgo;
-    signFormat: SignFormat;
+    signType?: SignType;
+    signAlgo?: SignAlgo;
+    signFormat?: SignFormat;
 }
