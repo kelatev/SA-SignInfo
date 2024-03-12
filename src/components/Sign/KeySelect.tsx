@@ -10,7 +10,7 @@ import { FileToUint8 } from '../../utils/encode';
 import { FileLock, Password } from "@phosphor-icons/react";
 
 function SignSelect() {
-    const { keyMediaType, setKeyMediaType, librarySW, currentLibrary } = useEUSignContext();
+    const { keyMediaType, setKeyMediaType, currentLibrary } = useEUSignContext();
     const { privateKey, setPrivateKey } = useKeyContext();
 
     const storagePrefix = 'sign';
