@@ -2,9 +2,9 @@
   "language": 1,
   "encoding": "utf-8",
   "directAccess": true,
-  "httpProxyServiceURL": "",
-  "CAs": "/eusign/data/CAs.json?v=1",
-  "CACertificates": "/eusign/data/CACertificates.p7b?v=1",
+  "httpProxyServiceURL": "proxy",
+  "CAs": "/eusign/data/CAs.json?v=20240228",
+  "CACertificates": "/eusign/data/CACertificates.p7b?v=20240228",
   "allowedKeyMediaTypes": [
     "е.ключ BIFIT iToken",
     "криптомод. ІІТ Гряда-61",

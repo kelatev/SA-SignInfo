@@ -3,9 +3,8 @@ import Timeline from "../Timeline/Timeline";
 import Form from "react-bootstrap/Form";
 import { useKeyContext } from './KeyContext';
 import { GearSix, Pencil } from "@phosphor-icons/react";
-import { GetSupportedSignAlgos } from '../../EUSign/EndUserUtil';
-import { SignType } from './types';
-import { EndUserSignType } from "../../EUSign/EndUserConstants";
+import { GetSupportedSignAlgos, GetSignContainerType } from '../../EUSign/EndUserUtil';
+import { EndUserSignType, EndUserSignContainerType, EndUserCAdESType } from "../../EUSign/EndUserConstants";
 
 interface SelectItem {
     value: number
@@ -29,12 +28,12 @@ function Settings() {
 
         setSignTypeList([
             {
-                value: SignType.Int,
-                text: "Дані та підпис в одному файлі (формат CAdES)"
+                value: EndUserCAdESType.Enveloped,
+                text: GetSignContainerType(EndUserSignContainerType.CAdES, EndUserCAdESType.Enveloped)
             },
             {
-                value: SignType.Ext,
-                text: "Дані та підпис окремими файлами (формат CAdES)"
+                value: EndUserCAdESType.Detached,
+                text: GetSignContainerType(EndUserSignContainerType.CAdES, EndUserCAdESType.Detached)
             }
         ]);
         setSignFormatList([
@@ -51,7 +50,7 @@ function Settings() {
         ]);
         setPrivateKey(prevState => ({
             ...prevState, settings: {
-                signType: SignType.Int,
+                signType: EndUserCAdESType.Enveloped,
                 signAlgo: signAlgos[0].value,
                 signFormat: EndUserSignType.CAdES_X_Long
             }

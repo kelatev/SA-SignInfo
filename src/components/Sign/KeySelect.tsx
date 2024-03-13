@@ -112,7 +112,7 @@ function SignSelect() {
                         setPrivateKey({
                             privateKey: keySelect.privatKey,
                             certificates: ownCertificates,
-                            ownerInfo: ownerInfo
+                            ownerInfo: ownerInfo,
                         });
                     }
 

@@ -8,16 +8,9 @@ import useEndUserController from '../EUSign/useEndUserController';
 
 function Home() {
     /* const settings = {
-        language: 1,
-        encoding: 'utf-8',
-        CAs: '/eusign/data/CAs.json',
-        CACertificates: '/eusign/data/CACertificates.p7b',
         verifySettings: {
             ocspResponseExpireTime: 100
         },
-        httpProxyServiceURL: "",
-        directAccess: true,
-        TSLAddress: null
     } */
     const { keyMediaType, setKeyMediaType, librarySW, currentLibrary } = useEndUserController();
 

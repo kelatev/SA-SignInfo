@@ -1,12 +1,7 @@
-import { EndUserSignAlgo, EndUserSignType } from "../../EUSign/EndUserConstants";
-
-export enum SignType {
-    Int = 1,
-    Ext = 2,
-}
+import { EndUserCAdESType, EndUserXAdESType, EndUserASiCType, EndUserSignAlgo, EndUserSignType } from "../../EUSign/EndUserConstants";
 
 export interface SettingsType {
-    signType?: SignType;
+    signType?: EndUserCAdESType | EndUserXAdESType | EndUserASiCType;
     signAlgo?: EndUserSignAlgo;
     signFormat?: EndUserSignType;
 }

@@ -4,9 +4,8 @@ import { FileToUint8 } from "../../utils/encode";
 import { useEUSignContext } from "../../EUSign/EUSignContext";
 import { useKeyContext } from "./KeyContext";
 import Timeline from "../Timeline/Timeline";
-import { SignType } from './types'
 import { CheckPrivateKey, SignAlgoToPublicKeyType } from '../../EUSign/EndUserUtil'
-import { EndUserKeyUsage, EndUserSignAlgo, EndUserSignType, EU_SIGN_TYPE_PARAMETER } from '../../EUSign/EndUserConstants'
+import { EndUserKeyUsage, EndUserSignAlgo, EndUserSignType, EndUserCAdESType, EU_SIGN_TYPE_PARAMETER } from '../../EUSign/EndUserConstants'
 
 export default function KeySign() {
     const { currentLibrary } = useEUSignContext();
@@ -19,6 +18,7 @@ export default function KeySign() {
     useEffect(() => {
         if (currentLibrary?.info.loaded && fileToSign) {
             (async function () {
+                //OnSignFile
                 try {
                     await CheckPrivateKey(
                         SignAlgoToPublicKeyType(privateKey?.settings?.signAlgo), [
@@ -30,7 +30,7 @@ export default function KeySign() {
                     const result = await currentLibrary.library?.SignDataEx(
                         privateKey?.settings?.signAlgo ?? EndUserSignAlgo.DSTU4145WithGOST34311,
                         data,
-                        privateKey?.settings?.signType === SignType.Ext,
+                        privateKey?.settings?.signType === EndUserCAdESType.Detached,
                         true,
                     );
                     setSignedData(result);
