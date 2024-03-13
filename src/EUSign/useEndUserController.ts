@@ -3,6 +3,19 @@ import useEndUserInstance, { EndUserLibraryType } from "./useEndUserInstance";
 import EndUserLibrary from "./EndUserLibrary";
 import EndUserWorker from "./EndUserWorker";
 
+export enum SignContainerType {
+    XAdES = 1,
+    PAdES = 2,
+    CAdES = 3,
+    ASiCS = 4,
+    ASiCE = 5,
+}
+
+export enum SignType {
+    Detached = 1,
+    Enveloped = 2,
+}
+
 export enum KeyMediaType {
     File = 1,
     Hardware = 2,

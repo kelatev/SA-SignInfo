@@ -9,6 +9,7 @@ import {
     EndUserCertificate,
     EndUserSignInfo,
 } from "./eusign.types";
+import { EndUserSignAlgo } from "./EndUserConstants";
 
 export enum EndUserEventType {
     "None" = 0,
@@ -80,7 +81,7 @@ export default interface EndUserLibrary {
         getCerts: boolean,
         keyId: number,
     ) => Promise<EndUserPrivateKeyContext>;
-    GetOwnCertificates: () => Promise<Uint8Array[]>;
+    GetOwnCertificates: () => Promise<EndUserCertificate[]>;
     GetOwnEUserParams: () => Promise<EndUserParams>;
     ChangeOwnCertificatesStatus: (requestType: number, revocationReason: number) => Promise<void>;
     //MakeNewCertificate
@@ -105,27 +106,27 @@ export default interface EndUserLibrary {
         asBase64String?: boolean,
     ) => Promise<Uint8Array>;
     SignHash: (
-        signAlgo: number,
+        signAlgo: EndUserSignAlgo,
         hash: Uint8Array,
         appendCert: boolean,
         asBase64String?: boolean,
     ) => Promise<Uint8Array>;
     SignDataEx: (
-        signAlgo: number,
+        signAlgo: EndUserSignAlgo,
         data: Uint8Array,
         external: boolean,
         appendCert: boolean,
         asBase64String?: boolean,
     ) => Promise<Uint8Array>;
     AppendSign: (
-        signAlgo: number,
+        signAlgo: EndUserSignAlgo,
         data: Uint8Array,
         previousSign: Uint8Array,
         appendCert: boolean,
         asBase64String?: boolean,
     ) => Promise<Uint8Array>;
     AppendSignHash: (
-        signAlgo: number,
+        signAlgo: EndUserSignAlgo,
         hash: Uint8Array,
         previousSign: Uint8Array,
         appendCert: boolean,

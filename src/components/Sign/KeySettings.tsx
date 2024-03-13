@@ -1,76 +1,64 @@
 import { useEffect, useState } from 'react';
 import Timeline from "../Timeline/Timeline";
 import Form from "react-bootstrap/Form";
-//import { useEUSignContext } from '../../EUSign/EUSignContext';
 import { useKeyContext } from './KeyContext';
 import { GearSix, Pencil } from "@phosphor-icons/react";
-import { SignType, SignAlgo, SignFormat } from './types'
+import { GetSupportedSignAlgos } from '../../EUSign/EndUserUtil';
+import { SignType } from './types';
+import { EndUserSignType } from "../../EUSign/EndUserConstants";
 
 interface SelectItem {
-    key: number
-    value: string
+    value: number
+    text: string
 }
 
-export const signTypeCAdESInt = 1;
-export const signTypeCAdESExt = 2;
-
 function Settings() {
-    //const { currentLibrary } = useEUSignContext();
     const { privateKey, setPrivateKey } = useKeyContext();
 
-    const [signAlgoType, setSignTypeList] = useState<SelectItem[]>();
-    const [signAlgoList, setSignAlgoList] = useState<SelectItem[]>();
+    const [signType, setSignTypeList] = useState<SelectItem[]>();
+    const [signAlgo, setSignAlgoList] = useState<SelectItem[]>();
     const [signFormatList, setSignFormatList] = useState<SelectItem[]>();
 
     const [editMode, setEditMode] = useState(false);
 
     useEffect(() => {
+        const signAlgos = GetSupportedSignAlgos(privateKey?.certificates ?? []);
+        setSignAlgoList(signAlgos);
+
+        //const aa = GetSignContainerType(privateKey?.certificates?.at(0)?.infoEx);
+
         setSignTypeList([
             {
-                key: SignType.Int,
-                value: "Дані та підпис в одному файлі (формат CAdES)"
+                value: SignType.Int,
+                text: "Дані та підпис в одному файлі (формат CAdES)"
             },
             {
-                key: SignType.Ext,
-                value: "Дані та підпис окремими файлами (формат CAdES)"
+                value: SignType.Ext,
+                text: "Дані та підпис окремими файлами (формат CAdES)"
             }
         ]);
-        const list: SelectItem[] = [];
-        list.push({
-            key: SignAlgo.DSTU4145,
-            value: "ДСТУ 4145"
-        });
-        list.push({
-            key: SignAlgo.RSA,
-            value: "RSA"
-        });
-        list.push({
-            key: SignAlgo.ECDSA,
-            value: "ECDSA"
-        });
-        setSignAlgoList(list);
         setSignFormatList([
             {
-                key: SignFormat.CADES_X_LONG,
-                value: "з повними даними для перевірки (CAdES-X-Long)"
+                value: EndUserSignType.CAdES_X_Long,
+                text: "з повними даними для перевірки (CAdES-X-Long)"
             },
             {
-                key: SignFormat.CADES_C,
-                value: "з посиланням на повні дані для перевірки (CAdES-C)"
+                value: EndUserSignType.CAdES_C,
+                text: "з посиланням на повні дані для перевірки (CAdES-C)"
             },
-            { key: SignFormat.CADES_T, value: "з позначкою часу від КЕП (CAdES-T)" },
-            { key: SignFormat.CADES_BES, value: "базовий (CAdES-BES)" }
+            { value: EndUserSignType.CAdES_T, text: "з позначкою часу від КЕП (CAdES-T)" },
+            { value: EndUserSignType.CAdES_BES, text: "базовий (CAdES-BES)" }
         ]);
         setPrivateKey(prevState => ({
             ...prevState, settings: {
                 signType: SignType.Int,
-                signAlgo: SignAlgo.DSTU4145,
-                signFormat: SignFormat.CADES_X_LONG
+                signAlgo: signAlgos[0].value,
+                signFormat: EndUserSignType.CAdES_X_Long
             }
         }));
-    }, [setPrivateKey]);
+    }, [privateKey?.certificates, setPrivateKey]);
 
-    const printValue = (text: string, key: React.Key) => {
+    const printValue = (text: string | undefined, key: React.Key) => {
         return <div key={key}><span className='badge badge-light-primary'>{text}</span></div>
     }
 
@@ -104,9 +92,9 @@ function Settings() {
             <Timeline.Item title="Налаштування електронного підпису" icon={<GearSix />}>
                 <div className="border border-dashed border-gray-300 rounded px-5 py-3 mb-5 position-relative">
                     <button type='button' className='btn btn-light btn-sm position-absolute top-0 end-0 m-1 d-none' onClick={() => setEditMode(true)}><Pencil /></button>
-                    {signAlgoType && signAlgoType.filter(i => i.key === privateKey?.settings?.signType).map(item => printValue(item.value, item.key))}
-                    {signAlgoList && signAlgoList.filter(i => i.key === privateKey?.settings?.signAlgo).map((item) => printValue(item.value, item.key))}
-                    {signFormatList && signFormatList.filter(i => i.key === privateKey?.settings?.signFormat).map((item) => printValue(item.value, item.key))}
+                    {signType && signType.filter(i => i.value === privateKey?.settings?.signType).map(item => printValue(item.text, item.value))}
+                    {signAlgo && signAlgo.filter(i => i.value === privateKey?.settings?.signAlgo).map(item => printValue(item.text, item.value))}
+                    {signFormatList && signFormatList.filter(i => i.value === privateKey?.settings?.signFormat).map((item) => printValue(item.text, item.value))}
                 </div>
             </Timeline.Item>
         )
@@ -116,28 +104,28 @@ function Settings() {
         <Timeline.Item title="Налаштування електронного підпису" icon={<GearSix />}>
             <Form>
                 <Form.Label >Тип підпису</Form.Label>
-                {signAlgoType?.map((item) =>
+                {signType?.map((item) =>
                     <Form.Check
                         type={'radio'}
-                        key={item.key}
-                        label={item.value}
-                        checked={privateKey?.settings?.signType === item.key}
-                        onChange={() => setSignType(item.key)}
+                        key={item.value}
+                        label={item.text}
+                        checked={privateKey?.settings?.signType === item.value}
+                        onChange={() => setSignType(item.value)}
                     />
                 )}
 
-                <Form.Label>Алгоритм підпису</Form.Label>
+                <Form.Label>Тип алгоритму</Form.Label>
                 <Form.Select className="mb-1"
                     onChange={(ev) => setSignAlgo(parseInt(ev.currentTarget.value))}>
-                    {signAlgoList && signAlgoList.map((item) => <option
-                        key={item.key}>{item.value}</option>)}
+                    {signAlgo && signAlgo.map((item) => <option
+                        key={item.value}>{item.text}</option>)}
                 </Form.Select>
 
                 <Form.Label>Формат підпису</Form.Label>
                 <Form.Select className="mb-1"
                     onChange={(ev) => setSignFormat(parseInt(ev.currentTarget.value))}>
                     {signFormatList && signFormatList.map((item) => <option
-                        key={item.key}>{item.value}</option>)}
+                        key={item.value}>{item.text}</option>)}
                 </Form.Select>
             </Form>
         </Timeline.Item>

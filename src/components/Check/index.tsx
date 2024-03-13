@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import Card from "../Form/Card";
 import Timeline from "../Timeline/Timeline";
-import TimelineFileSelect from "../Timeline/TimelineFileSelect";
 import InfoSigner from "./InfoSigner";
 import { useEUSignContext } from '../../EUSign/EUSignContext';
 import { FileArchive, FileDashed } from "@phosphor-icons/react";
@@ -17,7 +16,7 @@ function PanelCheck() {
             <Timeline>
                 {/*, pdf, xml, asics або asice*/}
                 <Timeline.Item title='Підписаний файл' icon={<FileArchive />} description={'p7s'}>
-                    <TimelineFileSelect
+                    <Timeline.FileSelect
                         onFileChange={setFile}
                         storagePrefix='check'
                         error={error}

@@ -5,6 +5,8 @@ import { useEUSignContext } from "../../EUSign/EUSignContext";
 import { useKeyContext } from "./KeyContext";
 import Timeline from "../Timeline/Timeline";
 import { SignType } from './types'
+import { CheckPrivateKey, SignAlgoToPublicKeyType } from '../../EUSign/EndUserUtil'
+import { EndUserKeyUsage, EndUserSignAlgo, EndUserSignType, EU_SIGN_TYPE_PARAMETER } from '../../EUSign/EndUserConstants'
 
 export default function KeySign() {
     const { currentLibrary } = useEUSignContext();
@@ -18,9 +20,15 @@ export default function KeySign() {
         if (currentLibrary?.info.loaded && fileToSign) {
             (async function () {
                 try {
+                    await CheckPrivateKey(
+                        SignAlgoToPublicKeyType(privateKey?.settings?.signAlgo), [
+                        EndUserKeyUsage.DigitalSignature |
+                        EndUserKeyUsage.NonRepudation,
+                    ], privateKey?.certificates);
+                    await currentLibrary.library?.SetRuntimeParameter(EU_SIGN_TYPE_PARAMETER, privateKey?.settings?.signFormat ?? EndUserSignType.CAdES_BES);
                     const data = await FileToUint8(fileToSign);
                     const result = await currentLibrary.library?.SignDataEx(
-                        privateKey?.settings?.signAlgo as number,
+                        privateKey?.settings?.signAlgo ?? EndUserSignAlgo.DSTU4145WithGOST34311,
                         data,
                         privateKey?.settings?.signType === SignType.Ext,
                         true,
@@ -35,9 +43,11 @@ export default function KeySign() {
         }
     }, [
         currentLibrary?.library,
-        privateKey?.settings?.signAlgo,
         currentLibrary?.info.loaded,
+        privateKey?.certificates,
         privateKey?.settings?.signType,
+        privateKey?.settings?.signAlgo,
+        privateKey?.settings?.signFormat,
         fileToSign,
     ]);
 

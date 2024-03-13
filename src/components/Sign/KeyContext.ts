@@ -1,11 +1,11 @@
 import { createContext, useContext } from "react";
-import { EndUserOwnerInfo, EndUserPrivateKeyContext } from "../../EUSign/eusign.types";
+import { EndUserCertificate, EndUserOwnerInfo, EndUserPrivateKeyContext } from "../../EUSign/eusign.types";
 import { SettingsType } from "./types";
 
 export type PrivatKeyType =
     | {
           privateKey?: Uint8Array;
-          certificates?: Uint8Array[];
+          certificates?: EndUserCertificate[];
           ownerInfo?: EndUserOwnerInfo;
           pkContext?: EndUserPrivateKeyContext;
           settings?: SettingsType;

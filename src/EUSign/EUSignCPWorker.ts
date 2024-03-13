@@ -36,7 +36,7 @@ export default class EUSignCPWorker {
     }
 
     loadWorker() {
-        const instance = new Worker(process.env.PUBLIC_URL + "/eusign/euscp.worker.js");
+        const instance = new Worker(process.env.PUBLIC_URL + "/eusign/euscp.worker.js?maxDataSize=25");
 
         instance.onmessage = (event: MessageEvent) => {
             const data = event.data;

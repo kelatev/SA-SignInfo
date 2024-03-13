@@ -106,11 +106,12 @@ function SignSelect() {
                     /* Зчитування ключа */
                     //CtxReadPrivateKeyBinary-вернет контекст
                     const ownerInfo = await currentLibrary.library?.ReadPrivateKeyBinary(keySelect.privatKey, password, keySelect.certificates ?? null, null);
+                    const ownCertificates = await currentLibrary.library?.GetOwnCertificates();
                     const isPrivateKeyReaded = await currentLibrary.library?.IsPrivateKeyReaded();
                     if (isPrivateKeyReaded) {
                         setPrivateKey({
                             privateKey: keySelect.privatKey,
-                            certificates: keySelect.certificates,
+                            certificates: ownCertificates,
                             ownerInfo: ownerInfo
                         });
                     }

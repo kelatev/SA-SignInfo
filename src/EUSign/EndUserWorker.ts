@@ -16,6 +16,7 @@ import EndUserLibrary, {
     ClientRegistrationTokenKSP,
     SignContainerInfo,
 } from "./EndUserLibrary";
+import { EndUserSignAlgo } from "./EndUserConstants";
 
 export default class EndUserWorker implements EndUserLibrary {
     m_worker;
@@ -100,12 +101,7 @@ export default class EndUserWorker implements EndUserLibrary {
         certs: Uint8Array[] | Uint8Array | null,
         CACommonName: string | null,
     ) {
-        return this.command<EndUserOwnerInfo>(
-            "ReadPrivateKey",
-            keyMedia,
-            certs,
-            CACommonName,
-        );
+        return this.command<EndUserOwnerInfo>("ReadPrivateKey", keyMedia, certs, CACommonName);
     }
     ReadPrivateKeyBinary(
         privateKey: Uint8Array,
@@ -140,7 +136,7 @@ export default class EndUserWorker implements EndUserLibrary {
         );
     }
     GetOwnCertificates() {
-        return this.command<Uint8Array[]>("GetOwnCertificates");
+        return this.command<EndUserCertificate[]>("GetOwnCertificates");
     }
     GetOwnEUserParams() {
         return this.command<EndUserParams>("GetOwnEUserParams");
@@ -164,22 +160,38 @@ export default class EndUserWorker implements EndUserLibrary {
         return this.command<ClientRegistrationTokenKSP>("GetClientRegistrationTokenKSP", ksp);
     }
     HashData(hashAlgo: number, data: Uint8Array, asBase64String?: boolean) {
-        return this.command<Uint8Array>("HashData", hashAlgo, data, asBase64String);
+        return this.command<Uint8Array>("HashData", hashAlgo, data, Number(asBase64String));
     }
     GetSigner(sign: Uint8Array, signIndex: number, resolveOIDs?: boolean) {
-        return this.command<EndUserCertificate>("GetSigner", sign, signIndex, resolveOIDs);
+        return this.command<EndUserCertificate>("GetSigner", sign, signIndex, Number(resolveOIDs));
     }
     SignData(data: Uint8Array | string, asBase64String?: boolean) {
-        return this.command<Uint8Array>("SignData", data, asBase64String);
+        return this.command<Uint8Array>("SignData", data, Number(asBase64String));
     }
     SignDataInternal(appendCert: boolean, data: Uint8Array | string, asBase64String?: boolean) {
-        return this.command<Uint8Array>("SignDataInternal", appendCert, data, asBase64String);
+        return this.command<Uint8Array>(
+            "SignDataInternal",
+            Number(appendCert),
+            data,
+            Number(asBase64String),
+        );
     }
-    SignHash(signAlgo: number, hash: Uint8Array, appendCert: boolean, asBase64String?: boolean) {
-        return this.command<Uint8Array>("SignHash", signAlgo, hash, appendCert, asBase64String);
+    SignHash(
+        signAlgo: EndUserSignAlgo,
+        hash: Uint8Array,
+        appendCert: boolean,
+        asBase64String?: boolean,
+    ) {
+        return this.command<Uint8Array>(
+            "SignHash",
+            signAlgo,
+            hash,
+            Number(appendCert),
+            Number(asBase64String),
+        );
     }
     SignDataEx(
-        signAlgo: number,
+        signAlgo: EndUserSignAlgo,
         data: Uint8Array,
         external: boolean,
         appendCert: boolean,
@@ -189,13 +201,13 @@ export default class EndUserWorker implements EndUserLibrary {
             "SignDataEx",
             signAlgo,
             data,
-            external,
-            appendCert,
-            asBase64String,
+            Number(external),
+            Number(appendCert),
+            Number(asBase64String),
         );
     }
     AppendSign(
-        signAlgo: number,
+        signAlgo: EndUserSignAlgo,
         data: Uint8Array,
         previousSign: Uint8Array,
         appendCert: boolean,
@@ -206,12 +218,12 @@ export default class EndUserWorker implements EndUserLibrary {
             signAlgo,
             data,
             previousSign,
-            appendCert,
-            asBase64String,
+            Number(appendCert),
+            Number(asBase64String),
         );
     }
     AppendSignHash(
-        signAlgo: number,
+        signAlgo: EndUserSignAlgo,
         hash: Uint8Array,
         previousSign: Uint8Array,
         appendCert: boolean,
@@ -222,8 +234,8 @@ export default class EndUserWorker implements EndUserLibrary {
             signAlgo,
             hash,
             previousSign,
-            appendCert,
-            asBase64String,
+            Number(appendCert),
+            Number(asBase64String),
         );
     }
     VerifyHash(hash: Uint8Array, sign: Uint8Array, signIndex: number) {
