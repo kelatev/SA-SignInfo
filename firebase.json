@@ -1,21 +1,18 @@
 {
   "hosting": {
-    "public": "build",
+    "source": ".",
     "ignore": [
       "firebase.json",
       "**/.*",
       "**/node_modules/**"
     ],
-    "rewrites": [
-      {
-        "source": "**",
-        "destination": "/index.html"
-      }
-    ]
+    "frameworksBackend": {
+      "region": "europe-west1"
+    }
   },
   "emulators": {
     "hosting": {
-      "port": 5000
+      "port": 5003
     },
     "ui": {
       "enabled": true

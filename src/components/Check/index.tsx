@@ -12,7 +12,7 @@ function PanelCheck() {
     const { loading, error, verifyResult, signedData } = useVerifyFiles({ library: librarySW, file: file });
 
     return (
-        <Card title='Перевірка підпису' backgroundColor='#CBF0F4' className='bgi-no-repeat bgi-position-x-end' backgroundImage='url("/wave-bg-blue.svg")'>
+        <Card title='Перевірка підпису' backgroundColor='#F6E5CA' className='bgi-no-repeat bgi-position-x-end' backgroundImage='url("/media/wave-bg-blue.svg")'>
             <Timeline>
                 {/*, pdf, xml, asics або asice*/}
                 <Timeline.Item title='Підписаний файл' icon={<FileArchive />} description={'p7s'}>

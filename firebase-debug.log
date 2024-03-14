@@ -1,0 +1,359 @@
+[debug] [2024-03-14T19:21:51.879Z] ----------------------------------------------------------------------
+[debug] [2024-03-14T19:21:51.895Z] Command:       /usr/local/bin/node /usr/local/bin/firebase emulators:start
+[debug] [2024-03-14T19:21:51.896Z] CLI Version:   13.5.0
+[debug] [2024-03-14T19:21:51.896Z] Platform:      darwin
+[debug] [2024-03-14T19:21:51.896Z] Node Version:  v20.5.1
+[debug] [2024-03-14T19:21:51.896Z] Time:          Thu Mar 14 2024 21:21:51 GMT+0200 (Eastern European Standard Time)
+[debug] [2024-03-14T19:21:51.896Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2024-03-14T19:21:52.032Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2024-03-14T19:21:52.033Z] > authorizing via signed-in user (kelatev@gmail.com)
+[info] i  emulators: Starting emulators: hosting {"metadata":{"emulator":{"name":"hub"},"message":"Starting emulators: hosting"}}
+[debug] [2024-03-14T19:21:52.636Z] [logging] Logging Emulator only supports listening on one address (127.0.0.1). Not listening on ::1
+[debug] [2024-03-14T19:21:52.636Z] [hosting] Hosting Emulator only supports listening on one address (127.0.0.1). Not listening on ::1
+[debug] [2024-03-14T19:21:52.637Z] assigned listening specs for emulators {"user":{"hub":[{"address":"127.0.0.1","family":"IPv4","port":4400},{"address":"::1","family":"IPv6","port":4400}],"logging":[{"address":"127.0.0.1","family":"IPv4","port":4500}],"hosting":[{"address":"127.0.0.1","family":"IPv4","port":5003}]},"metadata":{"message":"assigned listening specs for emulators"}}
+[debug] [2024-03-14T19:21:52.641Z] [hub] writing locator at /var/folders/qv/j1rp418n1ql3ggr7sqp2cfdc0000gn/T/hub-sign-f90aa.json
+[debug] [2024-03-14T19:21:52.655Z] > refreshing access token with scopes: []
+[debug] [2024-03-14T19:21:52.657Z] >>> [apiv2][query] POST https://www.googleapis.com/oauth2/v3/token [none]
+[debug] [2024-03-14T19:21:52.657Z] >>> [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2024-03-14T19:21:52.793Z] <<< [apiv2][status] POST https://www.googleapis.com/oauth2/v3/token 200
+[debug] [2024-03-14T19:21:52.794Z] <<< [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2024-03-14T19:21:52.842Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/sign-f90aa [none]
+[debug] [2024-03-14T19:21:53.336Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/sign-f90aa 200
+[debug] [2024-03-14T19:21:53.336Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/sign-f90aa {"projectId":"sign-f90aa","projectNumber":"1046655274267","displayName":"Sign","name":"projects/sign-f90aa","resources":{"hostingSite":"sign-f90aa"},"state":"ACTIVE","etag":"1_5a0b5ebd-2985-4776-8627-896ef6379870"}
+[debug] [2024-03-14T19:21:56.683Z] >>> [apiv2][query] GET https://firebasehosting.googleapis.com/v1beta1/projects/sign-f90aa/sites pageToken=&pageSize=10
+[debug] [2024-03-14T19:21:57.766Z] <<< [apiv2][status] GET https://firebasehosting.googleapis.com/v1beta1/projects/sign-f90aa/sites 200
+[debug] [2024-03-14T19:21:57.766Z] <<< [apiv2][body] GET https://firebasehosting.googleapis.com/v1beta1/projects/sign-f90aa/sites {"sites":[{"name":"projects/sign-f90aa/sites/sign-f90aa","defaultUrl":"https://sign-f90aa.web.app","appId":"1:1046655274267:web:8fc6a9bb348fbe0e5157be","type":"DEFAULT_SITE"}]}
+[debug] [2024-03-14T19:21:57.767Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/-/webApps/1:1046655274267:web:8fc6a9bb348fbe0e5157be/config [none]
+[debug] [2024-03-14T19:21:58.453Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/-/webApps/1:1046655274267:web:8fc6a9bb348fbe0e5157be/config 200
+[debug] [2024-03-14T19:21:58.453Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/-/webApps/1:1046655274267:web:8fc6a9bb348fbe0e5157be/config {"projectId":"sign-f90aa","appId":"1:1046655274267:web:8fc6a9bb348fbe0e5157be","storageBucket":"sign-f90aa.appspot.com","apiKey":"AIzaSyCo9d4ynJTY3W4r3TGHPF8F7dfrTJM9fCU","authDomain":"sign-f90aa.firebaseapp.com","messagingSenderId":"1046655274267","measurementId":"G-ZRSQRHMNBS"}
+[info] 
+   Thank you for trying our early preview of Express.js support on Firebase Hosting.
+   During the preview, support is best-effort and breaking changes can be expected. Proceed with caution.
+
+   Documentation: https://firebase.google.com/docs/hosting/frameworks/express
+   File a bug: https://github.com/firebase/firebase-tools/issues/new?template=bug_report.md
+   Submit a feature request: https://github.com/firebase/firebase-tools/issues/new?template=feature_request.md
+
+   We'd love to learn from you. Express your interest in helping us shape the future of Firebase Hosting: https://goo.gle/41enW5X
+
+[debug] [2024-03-14T19:22:52.049Z] [web frameworks] effective firebase.json:  {
+  "hosting": [
+    {
+      "source": ".",
+      "ignore": [
+        "firebase.json",
+        "**/.*",
+        "**/node_modules/**"
+      ],
+      "frameworksBackend": {
+        "region": "europe-west1"
+      },
+      "site": "sign-f90aa",
+      "rewrites": [
+        {
+          "source": "**",
+          "function": {
+            "functionId": "ssrsignf90aa",
+            "region": "europe-west1",
+            "pinTag": true
+          }
+        }
+      ],
+      "redirects": [],
+      "headers": [
+        {
+          "source": "**/*.[jt]s",
+          "headers": [
+            {
+              "key": "Set-Cookie",
+              "value": "__FIREBASE_DEFAULTS__=eyJjb25maWciOnsicHJvamVjdElkIjoic2lnbi1mOTBhYSIsImFwcElkIjoiMToxMDQ2NjU1Mjc0MjY3OndlYjo4ZmM2YTliYjM0OGZiZTBlNTE1N2JlIiwic3RvcmFnZUJ1Y2tldCI6InNpZ24tZjkwYWEuYXBwc3BvdC5jb20iLCJhcGlLZXkiOiJBSXphU3lDbzlkNHluSlRZM1c0cjNUR0hQRjhGN2RmclRKTTlmQ1UiLCJhdXRoRG9tYWluIjoic2lnbi1mOTBhYS5maXJlYmFzZWFwcC5jb20iLCJtZXNzYWdpbmdTZW5kZXJJZCI6IjEwNDY2NTUyNzQyNjciLCJtZWFzdXJlbWVudElkIjoiRy1aUlNRUkhNTkJTIn0sIl9hdXRoVG9rZW5TeW5jVVJMIjoiL19fc2Vzc2lvbiJ9; SameSite=Strict; Expires=2026-02-07T06:02:52.049Z; Path=/;"
+            }
+          ]
+        }
+      ],
+      "cleanUrls": true,
+      "public": ".firebase/sign-f90aa/hosting",
+      "webFramework": "express_ssr"
+    }
+  ],
+  "functions": [
+    {
+      "source": ".firebase/sign-f90aa/functions",
+      "codebase": "firebase-frameworks-sign-f90aa"
+    }
+  ]
+}
+[debug] [2024-03-14T19:22:52.422Z] [functions] Functions Emulator only supports listening on one address (127.0.0.1). Not listening on ::1
+[debug] [2024-03-14T19:22:52.422Z] [eventarc] Eventarc Emulator only supports listening on one address (127.0.0.1). Not listening on ::1
+[debug] [2024-03-14T19:22:52.422Z] late-assigned ports for functions and eventarc emulators {"user":{"hub":[{"address":"127.0.0.1","family":"IPv4","port":4400},{"address":"::1","family":"IPv6","port":4400}],"logging":[{"address":"127.0.0.1","family":"IPv4","port":4500}],"hosting":[{"address":"127.0.0.1","family":"IPv4","port":5003}],"functions":[{"address":"127.0.0.1","family":"IPv4","port":5001}],"eventarc":[{"address":"127.0.0.1","family":"IPv4","port":9299}]},"metadata":{"message":"late-assigned ports for functions and eventarc emulators"}}
+[warn] ⚠  functions: The following emulators are not running, calls to these services from the Functions emulator will affect production: auth, firestore, database, pubsub, storage {"metadata":{"emulator":{"name":"functions"},"message":"The following emulators are not running, calls to these services from the Functions emulator will affect production: \u001b[1mauth, firestore, database, pubsub, storage\u001b[22m"}}
+[debug] [2024-03-14T19:22:52.428Z] defaultcredentials: writing to file /Users/kelatev/.config/firebase/kelatev_gmail_com_application_default_credentials.json
+[debug] [2024-03-14T19:22:52.431Z] Setting GAC to /Users/kelatev/.config/firebase/kelatev_gmail_com_application_default_credentials.json {"metadata":{"emulator":{"name":"functions"},"message":"Setting GAC to /Users/kelatev/.config/firebase/kelatev_gmail_com_application_default_credentials.json"}}
+[debug] [2024-03-14T19:22:52.432Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/sign-f90aa/adminSdkConfig [none]
+[debug] [2024-03-14T19:22:52.702Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/sign-f90aa/adminSdkConfig 200
+[debug] [2024-03-14T19:22:52.702Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/sign-f90aa/adminSdkConfig {"projectId":"sign-f90aa","storageBucket":"sign-f90aa.appspot.com"}
+[debug] [2024-03-14T19:22:52.748Z] >>> [apiv2][query] GET https://firebasehosting.googleapis.com/v1beta1/projects/sign-f90aa/sites 
+[debug] [2024-03-14T19:22:53.730Z] <<< [apiv2][status] GET https://firebasehosting.googleapis.com/v1beta1/projects/sign-f90aa/sites 200
+[debug] [2024-03-14T19:22:53.730Z] <<< [apiv2][body] GET https://firebasehosting.googleapis.com/v1beta1/projects/sign-f90aa/sites {"sites":[{"name":"projects/sign-f90aa/sites/sign-f90aa","defaultUrl":"https://sign-f90aa.web.app","appId":"1:1046655274267:web:8fc6a9bb348fbe0e5157be","type":"DEFAULT_SITE"}]}
+[debug] [2024-03-14T19:22:53.731Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/sign-f90aa/webApps/1:1046655274267:web:8fc6a9bb348fbe0e5157be/config [none]
+[debug] [2024-03-14T19:22:54.362Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/sign-f90aa/webApps/1:1046655274267:web:8fc6a9bb348fbe0e5157be/config 200
+[debug] [2024-03-14T19:22:54.362Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/sign-f90aa/webApps/1:1046655274267:web:8fc6a9bb348fbe0e5157be/config {"projectId":"sign-f90aa","appId":"1:1046655274267:web:8fc6a9bb348fbe0e5157be","storageBucket":"sign-f90aa.appspot.com","apiKey":"AIzaSyCo9d4ynJTY3W4r3TGHPF8F7dfrTJM9fCU","authDomain":"sign-f90aa.firebaseapp.com","messagingSenderId":"1046655274267","measurementId":"G-ZRSQRHMNBS"}
+[info] i  hosting[sign-f90aa]: Serving hosting files from: .firebase/sign-f90aa/hosting {"metadata":{"emulator":{"name":"hosting"},"message":"Serving hosting files from: \u001b[1m.firebase/sign-f90aa/hosting\u001b[22m"}}
+[info] ✔  hosting[sign-f90aa]: Local server: http://127.0.0.1:5003 {"metadata":{"emulator":{"name":"hosting"},"message":"Local server: \u001b[4m\u001b[1mhttp://127.0.0.1:5003\u001b[22m\u001b[24m"}}
+[info] i  functions: Watching "/Users/kelatev/Documents/GitHub/SA-SignInfo/.firebase/sign-f90aa/functions" for Cloud Functions... {"metadata":{"emulator":{"name":"functions"},"message":"Watching \"/Users/kelatev/Documents/GitHub/SA-SignInfo/.firebase/sign-f90aa/functions\" for Cloud Functions..."}}
+[debug] [2024-03-14T19:22:54.520Z] Validating nodejs source
+[debug] [2024-03-14T19:22:55.109Z] > [functions] package.json contents: {
+  "name": "sa-uasign",
+  "version": "0.1.0",
+  "private": true,
+  "directories": {
+    "serve": "build"
+  },
+  "files": [
+    "build",
+    "server.js"
+  ],
+  "main": "server.js",
+  "dependencies": {
+    "@phosphor-icons/react": "^2.0.15",
+    "@restart/hooks": "^0.4.16",
+    "@restart/ui": "^1.6.6",
+    "@testing-library/jest-dom": "^6.4.2",
+    "@testing-library/react": "^14.2.1",
+    "@testing-library/user-event": "^14.5.2",
+    "@types/jest": "^29.5.12",
+    "@types/node": "^20.11.26",
+    "@types/react": "^18.2.65",
+    "@types/react-dom": "^18.2.21",
+    "@types/react-syntax-highlighter": "^15.5.11",
+    "buffer": "^6.0.3",
+    "express": "^4.18.3",
+    "file-saver": "^2.0.5",
+    "firebase": "^10.8.1",
+    "prop-types": "^15.8.1",
+    "react": "^18.2.0",
+    "react-bootstrap": "^2.10.1",
+    "react-copy-to-clipboard": "^5.1.0",
+    "react-dom": "^18.2.0",
+    "react-syntax-highlighter": "^15.5.0",
+    "typescript": "^5.4.2",
+    "web-vitals": "^3.5.2",
+    "windows-1251": "^3.0.4",
+    "sa-uasign": "file:sa-uasign-0.1.0.tgz",
+    "firebase-frameworks": "^0.11.0",
+    "firebase-functions": "^4.5.0",
+    "firebase-admin": "^11.11.1"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "overrides": {
+    "typescript": "^5.4.2"
+  },
+  "engines": {
+    "node": "20"
+  }
+}
+[debug] [2024-03-14T19:22:55.110Z] Building nodejs source
+[debug] [2024-03-14T19:22:55.110Z] Failed to find version of module node: reached end of search path /Users/kelatev/Documents/GitHub/SA-SignInfo/.firebase/sign-f90aa/functions/node_modules
+[info] ✔  functions: Using node@20 from host. 
+[info] i  functions: Loaded environment variables from .env. 
+[debug] [2024-03-14T19:22:55.113Z] Could not find functions.yaml. Must use http discovery
+[debug] [2024-03-14T19:22:55.123Z] Found firebase-functions binary at '/Users/kelatev/Documents/GitHub/SA-SignInfo/.firebase/sign-f90aa/functions/node_modules/.bin/firebase-functions'
+[info] Serving at port 8194
+
+[debug] [2024-03-14T19:22:55.823Z] Got response from /__/functions.yaml {"endpoints":{"ssrsignf90aa":{"availableMemoryMb":null,"timeoutSeconds":null,"minInstances":null,"maxInstances":null,"ingressSettings":null,"concurrency":null,"serviceAccountEmail":null,"vpc":null,"platform":"gcfv2","region":["europe-west1"],"labels":{},"httpsTrigger":{},"entryPoint":"ssrsignf90aa"}},"specVersion":"v1alpha1","requiredAPIs":[]}
+[info] [hosting] Rewriting /proxy to http://127.0.0.1:5001/sign-f90aa/europe-west1/ssrsignf90aa for local Function europe-west1/ssrsignf90aa
+[debug] [2024-03-14T19:22:59.400Z] >>> [apiv2][query] GET http://127.0.0.1:5001/sign-f90aa/europe-west1/ssrsignf90aa/proxy 
+[debug] [2024-03-14T19:22:59.402Z] [work-queue] {"queuedWork":["/sign-f90aa/europe-west1/ssrsignf90aa/proxy-2024-03-14T19:22:59.402Z"],"queueLength":1,"runningWork":[],"workRunningCount":0}
+[debug] [2024-03-14T19:22:59.403Z] [work-queue] {"queuedWork":[],"queueLength":0,"runningWork":["/sign-f90aa/europe-west1/ssrsignf90aa/proxy-2024-03-14T19:22:59.402Z"],"workRunningCount":1}
+[debug] [2024-03-14T19:22:59.406Z] [work-queue] {"queuedWork":[],"queueLength":0,"runningWork":[],"workRunningCount":0}
+[debug] [2024-03-14T19:22:59.407Z] <<< [apiv2][status] GET http://127.0.0.1:5001/sign-f90aa/europe-west1/ssrsignf90aa/proxy 404
+[debug] [2024-03-14T19:22:59.408Z] <<< [apiv2][body] GET http://127.0.0.1:5001/sign-f90aa/europe-west1/ssrsignf90aa/proxy [stream]
+[info] i  hosting: 127.0.0.1 - - [14/Mar/2024:19:22:59 +0000] "GET /proxy HTTP/1.1" 404 72 "-" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36" {"metadata":{"emulator":{"name":"hosting"},"message":"127.0.0.1 - - [14/Mar/2024:19:22:59 +0000] \"GET /proxy HTTP/1.1\" 404 72 \"-\" \"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36\""}}
+[info] [hosting] Rewriting /proxy to http://127.0.0.1:5001/sign-f90aa/europe-west1/ssrsignf90aa for local Function europe-west1/ssrsignf90aa
+[debug] [2024-03-14T19:23:00.671Z] >>> [apiv2][query] GET http://127.0.0.1:5001/sign-f90aa/europe-west1/ssrsignf90aa/proxy 
+[debug] [2024-03-14T19:23:00.673Z] [work-queue] {"queuedWork":["/sign-f90aa/europe-west1/ssrsignf90aa/proxy-2024-03-14T19:23:00.673Z"],"queueLength":1,"runningWork":[],"workRunningCount":0}
+[debug] [2024-03-14T19:23:00.673Z] [work-queue] {"queuedWork":[],"queueLength":0,"runningWork":["/sign-f90aa/europe-west1/ssrsignf90aa/proxy-2024-03-14T19:23:00.673Z"],"workRunningCount":1}
+[debug] [2024-03-14T19:23:00.674Z] [work-queue] {"queuedWork":[],"queueLength":0,"runningWork":[],"workRunningCount":0}
+[debug] [2024-03-14T19:23:00.675Z] <<< [apiv2][status] GET http://127.0.0.1:5001/sign-f90aa/europe-west1/ssrsignf90aa/proxy 404
+[debug] [2024-03-14T19:23:00.675Z] <<< [apiv2][body] GET http://127.0.0.1:5001/sign-f90aa/europe-west1/ssrsignf90aa/proxy [stream]
+[info] i  hosting: 127.0.0.1 - - [14/Mar/2024:19:23:00 +0000] "GET /proxy HTTP/1.1" 404 72 "-" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36" {"metadata":{"emulator":{"name":"hosting"},"message":"127.0.0.1 - - [14/Mar/2024:19:23:00 +0000] \"GET /proxy HTTP/1.1\" 404 72 \"-\" \"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36\""}}
+[info] ✔  functions: Loaded functions definitions from source: ssrsignf90aa. {"metadata":{"emulator":{"name":"functions"},"message":"Loaded functions definitions from source: ssrsignf90aa."}}
+[info] ✔  functions[europe-west1-ssrsignf90aa]: http function initialized (http://127.0.0.1:5001/sign-f90aa/europe-west1/ssrsignf90aa). {"metadata":{"emulator":{"name":"functions"},"message":"\u001b[1mhttp\u001b[22m function initialized (http://127.0.0.1:5001/sign-f90aa/europe-west1/ssrsignf90aa)."}}
+[info] 
+┌─────────────────────────────────────────────────────────────┐
+│ ✔  All emulators ready! It is now safe to connect your app. │
+└─────────────────────────────────────────────────────────────┘
+
+┌───────────┬────────────────┐
+│ Emulator  │ Host:Port      │
+├───────────┼────────────────┤
+│ Functions │ 127.0.0.1:5001 │
+├───────────┼────────────────┤
+│ Hosting   │ 127.0.0.1:5003 │
+└───────────┴────────────────┘
+  Emulator Hub running at 127.0.0.1:4400
+  Other reserved ports: 4500
+
+Issues? Report them at https://github.com/firebase/firebase-tools/issues and attach the *-debug.log files.
+ 
+[info] [hosting] Rewriting /proxy to http://127.0.0.1:5001/sign-f90aa/europe-west1/ssrsignf90aa for local Function europe-west1/ssrsignf90aa
+[debug] [2024-03-14T19:23:01.629Z] >>> [apiv2][query] GET http://127.0.0.1:5001/sign-f90aa/europe-west1/ssrsignf90aa/proxy 
+[debug] [2024-03-14T19:23:01.630Z] [work-queue] {"queuedWork":["/sign-f90aa/europe-west1/ssrsignf90aa/proxy-2024-03-14T19:23:01.630Z"],"queueLength":1,"runningWork":[],"workRunningCount":0}
+[debug] [2024-03-14T19:23:01.630Z] [work-queue] {"queuedWork":[],"queueLength":0,"runningWork":["/sign-f90aa/europe-west1/ssrsignf90aa/proxy-2024-03-14T19:23:01.630Z"],"workRunningCount":1}
+[debug] [2024-03-14T19:23:01.631Z] Accepted request GET /sign-f90aa/europe-west1/ssrsignf90aa/proxy --> europe-west1-ssrsignf90aa
+[debug] [2024-03-14T19:23:01.632Z] [functions] Runtime ready! Sending request! {"metadata":{"emulator":{"name":"functions"},"message":"[functions] Runtime ready! Sending request!"}}
+[debug] [2024-03-14T19:23:01.632Z] [functions] Got req.url=/sign-f90aa/europe-west1/ssrsignf90aa/proxy, mapping to path=/proxy {"metadata":{"emulator":{"name":"functions"},"message":"[functions] Got req.url=/sign-f90aa/europe-west1/ssrsignf90aa/proxy, mapping to path=/proxy"}}
+[info] i  functions: Loaded environment variables from .env. 
+[debug] [2024-03-14T19:23:01.636Z] [worker-pool] addWorker(europe-west1-ssrsignf90aa) {"metadata":{"emulator":{"name":"functions"},"message":"[worker-pool] addWorker(europe-west1-ssrsignf90aa)"}}
+[debug] [2024-03-14T19:23:01.637Z] [worker-pool] Adding worker with key europe-west1-ssrsignf90aa, total=1 {"metadata":{"emulator":{"name":"functions"},"message":"[worker-pool] Adding worker with key europe-west1-ssrsignf90aa, total=1"}}
+[info] i  hosting: 127.0.0.1 - - [14/Mar/2024:19:23:02 +0000] "GET /proxy HTTP/1.1" - - "-" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36" {"metadata":{"emulator":{"name":"hosting"},"message":"127.0.0.1 - - [14/Mar/2024:19:23:02 +0000] \"GET /proxy HTTP/1.1\" - - \"-\" \"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36\""}}
+[info] [hosting] Rewriting /proxy to http://127.0.0.1:5001/sign-f90aa/europe-west1/ssrsignf90aa for local Function europe-west1/ssrsignf90aa
+[debug] [2024-03-14T19:23:02.218Z] >>> [apiv2][query] GET http://127.0.0.1:5001/sign-f90aa/europe-west1/ssrsignf90aa/proxy 
+[debug] [2024-03-14T19:23:02.221Z] [work-queue] {"queuedWork":["/sign-f90aa/europe-west1/ssrsignf90aa/proxy-2024-03-14T19:23:02.221Z"],"queueLength":1,"runningWork":["/sign-f90aa/europe-west1/ssrsignf90aa/proxy-2024-03-14T19:23:01.630Z"],"workRunningCount":1}
+[debug] [2024-03-14T19:23:02.221Z] [work-queue] {"queuedWork":[],"queueLength":0,"runningWork":["/sign-f90aa/europe-west1/ssrsignf90aa/proxy-2024-03-14T19:23:01.630Z","/sign-f90aa/europe-west1/ssrsignf90aa/proxy-2024-03-14T19:23:02.221Z"],"workRunningCount":2}
+[debug] [2024-03-14T19:23:02.222Z] Accepted request GET /sign-f90aa/europe-west1/ssrsignf90aa/proxy --> europe-west1-ssrsignf90aa
+[debug] [2024-03-14T19:23:02.223Z] [functions] Runtime ready! Sending request! {"metadata":{"emulator":{"name":"functions"},"message":"[functions] Runtime ready! Sending request!"}}
+[debug] [2024-03-14T19:23:02.224Z] [functions] Got req.url=/sign-f90aa/europe-west1/ssrsignf90aa/proxy, mapping to path=/proxy {"metadata":{"emulator":{"name":"functions"},"message":"[functions] Got req.url=/sign-f90aa/europe-west1/ssrsignf90aa/proxy, mapping to path=/proxy"}}
+[info] i  functions: Loaded environment variables from .env. 
+[debug] [2024-03-14T19:23:02.226Z] [worker-pool] addWorker(europe-west1-ssrsignf90aa) {"metadata":{"emulator":{"name":"functions"},"message":"[worker-pool] addWorker(europe-west1-ssrsignf90aa)"}}
+[debug] [2024-03-14T19:23:02.226Z] [worker-pool] Adding worker with key europe-west1-ssrsignf90aa, total=2 {"metadata":{"emulator":{"name":"functions"},"message":"[worker-pool] Adding worker with key europe-west1-ssrsignf90aa, total=2"}}
+[info] i  hosting: 127.0.0.1 - - [14/Mar/2024:19:23:02 +0000] "GET /proxy HTTP/1.1" - - "-" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36" {"metadata":{"emulator":{"name":"hosting"},"message":"127.0.0.1 - - [14/Mar/2024:19:23:02 +0000] \"GET /proxy HTTP/1.1\" - - \"-\" \"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36\""}}
+[info] [hosting] Rewriting /proxy to http://127.0.0.1:5001/sign-f90aa/europe-west1/ssrsignf90aa for local Function europe-west1/ssrsignf90aa
+[debug] [2024-03-14T19:23:02.872Z] >>> [apiv2][query] GET http://127.0.0.1:5001/sign-f90aa/europe-west1/ssrsignf90aa/proxy 
+[debug] [2024-03-14T19:23:02.875Z] [work-queue] {"queuedWork":["/sign-f90aa/europe-west1/ssrsignf90aa/proxy-2024-03-14T19:23:02.875Z"],"queueLength":1,"runningWork":["/sign-f90aa/europe-west1/ssrsignf90aa/proxy-2024-03-14T19:23:01.630Z","/sign-f90aa/europe-west1/ssrsignf90aa/proxy-2024-03-14T19:23:02.221Z"],"workRunningCount":2}
+[debug] [2024-03-14T19:23:02.876Z] [work-queue] {"queuedWork":[],"queueLength":0,"runningWork":["/sign-f90aa/europe-west1/ssrsignf90aa/proxy-2024-03-14T19:23:01.630Z","/sign-f90aa/europe-west1/ssrsignf90aa/proxy-2024-03-14T19:23:02.221Z","/sign-f90aa/europe-west1/ssrsignf90aa/proxy-2024-03-14T19:23:02.875Z"],"workRunningCount":3}
+[debug] [2024-03-14T19:23:02.876Z] Accepted request GET /sign-f90aa/europe-west1/ssrsignf90aa/proxy --> europe-west1-ssrsignf90aa
+[debug] [2024-03-14T19:23:02.876Z] [functions] Runtime ready! Sending request! {"metadata":{"emulator":{"name":"functions"},"message":"[functions] Runtime ready! Sending request!"}}
+[debug] [2024-03-14T19:23:02.877Z] [functions] Got req.url=/sign-f90aa/europe-west1/ssrsignf90aa/proxy, mapping to path=/proxy {"metadata":{"emulator":{"name":"functions"},"message":"[functions] Got req.url=/sign-f90aa/europe-west1/ssrsignf90aa/proxy, mapping to path=/proxy"}}
+[info] i  functions: Loaded environment variables from .env. 
+[debug] [2024-03-14T19:23:02.879Z] [worker-pool] addWorker(europe-west1-ssrsignf90aa) {"metadata":{"emulator":{"name":"functions"},"message":"[worker-pool] addWorker(europe-west1-ssrsignf90aa)"}}
+[debug] [2024-03-14T19:23:02.879Z] [worker-pool] Adding worker with key europe-west1-ssrsignf90aa, total=3 {"metadata":{"emulator":{"name":"functions"},"message":"[worker-pool] Adding worker with key europe-west1-ssrsignf90aa, total=3"}}
+[debug] [2024-03-14T19:23:03.381Z] [runtime-status] [29377] Resolved module firebase-admin {"declared":true,"installed":true,"version":"11.11.1","resolution":"/Users/kelatev/Documents/GitHub/SA-SignInfo/.firebase/sign-f90aa/functions/node_modules/firebase-admin/lib/index.js"} {"metadata":{"emulator":{"name":"functions"},"function":{"name":"europe-west1-ssrsignf90aa"},"extension":{},"message":"[runtime-status] [29377] Resolved module firebase-admin {\"declared\":true,\"installed\":true,\"version\":\"11.11.1\",\"resolution\":\"/Users/kelatev/Documents/GitHub/SA-SignInfo/.firebase/sign-f90aa/functions/node_modules/firebase-admin/lib/index.js\"}"}}
+[debug] [2024-03-14T19:23:03.381Z] [runtime-status] [29376] Resolved module firebase-admin {"declared":true,"installed":true,"version":"11.11.1","resolution":"/Users/kelatev/Documents/GitHub/SA-SignInfo/.firebase/sign-f90aa/functions/node_modules/firebase-admin/lib/index.js"} {"metadata":{"emulator":{"name":"functions"},"function":{"name":"europe-west1-ssrsignf90aa"},"extension":{},"message":"[runtime-status] [29376] Resolved module firebase-admin {\"declared\":true,\"installed\":true,\"version\":\"11.11.1\",\"resolution\":\"/Users/kelatev/Documents/GitHub/SA-SignInfo/.firebase/sign-f90aa/functions/node_modules/firebase-admin/lib/index.js\"}"}}
+[debug] [2024-03-14T19:23:03.381Z] [runtime-status] [29377] Resolved module firebase-functions {"declared":true,"installed":true,"version":"4.8.0","resolution":"/Users/kelatev/Documents/GitHub/SA-SignInfo/.firebase/sign-f90aa/functions/node_modules/firebase-functions/lib/v1/index.js"} {"metadata":{"emulator":{"name":"functions"},"function":{"name":"europe-west1-ssrsignf90aa"},"extension":{},"message":"[runtime-status] [29377] Resolved module firebase-functions {\"declared\":true,\"installed\":true,\"version\":\"4.8.0\",\"resolution\":\"/Users/kelatev/Documents/GitHub/SA-SignInfo/.firebase/sign-f90aa/functions/node_modules/firebase-functions/lib/v1/index.js\"}"}}
+[debug] [2024-03-14T19:23:03.382Z] [runtime-status] [29377] Outgoing network have been stubbed. [{"name":"http","status":"mocked"},{"name":"http","status":"mocked"},{"name":"https","status":"mocked"},{"name":"https","status":"mocked"},{"name":"net","status":"mocked"}] {"metadata":{"emulator":{"name":"functions"},"function":{"name":"europe-west1-ssrsignf90aa"},"extension":{},"message":"[runtime-status] [29377] Outgoing network have been stubbed. [{\"name\":\"http\",\"status\":\"mocked\"},{\"name\":\"http\",\"status\":\"mocked\"},{\"name\":\"https\",\"status\":\"mocked\"},{\"name\":\"https\",\"status\":\"mocked\"},{\"name\":\"net\",\"status\":\"mocked\"}]"}}
+[debug] [2024-03-14T19:23:03.382Z] [runtime-status] [29376] Resolved module firebase-functions {"declared":true,"installed":true,"version":"4.8.0","resolution":"/Users/kelatev/Documents/GitHub/SA-SignInfo/.firebase/sign-f90aa/functions/node_modules/firebase-functions/lib/v1/index.js"} {"metadata":{"emulator":{"name":"functions"},"function":{"name":"europe-west1-ssrsignf90aa"},"extension":{},"message":"[runtime-status] [29376] Resolved module firebase-functions {\"declared\":true,\"installed\":true,\"version\":\"4.8.0\",\"resolution\":\"/Users/kelatev/Documents/GitHub/SA-SignInfo/.firebase/sign-f90aa/functions/node_modules/firebase-functions/lib/v1/index.js\"}"}}
+[debug] [2024-03-14T19:23:03.382Z] [runtime-status] [29376] Outgoing network have been stubbed. [{"name":"http","status":"mocked"},{"name":"http","status":"mocked"},{"name":"https","status":"mocked"},{"name":"https","status":"mocked"},{"name":"net","status":"mocked"}] {"metadata":{"emulator":{"name":"functions"},"function":{"name":"europe-west1-ssrsignf90aa"},"extension":{},"message":"[runtime-status] [29376] Outgoing network have been stubbed. [{\"name\":\"http\",\"status\":\"mocked\"},{\"name\":\"http\",\"status\":\"mocked\"},{\"name\":\"https\",\"status\":\"mocked\"},{\"name\":\"https\",\"status\":\"mocked\"},{\"name\":\"net\",\"status\":\"mocked\"}]"}}
+[debug] [2024-03-14T19:23:03.382Z] [runtime-status] [29377] Resolved module firebase-functions {"declared":true,"installed":true,"version":"4.8.0","resolution":"/Users/kelatev/Documents/GitHub/SA-SignInfo/.firebase/sign-f90aa/functions/node_modules/firebase-functions/lib/v1/index.js"} {"metadata":{"emulator":{"name":"functions"},"function":{"name":"europe-west1-ssrsignf90aa"},"extension":{},"message":"[runtime-status] [29377] Resolved module firebase-functions {\"declared\":true,\"installed\":true,\"version\":\"4.8.0\",\"resolution\":\"/Users/kelatev/Documents/GitHub/SA-SignInfo/.firebase/sign-f90aa/functions/node_modules/firebase-functions/lib/v1/index.js\"}"}}
+[debug] [2024-03-14T19:23:03.383Z] [runtime-status] [29376] Resolved module firebase-functions {"declared":true,"installed":true,"version":"4.8.0","resolution":"/Users/kelatev/Documents/GitHub/SA-SignInfo/.firebase/sign-f90aa/functions/node_modules/firebase-functions/lib/v1/index.js"} {"metadata":{"emulator":{"name":"functions"},"function":{"name":"europe-west1-ssrsignf90aa"},"extension":{},"message":"[runtime-status] [29376] Resolved module firebase-functions {\"declared\":true,\"installed\":true,\"version\":\"4.8.0\",\"resolution\":\"/Users/kelatev/Documents/GitHub/SA-SignInfo/.firebase/sign-f90aa/functions/node_modules/firebase-functions/lib/v1/index.js\"}"}}
+[debug] [2024-03-14T19:23:03.601Z] [runtime-status] [29378] Resolved module firebase-admin {"declared":true,"installed":true,"version":"11.11.1","resolution":"/Users/kelatev/Documents/GitHub/SA-SignInfo/.firebase/sign-f90aa/functions/node_modules/firebase-admin/lib/index.js"} {"metadata":{"emulator":{"name":"functions"},"function":{"name":"europe-west1-ssrsignf90aa"},"extension":{},"message":"[runtime-status] [29378] Resolved module firebase-admin {\"declared\":true,\"installed\":true,\"version\":\"11.11.1\",\"resolution\":\"/Users/kelatev/Documents/GitHub/SA-SignInfo/.firebase/sign-f90aa/functions/node_modules/firebase-admin/lib/index.js\"}"}}
+[debug] [2024-03-14T19:23:03.603Z] [runtime-status] [29378] Resolved module firebase-functions {"declared":true,"installed":true,"version":"4.8.0","resolution":"/Users/kelatev/Documents/GitHub/SA-SignInfo/.firebase/sign-f90aa/functions/node_modules/firebase-functions/lib/v1/index.js"} {"metadata":{"emulator":{"name":"functions"},"function":{"name":"europe-west1-ssrsignf90aa"},"extension":{},"message":"[runtime-status] [29378] Resolved module firebase-functions {\"declared\":true,\"installed\":true,\"version\":\"4.8.0\",\"resolution\":\"/Users/kelatev/Documents/GitHub/SA-SignInfo/.firebase/sign-f90aa/functions/node_modules/firebase-functions/lib/v1/index.js\"}"}}
+[debug] [2024-03-14T19:23:03.603Z] [runtime-status] [29378] Outgoing network have been stubbed. [{"name":"http","status":"mocked"},{"name":"http","status":"mocked"},{"name":"https","status":"mocked"},{"name":"https","status":"mocked"},{"name":"net","status":"mocked"}] {"metadata":{"emulator":{"name":"functions"},"function":{"name":"europe-west1-ssrsignf90aa"},"extension":{},"message":"[runtime-status] [29378] Outgoing network have been stubbed. [{\"name\":\"http\",\"status\":\"mocked\"},{\"name\":\"http\",\"status\":\"mocked\"},{\"name\":\"https\",\"status\":\"mocked\"},{\"name\":\"https\",\"status\":\"mocked\"},{\"name\":\"net\",\"status\":\"mocked\"}]"}}
+[debug] [2024-03-14T19:23:03.604Z] [runtime-status] [29378] Resolved module firebase-functions {"declared":true,"installed":true,"version":"4.8.0","resolution":"/Users/kelatev/Documents/GitHub/SA-SignInfo/.firebase/sign-f90aa/functions/node_modules/firebase-functions/lib/v1/index.js"} {"metadata":{"emulator":{"name":"functions"},"function":{"name":"europe-west1-ssrsignf90aa"},"extension":{},"message":"[runtime-status] [29378] Resolved module firebase-functions {\"declared\":true,\"installed\":true,\"version\":\"4.8.0\",\"resolution\":\"/Users/kelatev/Documents/GitHub/SA-SignInfo/.firebase/sign-f90aa/functions/node_modules/firebase-functions/lib/v1/index.js\"}"}}
+[debug] [2024-03-14T19:23:03.639Z] [runtime-status] [29377] Checked functions.config() {"config":{}} {"metadata":{"emulator":{"name":"functions"},"function":{"name":"europe-west1-ssrsignf90aa"},"extension":{},"message":"[runtime-status] [29377] Checked functions.config() {\"config\":{}}"}}
+[debug] [2024-03-14T19:23:03.639Z] [runtime-status] [29377] firebase-functions has been stubbed. {"functionsResolution":{"declared":true,"installed":true,"version":"4.8.0","resolution":"/Users/kelatev/Documents/GitHub/SA-SignInfo/.firebase/sign-f90aa/functions/node_modules/firebase-functions/lib/v1/index.js"}} {"metadata":{"emulator":{"name":"functions"},"function":{"name":"europe-west1-ssrsignf90aa"},"extension":{},"message":"[runtime-status] [29377] firebase-functions has been stubbed. {\"functionsResolution\":{\"declared\":true,\"installed\":true,\"version\":\"4.8.0\",\"resolution\":\"/Users/kelatev/Documents/GitHub/SA-SignInfo/.firebase/sign-f90aa/functions/node_modules/firebase-functions/lib/v1/index.js\"}}"}}
+[debug] [2024-03-14T19:23:03.639Z] [runtime-status] [29376] Checked functions.config() {"config":{}} {"metadata":{"emulator":{"name":"functions"},"function":{"name":"europe-west1-ssrsignf90aa"},"extension":{},"message":"[runtime-status] [29376] Checked functions.config() {\"config\":{}}"}}
+[debug] [2024-03-14T19:23:03.639Z] [runtime-status] [29376] firebase-functions has been stubbed. {"functionsResolution":{"declared":true,"installed":true,"version":"4.8.0","resolution":"/Users/kelatev/Documents/GitHub/SA-SignInfo/.firebase/sign-f90aa/functions/node_modules/firebase-functions/lib/v1/index.js"}} {"metadata":{"emulator":{"name":"functions"},"function":{"name":"europe-west1-ssrsignf90aa"},"extension":{},"message":"[runtime-status] [29376] firebase-functions has been stubbed. {\"functionsResolution\":{\"declared\":true,\"installed\":true,\"version\":\"4.8.0\",\"resolution\":\"/Users/kelatev/Documents/GitHub/SA-SignInfo/.firebase/sign-f90aa/functions/node_modules/firebase-functions/lib/v1/index.js\"}}"}}
+[debug] [2024-03-14T19:23:03.640Z] [runtime-status] [29377] Resolved module firebase-functions {"declared":true,"installed":true,"version":"4.8.0","resolution":"/Users/kelatev/Documents/GitHub/SA-SignInfo/.firebase/sign-f90aa/functions/node_modules/firebase-functions/lib/v1/index.js"} {"metadata":{"emulator":{"name":"functions"},"function":{"name":"europe-west1-ssrsignf90aa"},"extension":{},"message":"[runtime-status] [29377] Resolved module firebase-functions {\"declared\":true,\"installed\":true,\"version\":\"4.8.0\",\"resolution\":\"/Users/kelatev/Documents/GitHub/SA-SignInfo/.firebase/sign-f90aa/functions/node_modules/firebase-functions/lib/v1/index.js\"}"}}
+[debug] [2024-03-14T19:23:03.640Z] [runtime-status] [29376] Resolved module firebase-functions {"declared":true,"installed":true,"version":"4.8.0","resolution":"/Users/kelatev/Documents/GitHub/SA-SignInfo/.firebase/sign-f90aa/functions/node_modules/firebase-functions/lib/v1/index.js"} {"metadata":{"emulator":{"name":"functions"},"function":{"name":"europe-west1-ssrsignf90aa"},"extension":{},"message":"[runtime-status] [29376] Resolved module firebase-functions {\"declared\":true,\"installed\":true,\"version\":\"4.8.0\",\"resolution\":\"/Users/kelatev/Documents/GitHub/SA-SignInfo/.firebase/sign-f90aa/functions/node_modules/firebase-functions/lib/v1/index.js\"}"}}
+[debug] [2024-03-14T19:23:03.641Z] [runtime-status] [29376] Resolved module firebase-admin {"declared":true,"installed":true,"version":"11.11.1","resolution":"/Users/kelatev/Documents/GitHub/SA-SignInfo/.firebase/sign-f90aa/functions/node_modules/firebase-admin/lib/index.js"} {"metadata":{"emulator":{"name":"functions"},"function":{"name":"europe-west1-ssrsignf90aa"},"extension":{},"message":"[runtime-status] [29376] Resolved module firebase-admin {\"declared\":true,\"installed\":true,\"version\":\"11.11.1\",\"resolution\":\"/Users/kelatev/Documents/GitHub/SA-SignInfo/.firebase/sign-f90aa/functions/node_modules/firebase-admin/lib/index.js\"}"}}
+[debug] [2024-03-14T19:23:03.641Z] [runtime-status] [29377] Resolved module firebase-admin {"declared":true,"installed":true,"version":"11.11.1","resolution":"/Users/kelatev/Documents/GitHub/SA-SignInfo/.firebase/sign-f90aa/functions/node_modules/firebase-admin/lib/index.js"} {"metadata":{"emulator":{"name":"functions"},"function":{"name":"europe-west1-ssrsignf90aa"},"extension":{},"message":"[runtime-status] [29377] Resolved module firebase-admin {\"declared\":true,\"installed\":true,\"version\":\"11.11.1\",\"resolution\":\"/Users/kelatev/Documents/GitHub/SA-SignInfo/.firebase/sign-f90aa/functions/node_modules/firebase-admin/lib/index.js\"}"}}
+[debug] [2024-03-14T19:23:03.646Z] [runtime-status] [29377] Resolved module firebase-functions {"declared":true,"installed":true,"version":"4.8.0","resolution":"/Users/kelatev/Documents/GitHub/SA-SignInfo/.firebase/sign-f90aa/functions/node_modules/firebase-functions/lib/v1/index.js"} {"metadata":{"emulator":{"name":"functions"},"function":{"name":"europe-west1-ssrsignf90aa"},"extension":{},"message":"[runtime-status] [29377] Resolved module firebase-functions {\"declared\":true,\"installed\":true,\"version\":\"4.8.0\",\"resolution\":\"/Users/kelatev/Documents/GitHub/SA-SignInfo/.firebase/sign-f90aa/functions/node_modules/firebase-functions/lib/v1/index.js\"}"}}
+[debug] [2024-03-14T19:23:03.646Z] [runtime-status] [29377] firebase-admin has been stubbed. {"adminResolution":{"declared":true,"installed":true,"version":"11.11.1","resolution":"/Users/kelatev/Documents/GitHub/SA-SignInfo/.firebase/sign-f90aa/functions/node_modules/firebase-admin/lib/index.js"}} {"metadata":{"emulator":{"name":"functions"},"function":{"name":"europe-west1-ssrsignf90aa"},"extension":{},"message":"[runtime-status] [29377] firebase-admin has been stubbed. {\"adminResolution\":{\"declared\":true,\"installed\":true,\"version\":\"11.11.1\",\"resolution\":\"/Users/kelatev/Documents/GitHub/SA-SignInfo/.firebase/sign-f90aa/functions/node_modules/firebase-admin/lib/index.js\"}}"}}
+[debug] [2024-03-14T19:23:03.646Z] [runtime-status] [29376] Resolved module firebase-functions {"declared":true,"installed":true,"version":"4.8.0","resolution":"/Users/kelatev/Documents/GitHub/SA-SignInfo/.firebase/sign-f90aa/functions/node_modules/firebase-functions/lib/v1/index.js"} {"metadata":{"emulator":{"name":"functions"},"function":{"name":"europe-west1-ssrsignf90aa"},"extension":{},"message":"[runtime-status] [29376] Resolved module firebase-functions {\"declared\":true,\"installed\":true,\"version\":\"4.8.0\",\"resolution\":\"/Users/kelatev/Documents/GitHub/SA-SignInfo/.firebase/sign-f90aa/functions/node_modules/firebase-functions/lib/v1/index.js\"}"}}
+[debug] [2024-03-14T19:23:03.646Z] [runtime-status] [29376] firebase-admin has been stubbed. {"adminResolution":{"declared":true,"installed":true,"version":"11.11.1","resolution":"/Users/kelatev/Documents/GitHub/SA-SignInfo/.firebase/sign-f90aa/functions/node_modules/firebase-admin/lib/index.js"}} {"metadata":{"emulator":{"name":"functions"},"function":{"name":"europe-west1-ssrsignf90aa"},"extension":{},"message":"[runtime-status] [29376] firebase-admin has been stubbed. {\"adminResolution\":{\"declared\":true,\"installed\":true,\"version\":\"11.11.1\",\"resolution\":\"/Users/kelatev/Documents/GitHub/SA-SignInfo/.firebase/sign-f90aa/functions/node_modules/firebase-admin/lib/index.js\"}}"}}
+[debug] [2024-03-14T19:23:03.657Z] [runtime-status] [29376] Functions runtime initialized. {"cwd":"/Users/kelatev/Documents/GitHub/SA-SignInfo/.firebase/sign-f90aa/functions","node_version":"20.5.1"} {"metadata":{"emulator":{"name":"functions"},"function":{"name":"europe-west1-ssrsignf90aa"},"extension":{},"message":"[runtime-status] [29376] Functions runtime initialized. {\"cwd\":\"/Users/kelatev/Documents/GitHub/SA-SignInfo/.firebase/sign-f90aa/functions\",\"node_version\":\"20.5.1\"}"}}
+[debug] [2024-03-14T19:23:03.657Z] [runtime-status] [29376] Listening to port: /var/folders/qv/j1rp418n1ql3ggr7sqp2cfdc0000gn/T/fire_emu_bcbcf6059bfa11ec.sock {"metadata":{"emulator":{"name":"functions"},"function":{"name":"europe-west1-ssrsignf90aa"},"extension":{},"message":"[runtime-status] [29376] Listening to port: /var/folders/qv/j1rp418n1ql3ggr7sqp2cfdc0000gn/T/fire_emu_bcbcf6059bfa11ec.sock"}}
+[debug] [2024-03-14T19:23:03.657Z] [runtime-status] [29377] Functions runtime initialized. {"cwd":"/Users/kelatev/Documents/GitHub/SA-SignInfo/.firebase/sign-f90aa/functions","node_version":"20.5.1"} {"metadata":{"emulator":{"name":"functions"},"function":{"name":"europe-west1-ssrsignf90aa"},"extension":{},"message":"[runtime-status] [29377] Functions runtime initialized. {\"cwd\":\"/Users/kelatev/Documents/GitHub/SA-SignInfo/.firebase/sign-f90aa/functions\",\"node_version\":\"20.5.1\"}"}}
+[debug] [2024-03-14T19:23:03.657Z] [runtime-status] [29377] Listening to port: /var/folders/qv/j1rp418n1ql3ggr7sqp2cfdc0000gn/T/fire_emu_7bf553f0bbe8ee93.sock {"metadata":{"emulator":{"name":"functions"},"function":{"name":"europe-west1-ssrsignf90aa"},"extension":{},"message":"[runtime-status] [29377] Listening to port: /var/folders/qv/j1rp418n1ql3ggr7sqp2cfdc0000gn/T/fire_emu_7bf553f0bbe8ee93.sock"}}
+[debug] [2024-03-14T19:23:03.668Z] [worker-europe-west1-ssrsignf90aa-bbf9b205-fb06-45d1-85f5-65d51c03f549]: IDLE {"metadata":{"emulator":{"name":"functions"},"function":{"name":"europe-west1-ssrsignf90aa"},"extension":{},"message":"[worker-europe-west1-ssrsignf90aa-bbf9b205-fb06-45d1-85f5-65d51c03f549]: IDLE"}}
+[debug] [2024-03-14T19:23:03.668Z] [worker-pool] submitRequest(triggerId=europe-west1-ssrsignf90aa) {"metadata":{"emulator":{"name":"functions"},"message":"[worker-pool] submitRequest(triggerId=europe-west1-ssrsignf90aa)"}}
+[info] i  functions: Beginning execution of "europe-west1-ssrsignf90aa" {"metadata":{"emulator":{"name":"functions"},"function":{"name":"europe-west1-ssrsignf90aa"},"extension":{},"message":"Beginning execution of \"europe-west1-ssrsignf90aa\""}}
+[debug] [2024-03-14T19:23:03.669Z] [worker-europe-west1-ssrsignf90aa-bbf9b205-fb06-45d1-85f5-65d51c03f549]: BUSY {"metadata":{"emulator":{"name":"functions"},"function":{"name":"europe-west1-ssrsignf90aa"},"extension":{},"message":"[worker-europe-west1-ssrsignf90aa-bbf9b205-fb06-45d1-85f5-65d51c03f549]: BUSY"}}
+[debug] [2024-03-14T19:23:03.776Z] [runtime-status] [29378] Checked functions.config() {"config":{}} {"metadata":{"emulator":{"name":"functions"},"function":{"name":"europe-west1-ssrsignf90aa"},"extension":{},"message":"[runtime-status] [29378] Checked functions.config() {\"config\":{}}"}}
+[debug] [2024-03-14T19:23:03.776Z] [runtime-status] [29378] firebase-functions has been stubbed. {"functionsResolution":{"declared":true,"installed":true,"version":"4.8.0","resolution":"/Users/kelatev/Documents/GitHub/SA-SignInfo/.firebase/sign-f90aa/functions/node_modules/firebase-functions/lib/v1/index.js"}} {"metadata":{"emulator":{"name":"functions"},"function":{"name":"europe-west1-ssrsignf90aa"},"extension":{},"message":"[runtime-status] [29378] firebase-functions has been stubbed. {\"functionsResolution\":{\"declared\":true,\"installed\":true,\"version\":\"4.8.0\",\"resolution\":\"/Users/kelatev/Documents/GitHub/SA-SignInfo/.firebase/sign-f90aa/functions/node_modules/firebase-functions/lib/v1/index.js\"}}"}}
+[debug] [2024-03-14T19:23:03.777Z] [runtime-status] [29378] Resolved module firebase-functions {"declared":true,"installed":true,"version":"4.8.0","resolution":"/Users/kelatev/Documents/GitHub/SA-SignInfo/.firebase/sign-f90aa/functions/node_modules/firebase-functions/lib/v1/index.js"} {"metadata":{"emulator":{"name":"functions"},"function":{"name":"europe-west1-ssrsignf90aa"},"extension":{},"message":"[runtime-status] [29378] Resolved module firebase-functions {\"declared\":true,\"installed\":true,\"version\":\"4.8.0\",\"resolution\":\"/Users/kelatev/Documents/GitHub/SA-SignInfo/.firebase/sign-f90aa/functions/node_modules/firebase-functions/lib/v1/index.js\"}"}}
+[debug] [2024-03-14T19:23:03.778Z] [runtime-status] [29378] Resolved module firebase-admin {"declared":true,"installed":true,"version":"11.11.1","resolution":"/Users/kelatev/Documents/GitHub/SA-SignInfo/.firebase/sign-f90aa/functions/node_modules/firebase-admin/lib/index.js"} {"metadata":{"emulator":{"name":"functions"},"function":{"name":"europe-west1-ssrsignf90aa"},"extension":{},"message":"[runtime-status] [29378] Resolved module firebase-admin {\"declared\":true,\"installed\":true,\"version\":\"11.11.1\",\"resolution\":\"/Users/kelatev/Documents/GitHub/SA-SignInfo/.firebase/sign-f90aa/functions/node_modules/firebase-admin/lib/index.js\"}"}}
+[debug] [2024-03-14T19:23:03.780Z] [runtime-status] [29378] Resolved module firebase-functions {"declared":true,"installed":true,"version":"4.8.0","resolution":"/Users/kelatev/Documents/GitHub/SA-SignInfo/.firebase/sign-f90aa/functions/node_modules/firebase-functions/lib/v1/index.js"} {"metadata":{"emulator":{"name":"functions"},"function":{"name":"europe-west1-ssrsignf90aa"},"extension":{},"message":"[runtime-status] [29378] Resolved module firebase-functions {\"declared\":true,\"installed\":true,\"version\":\"4.8.0\",\"resolution\":\"/Users/kelatev/Documents/GitHub/SA-SignInfo/.firebase/sign-f90aa/functions/node_modules/firebase-functions/lib/v1/index.js\"}"}}
+[debug] [2024-03-14T19:23:03.780Z] [runtime-status] [29378] firebase-admin has been stubbed. {"adminResolution":{"declared":true,"installed":true,"version":"11.11.1","resolution":"/Users/kelatev/Documents/GitHub/SA-SignInfo/.firebase/sign-f90aa/functions/node_modules/firebase-admin/lib/index.js"}} {"metadata":{"emulator":{"name":"functions"},"function":{"name":"europe-west1-ssrsignf90aa"},"extension":{},"message":"[runtime-status] [29378] firebase-admin has been stubbed. {\"adminResolution\":{\"declared\":true,\"installed\":true,\"version\":\"11.11.1\",\"resolution\":\"/Users/kelatev/Documents/GitHub/SA-SignInfo/.firebase/sign-f90aa/functions/node_modules/firebase-admin/lib/index.js\"}}"}}
+[debug] [2024-03-14T19:23:03.784Z] [worker-europe-west1-ssrsignf90aa-ed8c568d-758f-470d-99df-688b9a14ba57]: IDLE {"metadata":{"emulator":{"name":"functions"},"function":{"name":"europe-west1-ssrsignf90aa"},"extension":{},"message":"[worker-europe-west1-ssrsignf90aa-ed8c568d-758f-470d-99df-688b9a14ba57]: IDLE"}}
+[debug] [2024-03-14T19:23:03.785Z] [worker-pool] submitRequest(triggerId=europe-west1-ssrsignf90aa) {"metadata":{"emulator":{"name":"functions"},"message":"[worker-pool] submitRequest(triggerId=europe-west1-ssrsignf90aa)"}}
+[info] i  functions: Beginning execution of "europe-west1-ssrsignf90aa" {"metadata":{"emulator":{"name":"functions"},"function":{"name":"europe-west1-ssrsignf90aa"},"extension":{},"message":"Beginning execution of \"europe-west1-ssrsignf90aa\""}}
+[debug] [2024-03-14T19:23:03.785Z] [worker-europe-west1-ssrsignf90aa-ed8c568d-758f-470d-99df-688b9a14ba57]: BUSY {"metadata":{"emulator":{"name":"functions"},"function":{"name":"europe-west1-ssrsignf90aa"},"extension":{},"message":"[worker-europe-west1-ssrsignf90aa-ed8c568d-758f-470d-99df-688b9a14ba57]: BUSY"}}
+[debug] [2024-03-14T19:23:03.805Z] [runtime-status] [29378] Functions runtime initialized. {"cwd":"/Users/kelatev/Documents/GitHub/SA-SignInfo/.firebase/sign-f90aa/functions","node_version":"20.5.1"} {"metadata":{"emulator":{"name":"functions"},"function":{"name":"europe-west1-ssrsignf90aa"},"extension":{},"message":"[runtime-status] [29378] Functions runtime initialized. {\"cwd\":\"/Users/kelatev/Documents/GitHub/SA-SignInfo/.firebase/sign-f90aa/functions\",\"node_version\":\"20.5.1\"}"}}
+[debug] [2024-03-14T19:23:03.806Z] [runtime-status] [29378] Listening to port: /var/folders/qv/j1rp418n1ql3ggr7sqp2cfdc0000gn/T/fire_emu_3512e9dbbcb85bf6.sock {"metadata":{"emulator":{"name":"functions"},"function":{"name":"europe-west1-ssrsignf90aa"},"extension":{},"message":"[runtime-status] [29378] Listening to port: /var/folders/qv/j1rp418n1ql3ggr7sqp2cfdc0000gn/T/fire_emu_3512e9dbbcb85bf6.sock"}}
+[debug] [2024-03-14T19:23:03.902Z] [worker-europe-west1-ssrsignf90aa-c960df9e-7e1c-43dc-b9af-8f4521c613bf]: IDLE {"metadata":{"emulator":{"name":"functions"},"function":{"name":"europe-west1-ssrsignf90aa"},"extension":{},"message":"[worker-europe-west1-ssrsignf90aa-c960df9e-7e1c-43dc-b9af-8f4521c613bf]: IDLE"}}
+[debug] [2024-03-14T19:23:03.902Z] [worker-pool] submitRequest(triggerId=europe-west1-ssrsignf90aa) {"metadata":{"emulator":{"name":"functions"},"message":"[worker-pool] submitRequest(triggerId=europe-west1-ssrsignf90aa)"}}
+[info] i  functions: Beginning execution of "europe-west1-ssrsignf90aa" {"metadata":{"emulator":{"name":"functions"},"function":{"name":"europe-west1-ssrsignf90aa"},"extension":{},"message":"Beginning execution of \"europe-west1-ssrsignf90aa\""}}
+[debug] [2024-03-14T19:23:03.903Z] [worker-europe-west1-ssrsignf90aa-c960df9e-7e1c-43dc-b9af-8f4521c613bf]: BUSY {"metadata":{"emulator":{"name":"functions"},"function":{"name":"europe-west1-ssrsignf90aa"},"extension":{},"message":"[worker-europe-west1-ssrsignf90aa-c960df9e-7e1c-43dc-b9af-8f4521c613bf]: BUSY"}}
+[debug] [2024-03-14T19:23:03.946Z] Finishing up request with event=pause {"metadata":{"emulator":{"name":"functions"},"function":{"name":"europe-west1-ssrsignf90aa"},"extension":{},"message":"Finishing up request with event=pause"}}
+[info] i  functions: Finished "europe-west1-ssrsignf90aa" in 161.928073ms {"metadata":{"emulator":{"name":"functions"},"function":{"name":"europe-west1-ssrsignf90aa"},"extension":{},"message":"Finished \"europe-west1-ssrsignf90aa\" in 161.928073ms"}}
+[debug] [2024-03-14T19:23:03.947Z] [worker-europe-west1-ssrsignf90aa-ed8c568d-758f-470d-99df-688b9a14ba57]: IDLE {"metadata":{"emulator":{"name":"functions"},"function":{"name":"europe-west1-ssrsignf90aa"},"extension":{},"message":"[worker-europe-west1-ssrsignf90aa-ed8c568d-758f-470d-99df-688b9a14ba57]: IDLE"}}
+[debug] [2024-03-14T19:23:03.948Z] Finishing up request with event=finish {"metadata":{"emulator":{"name":"functions"},"function":{"name":"europe-west1-ssrsignf90aa"},"extension":{},"message":"Finishing up request with event=finish"}}
+[debug] [2024-03-14T19:23:03.948Z] Finishing up request with event=close {"metadata":{"emulator":{"name":"functions"},"function":{"name":"europe-west1-ssrsignf90aa"},"extension":{},"message":"Finishing up request with event=close"}}
+[debug] [2024-03-14T19:23:03.948Z] [work-queue] {"queuedWork":[],"queueLength":0,"runningWork":["/sign-f90aa/europe-west1/ssrsignf90aa/proxy-2024-03-14T19:23:01.630Z","/sign-f90aa/europe-west1/ssrsignf90aa/proxy-2024-03-14T19:23:02.875Z"],"workRunningCount":2}
+[debug] [2024-03-14T19:23:03.949Z] Finishing up request with event=pause {"metadata":{"emulator":{"name":"functions"},"function":{"name":"europe-west1-ssrsignf90aa"},"extension":{},"message":"Finishing up request with event=pause"}}
+[info] i  functions: Finished "europe-west1-ssrsignf90aa" in 280.136068ms {"metadata":{"emulator":{"name":"functions"},"function":{"name":"europe-west1-ssrsignf90aa"},"extension":{},"message":"Finished \"europe-west1-ssrsignf90aa\" in 280.136068ms"}}
+[debug] [2024-03-14T19:23:03.949Z] [worker-europe-west1-ssrsignf90aa-bbf9b205-fb06-45d1-85f5-65d51c03f549]: IDLE {"metadata":{"emulator":{"name":"functions"},"function":{"name":"europe-west1-ssrsignf90aa"},"extension":{},"message":"[worker-europe-west1-ssrsignf90aa-bbf9b205-fb06-45d1-85f5-65d51c03f549]: IDLE"}}
+[debug] [2024-03-14T19:23:03.949Z] Finishing up request with event=finish {"metadata":{"emulator":{"name":"functions"},"function":{"name":"europe-west1-ssrsignf90aa"},"extension":{},"message":"Finishing up request with event=finish"}}
+[debug] [2024-03-14T19:23:03.949Z] Finishing up request with event=close {"metadata":{"emulator":{"name":"functions"},"function":{"name":"europe-west1-ssrsignf90aa"},"extension":{},"message":"Finishing up request with event=close"}}
+[debug] [2024-03-14T19:23:03.949Z] [work-queue] {"queuedWork":[],"queueLength":0,"runningWork":["/sign-f90aa/europe-west1/ssrsignf90aa/proxy-2024-03-14T19:23:02.875Z"],"workRunningCount":1}
+[debug] [2024-03-14T19:23:03.950Z] <<< [apiv2][status] GET http://127.0.0.1:5001/sign-f90aa/europe-west1/ssrsignf90aa/proxy 400
+[debug] [2024-03-14T19:23:03.950Z] <<< [apiv2][body] GET http://127.0.0.1:5001/sign-f90aa/europe-west1/ssrsignf90aa/proxy [stream]
+[debug] [2024-03-14T19:23:03.952Z] <<< [apiv2][status] GET http://127.0.0.1:5001/sign-f90aa/europe-west1/ssrsignf90aa/proxy 400
+[debug] [2024-03-14T19:23:03.952Z] <<< [apiv2][body] GET http://127.0.0.1:5001/sign-f90aa/europe-west1/ssrsignf90aa/proxy [stream]
+[debug] [2024-03-14T19:23:03.983Z] Finishing up request with event=pause {"metadata":{"emulator":{"name":"functions"},"function":{"name":"europe-west1-ssrsignf90aa"},"extension":{},"message":"Finishing up request with event=pause"}}
+[info] i  functions: Finished "europe-west1-ssrsignf90aa" in 80.397935ms {"metadata":{"emulator":{"name":"functions"},"function":{"name":"europe-west1-ssrsignf90aa"},"extension":{},"message":"Finished \"europe-west1-ssrsignf90aa\" in 80.397935ms"}}
+[debug] [2024-03-14T19:23:03.983Z] [worker-europe-west1-ssrsignf90aa-c960df9e-7e1c-43dc-b9af-8f4521c613bf]: IDLE {"metadata":{"emulator":{"name":"functions"},"function":{"name":"europe-west1-ssrsignf90aa"},"extension":{},"message":"[worker-europe-west1-ssrsignf90aa-c960df9e-7e1c-43dc-b9af-8f4521c613bf]: IDLE"}}
+[debug] [2024-03-14T19:23:03.984Z] Finishing up request with event=finish {"metadata":{"emulator":{"name":"functions"},"function":{"name":"europe-west1-ssrsignf90aa"},"extension":{},"message":"Finishing up request with event=finish"}}
+[debug] [2024-03-14T19:23:03.984Z] Finishing up request with event=close {"metadata":{"emulator":{"name":"functions"},"function":{"name":"europe-west1-ssrsignf90aa"},"extension":{},"message":"Finishing up request with event=close"}}
+[debug] [2024-03-14T19:23:03.984Z] [work-queue] {"queuedWork":[],"queueLength":0,"runningWork":[],"workRunningCount":0}
+[debug] [2024-03-14T19:23:03.984Z] <<< [apiv2][status] GET http://127.0.0.1:5001/sign-f90aa/europe-west1/ssrsignf90aa/proxy 400
+[debug] [2024-03-14T19:23:03.985Z] <<< [apiv2][body] GET http://127.0.0.1:5001/sign-f90aa/europe-west1/ssrsignf90aa/proxy [stream]
+[info] i  hosting: 127.0.0.1 - - [14/Mar/2024:19:23:03 +0000] "GET /proxy HTTP/1.1" 400 64 "-" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36" {"metadata":{"emulator":{"name":"hosting"},"message":"127.0.0.1 - - [14/Mar/2024:19:23:03 +0000] \"GET /proxy HTTP/1.1\" 400 64 \"-\" \"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36\""}}
+[info] i  hosting: 127.0.0.1 - - [14/Mar/2024:19:23:07 +0000] "GET / HTTP/1.1" 200 687 "-" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36" {"metadata":{"emulator":{"name":"hosting"},"message":"127.0.0.1 - - [14/Mar/2024:19:23:07 +0000] \"GET / HTTP/1.1\" 200 687 \"-\" \"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36\""}}
+[info] i  hosting: 127.0.0.1 - - [14/Mar/2024:19:23:07 +0000] "GET /static/css/main.b94a65a2.css HTTP/1.1" 200 - "http://localhost:5003/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36" {"metadata":{"emulator":{"name":"hosting"},"message":"127.0.0.1 - - [14/Mar/2024:19:23:07 +0000] \"GET /static/css/main.b94a65a2.css HTTP/1.1\" 200 - \"http://localhost:5003/\" \"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36\""}}
+[info] i  hosting: 127.0.0.1 - - [14/Mar/2024:19:23:07 +0000] "GET /static/js/main.f3321d7a.js HTTP/1.1" 200 - "http://localhost:5003/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36" {"metadata":{"emulator":{"name":"hosting"},"message":"127.0.0.1 - - [14/Mar/2024:19:23:07 +0000] \"GET /static/js/main.f3321d7a.js HTTP/1.1\" 200 - \"http://localhost:5003/\" \"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36\""}}
+[info] i  hosting: 127.0.0.1 - - [14/Mar/2024:19:23:07 +0000] "GET /media/wave-bg-blue.svg HTTP/1.1" 200 - "http://localhost:5003/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36" {"metadata":{"emulator":{"name":"hosting"},"message":"127.0.0.1 - - [14/Mar/2024:19:23:07 +0000] \"GET /media/wave-bg-blue.svg HTTP/1.1\" 200 - \"http://localhost:5003/\" \"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36\""}}
+[info] i  hosting: 127.0.0.1 - - [14/Mar/2024:19:23:07 +0000] "GET /media/wave-bg-purple.svg HTTP/1.1" 200 - "http://localhost:5003/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36" {"metadata":{"emulator":{"name":"hosting"},"message":"127.0.0.1 - - [14/Mar/2024:19:23:07 +0000] \"GET /media/wave-bg-purple.svg HTTP/1.1\" 200 - \"http://localhost:5003/\" \"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36\""}}
+[info] i  hosting: 127.0.0.1 - - [14/Mar/2024:19:23:07 +0000] "GET /media/manifest.json HTTP/1.1" 200 480 "http://localhost:5003/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36" {"metadata":{"emulator":{"name":"hosting"},"message":"127.0.0.1 - - [14/Mar/2024:19:23:07 +0000] \"GET /media/manifest.json HTTP/1.1\" 200 480 \"http://localhost:5003/\" \"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36\""}}
+[info] i  hosting: 127.0.0.1 - - [14/Mar/2024:19:23:07 +0000] "GET /media/logo192.png HTTP/1.1" 200 9038 "http://localhost:5003/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36" {"metadata":{"emulator":{"name":"hosting"},"message":"127.0.0.1 - - [14/Mar/2024:19:23:07 +0000] \"GET /media/logo192.png HTTP/1.1\" 200 9038 \"http://localhost:5003/\" \"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36\""}}
+[info] i  hosting: 127.0.0.1 - - [14/Mar/2024:19:23:08 +0000] "GET /eusign/euscp.worker.js?maxDataSize=25 HTTP/1.1" 200 - "http://localhost:5003/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36" {"metadata":{"emulator":{"name":"hosting"},"message":"127.0.0.1 - - [14/Mar/2024:19:23:08 +0000] \"GET /eusign/euscp.worker.js?maxDataSize=25 HTTP/1.1\" 200 - \"http://localhost:5003/\" \"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36\""}}
+[info] i  hosting: 127.0.0.1 - - [14/Mar/2024:19:23:10 +0000] "GET /media/manifest.json HTTP/1.1" 200 480 "http://localhost:5003/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36" {"metadata":{"emulator":{"name":"hosting"},"message":"127.0.0.1 - - [14/Mar/2024:19:23:10 +0000] \"GET /media/manifest.json HTTP/1.1\" 200 480 \"http://localhost:5003/\" \"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36\""}}
+[info] i  hosting: 127.0.0.1 - - [14/Mar/2024:19:23:10 +0000] "GET /static/css/main.b94a65a2.css HTTP/1.1" 200 - "http://localhost:5003/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36" {"metadata":{"emulator":{"name":"hosting"},"message":"127.0.0.1 - - [14/Mar/2024:19:23:10 +0000] \"GET /static/css/main.b94a65a2.css HTTP/1.1\" 200 - \"http://localhost:5003/\" \"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36\""}}
+[info] i  hosting: 127.0.0.1 - - [14/Mar/2024:19:23:11 +0000] "GET /static/css/main.b94a65a2.css.map HTTP/1.1" 200 - "-" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36" {"metadata":{"emulator":{"name":"hosting"},"message":"127.0.0.1 - - [14/Mar/2024:19:23:11 +0000] \"GET /static/css/main.b94a65a2.css.map HTTP/1.1\" 200 - \"-\" \"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36\""}}
+[info] i  hosting: 127.0.0.1 - - [14/Mar/2024:19:23:11 +0000] "GET /static/js/main.f3321d7a.js.map HTTP/1.1" 200 - "-" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36" {"metadata":{"emulator":{"name":"hosting"},"message":"127.0.0.1 - - [14/Mar/2024:19:23:11 +0000] \"GET /static/js/main.f3321d7a.js.map HTTP/1.1\" 200 - \"-\" \"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36\""}}
+[info] i  hosting: 127.0.0.1 - - [14/Mar/2024:19:23:11 +0000] "GET /eusign/data/CAs.json?v=20240228 HTTP/1.1" 200 - "http://localhost:5003/eusign/euscp.worker.js?maxDataSize=25" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36" {"metadata":{"emulator":{"name":"hosting"},"message":"127.0.0.1 - - [14/Mar/2024:19:23:11 +0000] \"GET /eusign/data/CAs.json?v=20240228 HTTP/1.1\" 200 - \"http://localhost:5003/eusign/euscp.worker.js?maxDataSize=25\" \"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36\""}}
+[info] i  hosting: 127.0.0.1 - - [14/Mar/2024:19:23:11 +0000] "GET /eusign/data/CACertificates.p7b?v=20240228 HTTP/1.1" 200 891513 "http://localhost:5003/eusign/euscp.worker.js?maxDataSize=25" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36" {"metadata":{"emulator":{"name":"hosting"},"message":"127.0.0.1 - - [14/Mar/2024:19:23:11 +0000] \"GET /eusign/data/CACertificates.p7b?v=20240228 HTTP/1.1\" 200 891513 \"http://localhost:5003/eusign/euscp.worker.js?maxDataSize=25\" \"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36\""}}
+[info] [hosting] Rewriting /proxy?address=http://zc.bank.gov.ua:80/services/ocsp/ to http://127.0.0.1:5001/sign-f90aa/europe-west1/ssrsignf90aa for local Function europe-west1/ssrsignf90aa
+[debug] [2024-03-14T19:23:35.756Z] >>> [apiv2][query] POST http://127.0.0.1:5001/sign-f90aa/europe-west1/ssrsignf90aa/proxy address=http%3A%2F%2Fzc.bank.gov.ua%3A80%2Fservices%2Focsp%2F
+[debug] [2024-03-14T19:23:35.756Z] >>> [apiv2][body] POST http://127.0.0.1:5001/sign-f90aa/europe-west1/ssrsignf90aa/proxy [stream]
+[debug] [2024-03-14T19:23:35.760Z] [work-queue] {"queuedWork":["/sign-f90aa/europe-west1/ssrsignf90aa/proxy-2024-03-14T19:23:35.760Z"],"queueLength":1,"runningWork":[],"workRunningCount":0}
+[debug] [2024-03-14T19:23:35.760Z] [work-queue] {"queuedWork":[],"queueLength":0,"runningWork":["/sign-f90aa/europe-west1/ssrsignf90aa/proxy-2024-03-14T19:23:35.760Z"],"workRunningCount":1}
+[debug] [2024-03-14T19:23:35.760Z] Accepted request POST /sign-f90aa/europe-west1/ssrsignf90aa/proxy?address=http%3A%2F%2Fzc.bank.gov.ua%3A80%2Fservices%2Focsp%2F --> europe-west1-ssrsignf90aa
+[debug] [2024-03-14T19:23:35.763Z] [functions] Runtime ready! Sending request! {"metadata":{"emulator":{"name":"functions"},"message":"[functions] Runtime ready! Sending request!"}}
+[debug] [2024-03-14T19:23:35.764Z] [functions] Got req.url=/sign-f90aa/europe-west1/ssrsignf90aa/proxy?address=http%3A%2F%2Fzc.bank.gov.ua%3A80%2Fservices%2Focsp%2F, mapping to path=/proxy?address=http%3A%2F%2Fzc.bank.gov.ua%3A80%2Fservices%2Focsp%2F {"metadata":{"emulator":{"name":"functions"},"message":"[functions] Got req.url=/sign-f90aa/europe-west1/ssrsignf90aa/proxy?address=http%3A%2F%2Fzc.bank.gov.ua%3A80%2Fservices%2Focsp%2F, mapping to path=/proxy?address=http%3A%2F%2Fzc.bank.gov.ua%3A80%2Fservices%2Focsp%2F"}}
+[debug] [2024-03-14T19:23:35.764Z] [worker-pool] submitRequest(triggerId=europe-west1-ssrsignf90aa) {"metadata":{"emulator":{"name":"functions"},"message":"[worker-pool] submitRequest(triggerId=europe-west1-ssrsignf90aa)"}}
+[info] i  functions: Beginning execution of "europe-west1-ssrsignf90aa" {"metadata":{"emulator":{"name":"functions"},"function":{"name":"europe-west1-ssrsignf90aa"},"extension":{},"message":"Beginning execution of \"europe-west1-ssrsignf90aa\""}}
+[debug] [2024-03-14T19:23:35.765Z] [worker-europe-west1-ssrsignf90aa-bbf9b205-fb06-45d1-85f5-65d51c03f549]: BUSY {"metadata":{"emulator":{"name":"functions"},"function":{"name":"europe-west1-ssrsignf90aa"},"extension":{},"message":"[worker-europe-west1-ssrsignf90aa-bbf9b205-fb06-45d1-85f5-65d51c03f549]: BUSY"}}
+[debug] [2024-03-14T19:23:36.040Z] Finishing up request with event=pause {"metadata":{"emulator":{"name":"functions"},"function":{"name":"europe-west1-ssrsignf90aa"},"extension":{},"message":"Finishing up request with event=pause"}}
+[info] i  functions: Finished "europe-west1-ssrsignf90aa" in 275.534054ms {"metadata":{"emulator":{"name":"functions"},"function":{"name":"europe-west1-ssrsignf90aa"},"extension":{},"message":"Finished \"europe-west1-ssrsignf90aa\" in 275.534054ms"}}
+[debug] [2024-03-14T19:23:36.041Z] [worker-europe-west1-ssrsignf90aa-bbf9b205-fb06-45d1-85f5-65d51c03f549]: IDLE {"metadata":{"emulator":{"name":"functions"},"function":{"name":"europe-west1-ssrsignf90aa"},"extension":{},"message":"[worker-europe-west1-ssrsignf90aa-bbf9b205-fb06-45d1-85f5-65d51c03f549]: IDLE"}}
+[debug] [2024-03-14T19:23:36.041Z] Finishing up request with event=finish {"metadata":{"emulator":{"name":"functions"},"function":{"name":"europe-west1-ssrsignf90aa"},"extension":{},"message":"Finishing up request with event=finish"}}
+[debug] [2024-03-14T19:23:36.041Z] Finishing up request with event=close {"metadata":{"emulator":{"name":"functions"},"function":{"name":"europe-west1-ssrsignf90aa"},"extension":{},"message":"Finishing up request with event=close"}}
+[debug] [2024-03-14T19:23:36.041Z] [work-queue] {"queuedWork":[],"queueLength":0,"runningWork":[],"workRunningCount":0}
+[debug] [2024-03-14T19:23:36.042Z] <<< [apiv2][status] POST http://127.0.0.1:5001/sign-f90aa/europe-west1/ssrsignf90aa/proxy 200
+[debug] [2024-03-14T19:23:36.042Z] <<< [apiv2][body] POST http://127.0.0.1:5001/sign-f90aa/europe-west1/ssrsignf90aa/proxy [stream]
+[info] i  hosting: 127.0.0.1 - - [14/Mar/2024:19:23:36 +0000] "POST /proxy?address=http://zc.bank.gov.ua:80/services/ocsp/ HTTP/1.1" 200 4400 "http://localhost:5003/eusign/euscp.worker.js?maxDataSize=25" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36" {"metadata":{"emulator":{"name":"hosting"},"message":"127.0.0.1 - - [14/Mar/2024:19:23:36 +0000] \"POST /proxy?address=http://zc.bank.gov.ua:80/services/ocsp/ HTTP/1.1\" 200 4400 \"http://localhost:5003/eusign/euscp.worker.js?maxDataSize=25\" \"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36\""}}
+[info] i  hosting: 127.0.0.1 - - [14/Mar/2024:19:30:55 +0000] "GET /static/css/main.b94a65a2.css.map HTTP/1.1" 200 - "-" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36" {"metadata":{"emulator":{"name":"hosting"},"message":"127.0.0.1 - - [14/Mar/2024:19:30:55 +0000] \"GET /static/css/main.b94a65a2.css.map HTTP/1.1\" 200 - \"-\" \"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36\""}}
+[info] i  hosting: 127.0.0.1 - - [14/Mar/2024:19:30:55 +0000] "GET /static/js/main.f3321d7a.js.map HTTP/1.1" 200 - "-" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36" {"metadata":{"emulator":{"name":"hosting"},"message":"127.0.0.1 - - [14/Mar/2024:19:30:55 +0000] \"GET /static/js/main.f3321d7a.js.map HTTP/1.1\" 200 - \"-\" \"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36\""}}
+[info] i  hosting: 127.0.0.1 - - [14/Mar/2024:19:32:01 +0000] "GET /static/css/main.b94a65a2.css.map HTTP/1.1" 200 - "-" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36" {"metadata":{"emulator":{"name":"hosting"},"message":"127.0.0.1 - - [14/Mar/2024:19:32:01 +0000] \"GET /static/css/main.b94a65a2.css.map HTTP/1.1\" 200 - \"-\" \"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36\""}}
+[info] i  hosting: 127.0.0.1 - - [14/Mar/2024:19:32:01 +0000] "GET /static/js/main.f3321d7a.js.map HTTP/1.1" 200 - "-" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36" {"metadata":{"emulator":{"name":"hosting"},"message":"127.0.0.1 - - [14/Mar/2024:19:32:01 +0000] \"GET /static/js/main.f3321d7a.js.map HTTP/1.1\" 200 - \"-\" \"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36\""}}
