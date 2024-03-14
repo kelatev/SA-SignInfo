@@ -18,3 +18,5 @@ jobs:
           firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_SIGN_F90AA }}'
           channelId: live
           projectId: sign-f90aa
+        env:
+          FIREBASE_CLI_EXPERIMENTS: webframeworks
