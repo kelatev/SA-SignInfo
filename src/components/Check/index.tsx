@@ -9,6 +9,7 @@ import useVerifyFiles from './useVerifyFiles';
 function PanelCheck() {
     const { librarySW } = useEUSignContext();
     const [file, setFile] = useState<File | null>(null);
+    const [fileError] = useState<string>();
     const { loading, error, verifyResult, signedData } = useVerifyFiles({ library: librarySW, file: file });
 
     return (
@@ -19,14 +20,15 @@ function PanelCheck() {
                     <Timeline.FileSelect
                         onFileChange={setFile}
                         storagePrefix='check'
-                        error={error}
+                        error={fileError}
                         accept='.p7s,.pdf,.xml,.asics,.asice'
                     />
                 </Timeline.Item>
-                {loading &&
+                {(loading || error) &&
                     <Timeline.Spinner
                         title='Перевірка файлу'
                         icon={<FileDashed />}
+                        error={error}
                     />
                 }
                 {signedData &&

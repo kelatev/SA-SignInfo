@@ -1,29 +1,5 @@
 const express = require("express");
-const { initializeApp } = require("firebase-admin/app");
-const { getAppCheck } = require("firebase-admin/app-check");
-
 const expressApp = express();
-initializeApp();
-
-const appCheckVerification = async (req, res, next) => {
-    const appCheckToken = req.header("X-Firebase-AppCheck");
-
-    if (!appCheckToken) {
-        res.status(401);
-        return next("Unauthorized");
-    }
-
-    try {
-        await getAppCheck().verifyToken(appCheckToken);
-
-        // If verifyToken() succeeds, continue with the next middleware
-        // function in the stack.
-        return next();
-    } catch (err) {
-        res.status(401);
-        return next("Unauthorized");
-    }
-}
 
 var url = require("url");
 var http = require("http");
@@ -240,7 +216,7 @@ function handleRequest(method, path, data, resolve, reject) {
     }
 }
 
-expressApp.post("/proxy", [appCheckVerification], (req, res) => {
+expressApp.post("/proxy", (req, res) => {
     var _onData = function (data) {
         return new Promise(function (resolve, reject) {
             handleRequest(req.method, req.url, data, resolve, reject);

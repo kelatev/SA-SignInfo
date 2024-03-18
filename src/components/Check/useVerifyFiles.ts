@@ -1,7 +1,13 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect } from "react";
 import { EndUserInstance } from "../../EUSign/useEndUserInstance";
+import { SignContainerInfo } from "../../EUSign/EndUserLibrary";
 import { FileToUint8 } from "../../utils/encode";
-import { EndUserCertificateInfoEx, EndUserTimeInfo } from "../../EUSign/eusign.types";
+import {
+    EndUserCertificateInfoEx,
+    EndUserTimeInfo,
+    EndUserSignInfo,
+    EndUserCertificate,
+} from "../../EUSign/eusign.types";
 import { EndUserSignContainerType } from "../../EUSign/EndUserConstants";
 import {
     IsDigitalStamp,
@@ -41,7 +47,7 @@ export default function useVerifyFiles(props: Props) {
     const [file, setFile] = useState<Uint8Array>();
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string>();
-    const [verifyResult, setVerifyResult] = useState<EUVerifyResult>();
+    const [verifyResult, setVerifyResult] = useState<EUVerifyResult[]>();
     const [signedData, setSignedData] = useState<Uint8Array>();
 
     useEffect(() => {
@@ -55,61 +61,71 @@ export default function useVerifyFiles(props: Props) {
         }
     }, [props.file]);
 
-    const VerifyFiles = useCallback(
-        (file: Uint8Array) => {
-            (async function () {
-                try {
-                    if (props.library.library && file) {
-                        const signContainer = await props.library.library.GetSignContainerInfo(
-                            file,
-                        );
-                        const signInfo = await props.library.library.VerifyDataInternal(file, 0);
-                        const signerCert = await props.library.library.GetSigner(file, 0);
+    const CreateSignInfoResult = (
+        signContainer: SignContainerInfo,
+        signInfo: EndUserSignInfo,
+        signerCert: EndUserCertificate,
+    ): EUVerifyResult => {
+        return {
+            signFile: new Blob([signerCert.data]),
+            signType: signContainer.type,
+            signsInfos: [
+                {
+                    signerInfo: signerCert.infoEx,
+                    signTimeInfo: signInfo.timeInfo,
+                    isDigitalStamp: IsDigitalStamp(signerCert),
+                    signAlgo: GetSignAlgo(signerCert.infoEx.publicKeyType),
+                    signFormat: GetSignFormat(signContainer.type, signInfo.signLevel),
+                    signContainerType: GetSignContainerType(
+                        signContainer.type,
+                        signContainer.subType,
+                    ),
+                },
+            ],
+        };
+    };
 
-                        setLoading(false);
-                        setVerifyResult({
-                            signFile: new Blob([signerCert.data]),
-                            signType: signContainer.type,
-                            signsInfos: [
-                                {
-                                    signerInfo: signerCert.infoEx,
-                                    signTimeInfo: signInfo.timeInfo,
-                                    isDigitalStamp: IsDigitalStamp(signerCert),
-                                    signAlgo: GetSignAlgo(signerCert.infoEx.publicKeyType),
-                                    signFormat: GetSignFormat(
-                                        signContainer.type,
-                                        signInfo.signLevel,
-                                    ),
-                                    signContainerType: GetSignContainerType(
-                                        signContainer.type,
-                                        signContainer.subType,
-                                    ),
-                                },
-                            ],
-                        });
-                        signInfo.data && setSignedData(signInfo.data);
+    const VerifyFiles = (file: Uint8Array) => {
+        (async function () {
+            try {
+                if (props.library.library && file) {
+                    const signContainer = await props.library.library.GetSignContainerInfo(file);
+                    const signInfo = await props.library.library.VerifyDataInternal(file, 0);
+                    const signerCert = await props.library.library.GetSigner(file, 0);
+
+                    const results: EUVerifyResult[] = [];
+                    if (!Array.isArray(signInfo) && !Array.isArray(signerCert)) {
+                        results.push(CreateSignInfoResult(signContainer, signInfo, signerCert));
                     }
-                } catch (e: any) {
-                    console.log(e);
-                    setError(`${e.message} (${e.code})`);
+                    setVerifyResult(results);
                     setLoading(false);
+
+                    let data: Uint8Array | undefined;
+                    if (!Array.isArray(signInfo)) {
+                        data = signInfo.data;
+                    }
+                    data && setSignedData(data);
                 }
-            })();
-        },
-        [props.library],
-    );
+            } catch (e: any) {
+                console.log(e);
+                setError(`${e.message} (${e.code})`);
+                setLoading(false);
+            }
+        })();
+    };
 
     useEffect(() => {
         setError(undefined);
         setVerifyResult(undefined);
         setSignedData(undefined);
-        if (props.library.info?.loaded && file) {
+        if (props.library.info.loaded && file) {
             setLoading(true);
             VerifyFiles(file);
         } else {
             setLoading(false);
         }
-    }, [props.library.info?.loaded, file, VerifyFiles]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [props.library.info.loaded, file]);
 
     return { loading, error, verifyResult, signedData };
 }

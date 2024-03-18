@@ -8,6 +8,7 @@ import {
     EndUserParams,
     EndUserCertificate,
     EndUserSignInfo,
+    EndUserContext
 } from "./eusign.types";
 import { EndUserSignAlgo } from "./EndUserConstants";
 
@@ -96,9 +97,9 @@ export default interface EndUserLibrary {
     HashData: (hashAlgo: number, data: Uint8Array, asBase64String?: boolean) => Promise<Uint8Array>;
     GetSigner: (
         sign: Uint8Array,
-        signIndex: number,
+        signIndex?: number,
         resolveOIDs?: boolean,
-    ) => Promise<EndUserCertificate>;
+    ) => Promise<EndUserCertificate | EndUserCertificate[]>;
     SignData: (data: Uint8Array | string, asBase64String?: boolean) => Promise<Uint8Array>;
     SignDataInternal: (
         appendCert: boolean,
@@ -134,7 +135,7 @@ export default interface EndUserLibrary {
     ) => Promise<Uint8Array>;
     VerifyHash: (hash: Uint8Array, sign: Uint8Array, signIndex: number) => Promise<EndUserSignInfo>;
     VerifyData: (data: Uint8Array, sign: Uint8Array, signIndex: number) => Promise<EndUserSignInfo>;
-    VerifyDataInternal: (sign: Uint8Array, signIndex: number) => Promise<EndUserSignInfo>;
+    VerifyDataInternal: (sign: Uint8Array, signIndex?: number) => Promise<EndUserSignInfo | EndUserSignInfo[]>;
     //EnvelopData
     //DevelopData
     //ProtectDataByPassword
@@ -142,9 +143,9 @@ export default interface EndUserLibrary {
     //CreateAuthData
     //GetTSPByAccessInfo
     //CheckTSP
-    //CtxCreate
-    //CtxFree
-    //CtxSetParameter
+    CtxCreate: () => Promise<EndUserContext>;
+    CtxFree: (context: EndUserContext) => Promise<void>;
+    CtxSetParameter: (context: EndUserContext, name: string, value: boolean) => Promise<void>;
     //CtxReadPrivateKey
     //CtxReadPrivateKeyBinary
     //CtxFreePrivateKey

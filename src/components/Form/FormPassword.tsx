@@ -1,7 +1,6 @@
 import React, { KeyboardEvent, useState } from "react";
 import InputGroup from 'react-bootstrap/InputGroup';
 import FormControl from 'react-bootstrap/FormControl';
-import Button from 'react-bootstrap/Button';
 
 interface PasswordProps {
     title: string
@@ -30,16 +29,17 @@ function FormPassword(props: PasswordProps) {
 
     return (
         <>
-            <InputGroup className="mb-3">
+            <div className="mb-3 position-relative">
                 <FormControl
                     type="password"
                     placeholder='пароль'
+                    style={{ paddingRight: '88px' }}
                     value={password}
                     onChange={handleChange}
                     onKeyDown={handleKeyDown}
                 />
-                <Button variant="primary" onClick={handleSubmit} disabled={props.loading}>{props.title}</Button>
-            </InputGroup>
+                <button type="button" className="btn btn-sm btn-light-primary position-absolute top-0 end-0 bottom-0 m-1" onClick={handleSubmit} disabled={props.loading}>{props.title}</button>
+            </div>
         </>
     );
 }

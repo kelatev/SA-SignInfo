@@ -8,7 +8,7 @@ import { Cursor, User, Copy, Certificate } from "@phosphor-icons/react";
 import { EUVerifyResult } from './useVerifyFiles';
 
 interface Props {
-    data: EUVerifyResult;
+    data: EUVerifyResult[];
 }
 
 const RowDescription: React.FC<{ title: string; description: string }> = ({
@@ -40,8 +40,8 @@ function InfoSigner(props: Props) {
 
     return (
         <>
-            {props.data.signsInfos.map((item, index) =>
-                <div key={index}>
+            {props.data.map((item0, index0) => item0.signsInfos.map((item, index) =>
+                <div key={index0 + '-' + index}>
                     <TimelineItem
                         title={"Підписувач - " + item.signerInfo.subjCN}
                         icon={<User />}
@@ -127,7 +127,7 @@ function InfoSigner(props: Props) {
                         </Modal>
                     </TimelineItem>
                 </div>
-            )}
+            ))}
         </>
     );
 }

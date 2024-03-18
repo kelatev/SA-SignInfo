@@ -8,6 +8,7 @@ import {
     EndUserParams,
     EndUserCertificate,
     EndUserSignInfo,
+    EndUserContext,
 } from "./eusign.types";
 import EUSignCPWorker from "./EUSignCPWorker";
 import EndUserLibrary, {
@@ -162,8 +163,8 @@ export default class EndUserWorker implements EndUserLibrary {
     HashData(hashAlgo: number, data: Uint8Array, asBase64String?: boolean) {
         return this.command<Uint8Array>("HashData", hashAlgo, data, Number(asBase64String));
     }
-    GetSigner(sign: Uint8Array, signIndex: number, resolveOIDs?: boolean) {
-        return this.command<EndUserCertificate>("GetSigner", sign, signIndex, Number(resolveOIDs));
+    GetSigner(sign: Uint8Array, signIndex?: number, resolveOIDs?: boolean) {
+        return this.command<EndUserCertificate | EndUserCertificate[]>("GetSigner", sign, signIndex, resolveOIDs);
     }
     SignData(data: Uint8Array | string, asBase64String?: boolean) {
         return this.command<Uint8Array>("SignData", data, Number(asBase64String));
@@ -244,8 +245,8 @@ export default class EndUserWorker implements EndUserLibrary {
     VerifyData(data: Uint8Array, sign: Uint8Array, signIndex: number) {
         return this.command<EndUserSignInfo>("VerifyData", data, sign, signIndex);
     }
-    VerifyDataInternal(sign: Uint8Array, signIndex: number) {
-        return this.command<EndUserSignInfo>("VerifyDataInternal", sign, signIndex);
+    VerifyDataInternal(sign: Uint8Array, signIndex?: number) {
+        return this.command<EndUserSignInfo | EndUserSignInfo[]>("VerifyDataInternal", sign, signIndex);
     }
     //EnvelopData
     //DevelopData
@@ -254,9 +255,15 @@ export default class EndUserWorker implements EndUserLibrary {
     //CreateAuthData
     //GetTSPByAccessInfo
     //CheckTSP
-    //CtxCreate
-    //CtxFree
-    //CtxSetParameter
+    CtxCreate() {
+        return this.command<EndUserContext>("CtxCreate");
+    }
+    CtxFree(context: EndUserContext) {
+        return this.command<void>("CtxFree", context);
+    }
+    CtxSetParameter(context: EndUserContext, name: string, value: boolean) {
+        return this.command<void>("CtxSetParameter", context, name, value);
+    }
     //CtxReadPrivateKey
     //CtxReadPrivateKeyBinary
     //CtxFreePrivateKey

@@ -136,5 +136,8 @@
     }
   ],
   "allowMakeNewCertOnNewKeyMedia": false,
-  "allowMakeNewCertOnFileKeyMedia": true
+  "allowMakeNewCertOnFileKeyMedia": true,
+  "verifySettings": {
+    "ocspResponseExpireTime": 100
+  }
 }

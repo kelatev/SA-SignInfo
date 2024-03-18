@@ -2,10 +2,12 @@ import React, { useRef, useState } from 'react';
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import FormControl from "react-bootstrap/FormControl";
+import { dataURLtoFile } from '../../utils/encode'
 
 interface Base64Props {
     title: string
     accept?: string
+    fileName?: string
     onChange: (file: File) => void
 }
 
@@ -23,14 +25,7 @@ function FormUploadBase64(props: Base64Props) {
         }
 
         const base64 = textInput.current.value;
-        fetch(`data:application/octet-stream;base64,${base64}`)
-            .then(res => res.blob())
-            .then(res => {
-                props.onChange(new File(
-                    [res],
-                    'application.bin'
-                ));
-            })
+        props.onChange(dataURLtoFile(base64, props.fileName ?? 'base64.bin'));
     }
 
     function handleClipboard() {
@@ -46,7 +41,7 @@ function FormUploadBase64(props: Base64Props) {
     return (
         <>
             <button onClick={handleShow}
-                className="btn btn-secondary border-hover border-gray-400 btn-active-light-primary hover-elevate-up">{props.title}</button>
+                className="btn btn-secondary border-hover border-gray-400 btn-active-light-primary">{props.title}</button>
             <Modal show={show} onHide={handleClose} size="xl">
                 <Modal.Header closeButton>
                     <Modal.Title>Base64</Modal.Title>

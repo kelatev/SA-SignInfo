@@ -13,9 +13,10 @@ interface TimelineItemFileInterface {
     error?: string
     icon?: React.ReactNode
     withToken?: boolean
+    base64fileName?: string
 }
 
-const TimelineFileSelect: React.FC<TimelineItemFileInterface> = ({ onFileChange, storagePrefix, accept, error, icon, withToken }) => {
+const TimelineFileSelect: React.FC<TimelineItemFileInterface> = ({ onFileChange, storagePrefix, accept, error, icon, withToken, base64fileName }) => {
 
     const [file, setFile] = useState<File>();
     const storageKey = `${storagePrefix}-file`;
@@ -60,14 +61,14 @@ const TimelineFileSelect: React.FC<TimelineItemFileInterface> = ({ onFileChange,
                 <>
                     <FormUploadFile title='Обрати файл' onChange={handleFileChange} accept={accept} />
                     &nbsp;
-                    <FormUploadBase64 title='Base64' onChange={handleFileChange} />
+                    <FormUploadBase64 title='Base64' onChange={handleFileChange} fileName={base64fileName} />
                     {withToken && <>
                         &nbsp;
                         <button onClick={() => handleFileChange(new File([], 'Токен'))}
-                            className="btn btn-secondary border-hover border-gray-400 btn-active-light-primary hover-elevate-up">Токен</button>
+                            className="btn btn-secondary border-hover border-gray-400 btn-active-light-primary">Токен</button>
                         &nbsp;
                         <button onClick={() => handleFileChange(new File([], 'Хмарний'))}
-                            className="btn btn-secondary border-hover border-gray-400 btn-active-light-primary hover-elevate-up">Хмарний</button>
+                            className="btn btn-secondary border-hover border-gray-400 btn-active-light-primary">Хмарний</button>
                     </>}
                 </>
             )}
