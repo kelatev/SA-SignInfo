@@ -2,6 +2,7 @@ import { useState, useMemo } from "react";
 import useEndUserInstance, { EndUserLibraryType } from "./useEndUserInstance";
 import EndUserLibrary from "./EndUserLibrary";
 import EndUserWorker from "./EndUserWorker";
+import EndUserAgent from "./EndUserAgent";
 
 export enum SignContainerType {
     XAdES = 1,
@@ -28,8 +29,9 @@ export default function useEndUserController() {
     const [keyMediaType, setKeyMediaType] = useState<KeyMediaType>(KeyMediaType.File);
 
     const librarySW = useMemo<EndUserLibrary>(() => new EndUserWorker(), []);
+    const libraryJS = useMemo<EndUserLibrary>(() => new EndUserAgent(), []);
     const instanceSW = useEndUserInstance({ type: EndUserLibraryType.SW, library: librarySW });
-    const instanceJS = useEndUserInstance({ type: EndUserLibraryType.SW, library: librarySW });
+    const instanceJS = useEndUserInstance({ type: EndUserLibraryType.JS, library: libraryJS });
     const currentLibrary = useMemo(() => {
         return keyMediaType === KeyMediaType.Hardware ? instanceJS : instanceSW;
     }, [keyMediaType, instanceJS, instanceSW]);

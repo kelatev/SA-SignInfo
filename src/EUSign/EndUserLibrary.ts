@@ -8,7 +8,8 @@ import {
     EndUserParams,
     EndUserCertificate,
     EndUserSignInfo,
-    EndUserContext
+    EndUserContext,
+    EndUserSettingsCA,
 } from "./eusign.types";
 import { EndUserSignAlgo } from "./EndUserConstants";
 
@@ -22,6 +23,18 @@ export interface LibraryInfo {
     version: string;
     supported: boolean;
     loaded: boolean;
+    isSignAgentSupported?: boolean;
+    isWebExtensionSupported?: boolean;
+    isNPAPISupported?: boolean;
+    isActiveXSupported?: boolean;
+    isWebExtensionInstalled?: boolean;
+    isNativeLibraryNeedUpdate?: boolean;
+    nativeLibraryInstallURLs?: string | null;
+    nativeLibraryInstallURL?: string | null;
+    nativeLibraryUpdateURLs?: string | null;
+    nativeLibraryUpdateURL?: string | null;
+    webExtensionInstallURL?: string | null;
+    helpURL?: string | null;
 }
 
 export interface ClientRegistrationTokenKSP {
@@ -51,7 +64,7 @@ export default interface EndUserLibrary {
     SetRuntimeParameter: (name: string, value: number) => Promise<void>;
     GetStorageParameter: (name: string, protectedItem: boolean) => Promise<number>;
     SetStorageParameter: (name: string, value: number, protectedItem: boolean) => Promise<void>;
-    GetCAs: () => Promise<any[]>;
+    GetCAs: () => Promise<string | EndUserSettingsCA[]>;
     GetProxySettings: () => Promise<EndUserProxySettings>;
     SetProxySettings: (settings: EndUserProxySettings) => Promise<void>;
     GetKeyMedias: () => Promise<any>;
@@ -135,7 +148,10 @@ export default interface EndUserLibrary {
     ) => Promise<Uint8Array>;
     VerifyHash: (hash: Uint8Array, sign: Uint8Array, signIndex: number) => Promise<EndUserSignInfo>;
     VerifyData: (data: Uint8Array, sign: Uint8Array, signIndex: number) => Promise<EndUserSignInfo>;
-    VerifyDataInternal: (sign: Uint8Array, signIndex?: number) => Promise<EndUserSignInfo | EndUserSignInfo[]>;
+    VerifyDataInternal: (
+        sign: Uint8Array,
+        signIndex?: number,
+    ) => Promise<EndUserSignInfo | EndUserSignInfo[]>;
     //EnvelopData
     //DevelopData
     //ProtectDataByPassword

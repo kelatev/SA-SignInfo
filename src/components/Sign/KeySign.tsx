@@ -1,14 +1,14 @@
 import { useEffect, useState } from "react";
 import { Cursor, FileDashed } from "@phosphor-icons/react";
 import { FileToUint8 } from "../../utils/encode";
-import { useEUSignContext } from "../../EUSign/EUSignContext";
+import { useEndUserContext } from "../../EUSign/EndUserContext";
 import { useKeyContext } from "./KeyContext";
 import Timeline from "../Timeline/Timeline";
 import { CheckPrivateKey, SignAlgoToPublicKeyType } from '../../EUSign/EndUserUtil'
 import { EndUserKeyUsage, EndUserSignAlgo, EndUserSignType, EndUserCAdESType, EU_SIGN_TYPE_PARAMETER } from '../../EUSign/EndUserConstants'
 
 export default function KeySign() {
-    const { currentLibrary } = useEUSignContext();
+    const { currentLibrary } = useEndUserContext();
     const { privateKey } = useKeyContext();
 
     const [fileToSign, setFileToSign] = useState<File | null>();

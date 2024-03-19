@@ -1,6 +1,5 @@
-
-export const  EU_RESOLVE_OIDS_PARAMETER = 'ResolveOIDs';
-export const  EU_SIGN_TYPE_PARAMETER = 'SignType';
+export const EU_RESOLVE_OIDS_PARAMETER = "ResolveOIDs";
+export const EU_SIGN_TYPE_PARAMETER = "SignType";
 
 export enum EndUserCertKeyType {
     Unknown = 0,

@@ -79,68 +79,6 @@ export default class EUSignCPPromise {
     m_pkContext: any = null;
 
 
-    MapError(error: any) {
-        const endUserError = new EndUserError();
-
-        if (undefined !== error.GetErrorCode && undefined !== error.GetMessage) {
-            endUserError.errorCode = error.GetErrorCode();
-            endUserError.message = error.GetMessage()
-        } else if (undefined !== error.code && undefined !== error.message) {
-            endUserError.errorCode = error.code;
-            endUserError.message = error.message;
-        } else {
-            endUserError.errorCode = EndUserError.ERROR_UNKNOWN;
-            endUserError.message = error.toString();
-        }
-
-        return endUserError
-    }
-
-    /*ProcessArray(e, a) {
-        var r = this;
-        return new Promise((resolve, reject) => {
-                const array = any[];
-                let n = 0;
-                const b = function () {
-                    n >= e.length ? resolve(array) : (a(e[n]).then((function (c) {
-                            array.push(c),
-                                b()
-                        }
-                    )).catch((function (c) {
-                            return reject(r.MapError(c))
-                        }
-                    )),
-                        n++)
-                };
-                b()
-            }
-        )
-    }*/
-
-    /*OnEvent(c) {
-        try {
-            var e = this.m_eventListeners[c.type] || this.m_eventListeners[l.EndUserEventType.All];
-            e && e(c)
-        } catch (c) {
-        }
-    }*/
-
-    CheckInitialize() {
-        return new Promise<void>((resolve, reject) => {
-            if (this.m_initialized) {
-                resolve()
-            } else {
-                this.m_library.Load()
-                    .then(() => {
-                        throw this.m_library.m_library.MakeError(EndUserError.ERROR_NOT_INITIALIZED, "")
-                    })
-                    .catch((c) => {
-                        return reject(this.MapError(c))
-                    })
-            }
-        })
-    }
-
     BeginKMOperation() {
         return new Promise<void>((resolve) => {
             const run = () => {
@@ -173,46 +111,6 @@ export default class EUSignCPPromise {
         return null;
     }
 
-    IsCMPCompatible(caSettings: any, e: any): boolean {
-        return !!caSettings.cmpAddress && (void 0 === caSettings.cmpCompatibility || (caSettings.cmpCompatibility & e) == e)
-    }
-
-    async SetSettings(issuerCN: string | null): Promise<void> {
-        const caSettings = this.GetCASettings(issuerCN);
-        const defaultCASettings = this.m_settings.CAs && this.m_settings.CAs.length > 0 ? this.m_settings.CAs[0] : null;
-
-        if (issuerCN && caSettings === null) {
-            console.log('error')
-            return;
-        }
-
-        const tsp = caSettings && caSettings.tspAddress ? caSettings : defaultCASettings;
-
-        let settings1 = this.m_library.CreateTSPSettings();
-        settings1.SetGetStamps(true);
-        settings1.SetAddress(tsp ? tsp.tspAddress : '');
-        settings1.SetPort(tsp ? tsp.tspAddressPort : '80');
-        await this.m_library.SetTSPSettings(settings1);
-
-        const useOCSP = !tsp || (tsp && tsp.ocspAccessPointAddress !== '');
-        let settings2 = this.m_library.CreateOCSPSettings();
-        settings2.SetUseOCSP(useOCSP);
-        if (useOCSP) {
-            settings2.SetBeforeStore(true);
-            settings2.SetAddress(tsp ? tsp.ocspAccessPointAddress : "czo.gov.ua");
-            settings2.SetPort(tsp ? tsp.ocspAccessPointPort : "80");
-        }
-        await this.m_library.SetOCSPSettings(settings2);
-
-        const useCMP = tsp && tsp.cmpAddress !== '';
-        let settings3 = this.m_library.CreateCMPSettings();
-        settings3.SetUseCMP(useCMP);
-        if (useCMP) {
-            settings3.SetAddress(tsp.cmpAddress);
-            settings3.SetPort("80");
-        }
-        await this.m_library.SetCMPSettings(settings3);
-    }
 
     async ListJKSPrivateKeys(container: Uint8Array): Promise<string[]> {
         const _JKSPrivateKeysList = [];

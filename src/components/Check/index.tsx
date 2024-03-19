@@ -2,12 +2,12 @@ import { useState } from 'react';
 import Card from "../Form/Card";
 import Timeline from "../Timeline/Timeline";
 import InfoSigner from "./InfoSigner";
-import { useEUSignContext } from '../../EUSign/EUSignContext';
+import { useEndUserContext } from '../../EUSign/EndUserContext';
 import { FileArchive, FileDashed } from "@phosphor-icons/react";
 import useVerifyFiles from './useVerifyFiles';
 
 function PanelCheck() {
-    const { librarySW } = useEUSignContext();
+    const { librarySW } = useEndUserContext();
     const [file, setFile] = useState<File | null>(null);
     const [fileError] = useState<string>();
     const { loading, error, verifyResult, signedData } = useVerifyFiles({ library: librarySW, file: file });

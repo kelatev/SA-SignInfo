@@ -3,7 +3,7 @@ import Loader from "../components/Loader";
 import PanelCheck from "../components/Check";
 import PanelSign from "../components/Sign";
 import Layout from "../components/Layout";
-import { EUSignContext } from '../EUSign/EUSignContext';
+import { EndUserContext } from '../EUSign/EndUserContext';
 import useEndUserController from '../EUSign/useEndUserController';
 
 function Home() {
@@ -21,7 +21,7 @@ function Home() {
     }, [currentLibrary]);
 
     return (
-        <EUSignContext.Provider value={{ keyMediaType, setKeyMediaType, librarySW, currentLibrary }}>
+        <EndUserContext.Provider value={{ keyMediaType, setKeyMediaType, librarySW, currentLibrary }}>
             {librarySW.loading && <Loader error={librarySW.error} />}
             <Layout
                 title="SA - UA Sign"
@@ -30,7 +30,7 @@ function Home() {
                 left={<PanelCheck />}
                 right={<PanelSign />}
             />
-        </EUSignContext.Provider>
+        </EndUserContext.Provider>
     );
 }
 

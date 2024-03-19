@@ -2,7 +2,7 @@ import React, { useRef, useState } from 'react';
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import FormControl from "react-bootstrap/FormControl";
-import { dataURLtoFile } from '../../utils/encode'
+import { dataURLtoFile, isBase64 } from '../../utils/encode'
 
 interface Base64Props {
     title: string
@@ -25,13 +25,18 @@ function FormUploadBase64(props: Base64Props) {
         }
 
         const base64 = textInput.current.value;
-        props.onChange(dataURLtoFile(base64, props.fileName ?? 'base64.bin'));
+        if (isBase64(base64)) {
+            props.onChange(dataURLtoFile(base64, props.fileName ?? 'base64.bin'));
+        } else {
+            alert('base64 не валідний');
+        }
     }
 
     function handleClipboard() {
         try {
             navigator.clipboard.readText().then(value => {
                 textInput.current && (textInput.current.value = value);
+                handleUpload();
             });
         } catch (error) {
             console.log('Failed to read clipboard');

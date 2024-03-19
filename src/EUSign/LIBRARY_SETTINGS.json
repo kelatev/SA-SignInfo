@@ -1,5 +1,5 @@
 {
-  "language": 1,
+  "language": "ua",
   "encoding": "utf-8",
   "directAccess": true,
   "httpProxyServiceURL": "proxy",
@@ -23,7 +23,6 @@
     "смарт-карта Техноконс. TEllipse",
     "смарт-карта Техноконс. TEllipse2/3"
   ],
-  "connectionTimeout": 10000,
   "passwordRequirements": null,
   "KSPs": [
     {
@@ -137,7 +136,6 @@
   ],
   "allowMakeNewCertOnNewKeyMedia": false,
   "allowMakeNewCertOnFileKeyMedia": true,
-  "verifySettings": {
-    "ocspResponseExpireTime": 100
-  }
+  "connectionTimeout": 10000,
+  "ocspResponseExpireTime": 100
 }

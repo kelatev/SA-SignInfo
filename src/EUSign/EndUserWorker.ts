@@ -9,6 +9,7 @@ import {
     EndUserCertificate,
     EndUserSignInfo,
     EndUserContext,
+    EndUserSettingsCA,
 } from "./eusign.types";
 import EUSignCPWorker from "./EUSignCPWorker";
 import EndUserLibrary, {
@@ -74,7 +75,7 @@ export default class EndUserWorker implements EndUserLibrary {
         return this.command<void>("SetStorageParameter", name, value, protectedItem);
     }
     GetCAs() {
-        return this.command<any[]>("GetCAs");
+        return this.command<string | EndUserSettingsCA[]>("GetCAs");
     }
     GetProxySettings() {
         return this.command<EndUserProxySettings>("GetProxySettings");
@@ -164,7 +165,12 @@ export default class EndUserWorker implements EndUserLibrary {
         return this.command<Uint8Array>("HashData", hashAlgo, data, Number(asBase64String));
     }
     GetSigner(sign: Uint8Array, signIndex?: number, resolveOIDs?: boolean) {
-        return this.command<EndUserCertificate | EndUserCertificate[]>("GetSigner", sign, signIndex, resolveOIDs);
+        return this.command<EndUserCertificate | EndUserCertificate[]>(
+            "GetSigner",
+            sign,
+            signIndex,
+            resolveOIDs,
+        );
     }
     SignData(data: Uint8Array | string, asBase64String?: boolean) {
         return this.command<Uint8Array>("SignData", data, Number(asBase64String));
@@ -246,7 +252,11 @@ export default class EndUserWorker implements EndUserLibrary {
         return this.command<EndUserSignInfo>("VerifyData", data, sign, signIndex);
     }
     VerifyDataInternal(sign: Uint8Array, signIndex?: number) {
-        return this.command<EndUserSignInfo | EndUserSignInfo[]>("VerifyDataInternal", sign, signIndex);
+        return this.command<EndUserSignInfo | EndUserSignInfo[]>(
+            "VerifyDataInternal",
+            sign,
+            signIndex,
+        );
     }
     //EnvelopData
     //DevelopData

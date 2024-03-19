@@ -1,3 +1,5 @@
+import { CertificateInfoEx, Certificate } from "./EndUserMap";
+
 enum EndUserLanguage {
     EU_DEFAULT_LANG = 0,
     EU_UA_LANG = 1,
@@ -5,32 +7,55 @@ enum EndUserLanguage {
     EU_EN_LANG = 3,
 }
 
-export interface EndUserSettings {
-    settings: {
-        language: EndUserLanguage;
-        encoding: "utf-8";
-        directAccess: boolean;
-        CAs: string;
-        CACertificates: string;
-        signInfoTmpl?: string;
-        httpProxyServiceURL: string;
-        verifySettings: {
-            ocspResponseExpireTime: number;
-        };
-        TSLAddress: string | null;
-        mssServiceURL?: string;
-        KSPs?: any[];
-    };
+export interface EndUserSettingsCA {
+    issuerCNs: string[];
+    address: string;
+    ocspAccessPointAddress: string;
+    ocspAccessPointPort: string;
+    cmpAddress: string;
+    tspAddress: string;
+    tspAddressPort: string;
+    directAccess?: boolean;
+    qscdSNInCert?: boolean;
+    certsInKey?: boolean;
+    cmpCompatibility?: number;
 }
 
-export interface EndUserException {
-    GetErrorCode(): number;
-    GetMessage(): string;
-    toString(): string;
+export interface EndUserSettingsKSP {
+    name: string;
+    ksp: number;
+    address: string;
+    port: string;
+    directAccess: boolean;
+    clientIdPrefix?: string;
+    confirmationURL?: string;
+    mobileAppName?: string;
+    systemId?: string;
+}
+
+export interface EndUserSettings {
+    downloadsURL?: string;
+    language: EndUserLanguage | string;
+    encoding: string;
+    directAccess: boolean;
+    httpProxyServiceURL: string;
+    CAs: string | EndUserSettingsCA[];
+    CACertificates: string | Uint8Array;
+    allowedKeyMediaTypes: string[];
+    passwordRequirements?: null;
+    KSPs?: EndUserSettingsKSP[];
+    allowMakeNewCertOnNewKeyMedia: boolean;
+    allowMakeNewCertOnFileKeyMedia: boolean;
+    signInfoTmpl?: string;
+    connectionTimeout: number;
+    ocspResponseExpireTime: number;
+    TSLAddress?: string;
 }
 
 export interface EndUserError {
+    errorCode: number;
     GetErrorCode(): number;
+    message: string;
     GetMessage(): string;
     toString(): string;
 }
@@ -42,15 +67,12 @@ export interface EndUserByteArray {
 
 export interface EndUserKeyMedia {
     GetTypeIndex(): number;
-
     SetTypeIndex(typeIndex: number): void;
 
     GetDevIndex(): number;
-
     SetDevIndex(devIndex: number): void;
 
     GetPassword(): string;
-
     SetPassword(password: string): void;
 }
 
@@ -81,38 +103,35 @@ export interface EndUserFileStoreSettings {
 }
 
 export interface EndUserProxySettings {
-    useProxy: boolean;
     GetUseProxy(): boolean;
     SetUseProxy(useProxy: boolean): void;
-    anonymous: boolean;
+
     GetAnonymous(): boolean;
     SetAnonymous(anonymous: boolean): void;
-    address: string;
+
     GetAddress(): string;
     SetAddress(address: string): void;
-    port: string;
+
     GetPort(): string;
     SetPort(port: string): void;
-    user: string;
+
     GetUser(): string;
     SetUser(user: string): void;
-    password: string;
+
     GetPassword(): string;
     SetPassword(password: string): void;
-    savePassword: boolean;
+
     GetSavePassword(): boolean;
     SetSavePassword(savePassword: boolean): void;
 }
 
-// Клас, що містить інформацію про параметри TSP-сервера (див. табл. 3.1)
 export interface EndUserTSPSettings {
-    getStamps: boolean;
     GetGetStamps(): boolean;
     SetGetStamps(getStamps: boolean): void;
-    address: string;
+
     GetAddress(): string;
     SetAddress(address: string): void;
-    port: string;
+
     GetPort(): string;
     SetPort(port: string): void;
 }
@@ -168,9 +187,19 @@ export interface EndUserCMPSettings {
     SetCommonName(commonName: string): void;
 }
 
+export interface EndUserTSLSettings {
+    GetUseTSL(): boolean;
+    SetUseTSL(useTSL: boolean): void;
+
+    GetAutoDownloadTSL(): boolean;
+    SetAutoDownloadTSL(autoDownloadTSL: boolean): void;
+
+    GetTSLAddress(): string;
+    SetTSLAddress(tslAddress: string): void;
+}
+
 // Клас, що містить інформацію про взаємодію з серверами ЦСК
 export interface EndUserModeSettings {
-    offlineMode: boolean;
     GetOfflineMode(): boolean;
     SetOfflineMode(offlineMode: boolean): void;
 }
@@ -178,7 +207,6 @@ export interface EndUserModeSettings {
 // Клас, що містить інформацію про параметри використання точок
 // доступу до OCSP-серверів
 export interface EndUserOCSPAccessInfoModeSettings {
-    enabled: boolean;
     GetEnabled(): boolean;
     SetEnabled(enabled: boolean): void;
 }
@@ -207,284 +235,134 @@ export interface EndUserKeyMediaSettings {
 }
 
 export interface EndUserOwnerInfo {
-    isFilled: boolean;
-    issuer: string;
-    issuerCN: string;
-    serial: string;
-    subject: string;
-    subjCN: string;
-    subjOrg: string;
-    subjOrgUnit: string;
-    subjTitle: string;
-    subjState: string;
-    subjLocality: string;
-    subjFullName: string;
-    subjAddress: string;
-    subjPhone: string;
-    subjEMail: string;
-    subjDNS: string;
-    subjEDRPOUCode: string;
-    subjDRFOCode: string;
+    IsFilled(): boolean;
+    GetIssuer(): string;
+    GetIssuerCN(): string;
+    GetSerial(): string;
+    GetSubject(): string;
+    GetSubjCN(): string;
+    GetSubjOrg(): string;
+    GetSubjOrgUnit(): string;
+    GetSubjTitle(): string;
+    GetSubjState(): string;
+    GetSubjLocality(): string;
+    GetSubjFullName(): string;
+    GetSubjAddress(): string;
+    GetSubjPhone(): string;
+    GetSubjEMail(): string;
+    GetSubjDNS(): string;
+    GetSubjEDRPOUCode(): string;
+    GetSubjDRFOCode(): string;
 }
 
 export interface EndUserTimeInfo {
-    version: number;
     GetVersion(): number;
-    isTimeAvail: boolean;
     IsTimeAvail(): boolean;
-    isTimeStamp: boolean;
     IsTimeStamp(): boolean;
-    time: Date;
     GetTime(): Date;
-    isSignTimeStampAvail: boolean;
     IsSignTimeStampAvail(): boolean;
-    signTimeStamp: Date;
     GetSignTimeStamp(): Date;
 }
 
 export interface EndUserSignInfo {
-    ownerInfo: EndUserOwnerInfo;
     GetOwnerInfo(): EndUserOwnerInfo;
-    timeInfo: EndUserTimeInfo;
     GetTimeInfo(): EndUserTimeInfo;
-    data: Uint8Array;
     GetData(): Uint8Array;
     GetDataString(charset?: string): string;
-    signLevel?: number;
 }
 
 export interface EndUserSenderInfo {
-    ownerInfo: EndUserOwnerInfo;
     GetOwnerInfo(): EndUserOwnerInfo;
-    timeInfo: EndUserTimeInfo;
     GetTimeInfo(): EndUserTimeInfo;
-    data: Uint8Array;
     GetData(): Uint8Array;
     GetDataString(charset?: string): string;
 }
 
 export interface EndUserCertificateInfo {
     IsFilled(): boolean;
-
     GetVersion(): number;
-
     GetIssuer(): string;
-
     GetIssuerCN(): string;
-
     GetSerial(): string;
-
     GetSubject(): string;
-
     GetSubjCN(): string;
-
     GetSubjOrg(): string;
-
     GetSubjOrgUnit(): string;
-
     GetSubjTitle(): string;
-
     GetSubjState(): string;
-
     GetSubjLocality(): string;
-
     GetSubjFullName(): string;
-
     GetSubjAddress(): string;
-
     GetSubjPhone(): string;
-
     GetSubjEMail(): string;
-
     GetSubjDNS(): string;
-
     GetSubjEDRPOUCode(): string;
-
     GetSubjDRFOCode(): string;
-
     GetSubjNBUCode(): string;
-
     GetSubjSPFMCode(): string;
-
     GetSubjOCode(): string;
-
     GetSubjOUCode(): string;
-
     GetSubjUserCode(): string;
-
     GetCertBeginTime(): Date;
-
     GetCertEndTime(): Date;
-
     IsPrivKeyTimesAvail(): boolean;
-
     GetPrivKeyBeginTime(): Date;
-
     GetPrivKeyEndTime(): Date;
-
     GetPublicKeyBits(): number;
-
     GetPublicKey(): string;
-
     GetPublicKeyID(): string;
-
     IsECDHPublicKeyAvail(): boolean;
-
     GetECDHPublicKeyBits(): number;
-
     GetECDHPublicKey(): string;
-
     GetECDHPublicKeyID(): string;
-
     GetIssuerPublicKeyID(): string;
-
     GetKeyUsage(): string;
-
     GetExtKeyUsages(): string;
-
     GetPolicies(): string;
-
-    GetCrlDistribPoint1(): string;
-
-    GetCrlDistribPoint2(): string;
-
+    GetCRLDistribPoint1(): string;
+    GetCRLDistribPoint2(): string;
     IsPowerCert(): boolean;
-
     IsSubjTypeAvail(): boolean;
-
     IsSubjCA(): boolean;
 }
 
-export interface EndUserCertificateInfoEx {
-    isFilled: boolean;
-    IsFilled(): boolean;
-    version: number;
-    GetVersion(): number;
-    issuer: string;
-    GetIssuer(): string;
-    issuerCN: string;
-    GetIssuerCN(): string;
-    serial: string;
-    GetSerial(): string;
-    subject: string;
-    GetSubject(): string;
-    subjCN: string;
-    GetSubjCN(): string;
-    subjOrg: string;
-    GetSubjOrg(): string;
-    subjOrgUnit: string;
-    GetSubjOrgUnit(): string;
-    subjTitle: string;
-    GetSubjTitle(): string;
-    subjState: string;
-    GetSubjState(): string;
-    subjLocality: string;
-    GetSubjLocality(): string;
-    subjFullName: string;
-    GetSubjFullName(): string;
-    subjAddress: string;
-    GetSubjAddress(): string;
-    subjPhone: string;
-    GetSubjPhone(): string;
-    subjEMail: string;
-    GetSubjEMail(): string;
-    subjDNS: string;
-    GetSubjDNS(): string;
-    subjEDRPOUCode: string;
-    GetSubjEDRPOUCode(): string;
-    subjDRFOCode: string;
-    GetSubjDRFOCode(): string;
-    subjNBUCode: string;
-    GetSubjNBUCode(): string;
-    subjSPFMCode: string;
-    GetSubjSPFMCode(): string;
-    subjOCode: string;
-    GetSubjOCode(): string;
-    subjOUCode: string;
-    GetSubjOUCode(): string;
-    subjUserCode: string;
-    GetSubjUserCode(): string;
-    certBeginTime: Date;
-    GetCertBeginTime(): Date;
-    certEndTime: Date;
-    GetCertEndTime(): Date;
-    isPrivKeyTimesAvail: boolean;
-    IsPrivKeyTimesAvail(): boolean;
-    privKeyBeginTime: Date;
-    GetPrivKeyBeginTime(): Date;
-    privKeyEndTime: Date;
-    GetPrivKeyEndTime(): Date;
-    publicKeyBits: number;
-    GetPublicKeyBits(): number;
-    publicKey: string;
-    GetPublicKey(): string;
-    publicKeyID: string;
-    GetPublicKeyID(): string;
-    issuerPublicKeyID: string;
-    GetIssuerPublicKeyID(): string;
-    keyUsage: string;
-    GetKeyUsage(): string;
-    extKeyUsages: string;
-    GetExtKeyUsages(): string;
-    getPolicies: string;
-    GetPolicies(): string;
-    getCrlDistribPoint1: string;
-    GetCrlDistribPoint1(): string;
-    getCrlDistribPoint2: string;
-    GetCrlDistribPoint2(): string;
-    isPowerCert: boolean;
-    IsPowerCert(): boolean;
-    isSubjTypeAvail: boolean;
-    IsSubjTypeAvail(): boolean;
-    isSubjCA: boolean;
-    IsSubjCA(): boolean;
-    chainLength: number;
+export interface EndUserCertificateInfoEx extends EndUserCertificateInfo {
     GetChainLength(): number;
-    UPN: string;
     GetUPN(): string;
-    publicKeyType: number;
     GetPublicKeyType(): number;
-    keyUsageType: number;
     GetKeyUsageType(): number;
-    RSAModul: string;
     GetRSAModul(): string;
-    RSAExponent: string;
     GetRSAExponent(): string;
-    OCSPAccessInfo: string;
     GetOCSPAccessInfo(): string;
-    issuerAccessInfo: string;
     GetIssuerAccessInfo(): string;
-    TSPAccessInfo: string;
     GetTSPAccessInfo(): string;
-    isLimitValueAvail: boolean;
     IsLimitValueAvail(): boolean;
-    limitValue: number;
     GetLimitValue(): number;
-    limitValueCurrency: string;
     GetLimitValueCurrency(): string;
-    subjType: number;
     GetSubjType(): number;
-    subjSubType: number;
     GetSubjSubType(): number;
-    subjUNZR: string;
     GetSubjUNZR(): string;
-    subjCountry: string;
     GetSubjCountry(): string;
-    fingerpint: string;
     GetFingerpint(): string;
-    isQSCD: boolean;
     IsQSCD(): boolean;
-    subjUserID: string;
     GetSubjUserID(): string;
 }
 
-export interface EndUserCertificate {
-    infoEx: EndUserCertificateInfoEx;
-    GetInfoEx(): EndUserCertificateInfoEx;
-    SetInfoEx(infoEx: EndUserCertificateInfoEx): void;
-    data: Uint8Array;
-    GetData(): Uint8Array;
-    SetData(data: Uint8Array): void;
+export class EndUserCertificate implements Certificate {
+    infoEx!: CertificateInfoEx;
+    data!: Uint8Array;
+    GetInfoEx() {
+        return this.infoEx;
+    }
+    SetInfoEx(infoEx: CertificateInfoEx) {
+        this.infoEx = infoEx;
+    }
+    GetData() {
+        return this.data;
+    }
+    SetData(data: Uint8Array) {
+        this.data = data;
+    }
 }
 
 export interface EndUserCRLInfo {
@@ -531,11 +409,11 @@ export interface EndUserPrivateKeyInfo {
     SetPrivateKeyInfo(address: Uint8Array): void;
 }
 
-export interface EndUserPrivateKey {
-    alias: string;
-    certificates: EndUserCertificate[];
-    privateKey: Uint8Array;
-    digitalStamp: boolean;
+export class EndUserPrivateKey {
+    alias: string | undefined;
+    certificates: EndUserCertificate[] | undefined;
+    privateKey: Uint8Array | undefined;
+    digitalStamp: boolean | undefined;
 }
 
 export interface EndUserJKSPrivateKey extends EndUserPrivateKey {

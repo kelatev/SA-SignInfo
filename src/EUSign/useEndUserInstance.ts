@@ -39,10 +39,10 @@ export default function useEndUserInstance(props: Props): EndUserInstance {
                 props.library
                     .AddEventListener(EndUserEventType.All, callback)
                     .then(() => {
-                        return props.library.GetLibraryInfo(/* LIBRARY_SETTINGS.downloadsURL */);
+                        return props.library.GetLibraryInfo(/*Settings.downloadsURL */);
                     })
                     .then(libInfo => setInfo(libInfo))
-                    .then(() => props.library.Initialize(Settings as any))
+                    .then(() => props.library.Initialize(Settings))
                     .then(() => {
                         setLoading(false);
                         resolve();

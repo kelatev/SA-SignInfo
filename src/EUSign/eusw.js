@@ -2131,6 +2131,44 @@ EndUserCMPSettings.prototype.SetCommonName = function(commonName) {
     this.commonName = commonName;
 };
 
+var EndUserTSLSettings = function() {
+    this.setClassInfo('EndUserTSLSettings', 1);
+
+    this.fields = {
+        'useTSL': 'boolean',
+        'autoDownloadTSL': 'boolean',
+        'tslAddress': 'string'
+    };
+
+    this.initializeFields();
+};
+
+EndUserTransferableObject.makeTransferable(EndUserTSLSettings);
+
+EndUserTSLSettings.prototype.GetUseTSL = function() {
+    return this.useTSL;
+};
+
+EndUserTSLSettings.prototype.SetUseTSL = function(useTSL) {
+    this.useTSL = useTSL;
+};
+
+EndUserTSLSettings.prototype.GetAutoDownloadTSL = function() {
+    return this.autoDownloadTSL;
+};
+
+EndUserTSLSettings.prototype.SetAutoDownloadTSL = function(autoDownloadTSL) {
+    this.autoDownloadTSL = autoDownloadTSL;
+};
+
+EndUserTSLSettings.prototype.GetTSLAddress = function() {
+    return this.tslAddress;
+};
+
+EndUserTSLSettings.prototype.SetTSLAddress = function(tslAddress) {
+    this.tslAddress = tslAddress;
+};
+
 //--------------------------------------------------------------------------------
 
 var EndUserModeSettings = function() {
@@ -6141,6 +6179,35 @@ EUSignCP.prototype.SetCMPSettings = function(
     this._funcCall('SetCMPSettings', params,
         onSuccess, onError, null);
 };
+//--------------------------------------------------------------------------------
+
+EUSignCP.prototype.CreateTSLSettings = function() {
+    return new EndUserTSLSettings();
+};
+
+//--------------------------------------------------------------------------------
+
+EUSignCP.prototype.GetTSLSettings = function(
+    onSuccess, onError) {
+    var params;
+
+    params = this._funcMakeParams(null);
+
+    return this._funcCall('GetTSLSettings', params,
+        onSuccess, onError, null);
+};
+
+//--------------------------------------------------------------------------------
+
+EUSignCP.prototype.SetTSLSettings = function(
+    settings, onSuccess, onError) {
+    var params;
+
+    params = this._funcMakeParams([settings]);
+
+    this._funcCall('SetTSLSettings', params,
+        onSuccess, onError, null);
+};
 
 //--------------------------------------------------------------------------------
 
@@ -7817,7 +7884,7 @@ EUSignCP.prototype.ModifyOwnEUserParams = function(
 
     return this._funcCall('ModifyOwnEUserParams', params,
         onSuccess, onError, null);
-};
+}; 
 
 //--------------------------------------------------------------------------------
 
