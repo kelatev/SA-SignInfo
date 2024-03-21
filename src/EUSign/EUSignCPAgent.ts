@@ -1,4 +1,4 @@
-import { EUSignCP, EndUserArrayList, EndUserLibraryLoader, EndUserError } from "./eusw";
+import { EUSignCP, EndUserLibraryLoader, EndUserError } from "./eusw";
 import {
     EndUserModeSettingsClass,
     EndUserKeyMediaSettingsClass,
@@ -779,7 +779,7 @@ export default class EUSignCPAgent {
                     reject(this.MakeError(EndUserError.ERROR_DOWNLOAD_FILE, ""));
 
                 url = this.MakeURL(url);
-                xmlHttp.open("GET", url, false);
+                xmlHttp.open("GET", url, true);
                 if (dataType === "binary") {
                     xmlHttp.responseType = "arraybuffer";
                 }

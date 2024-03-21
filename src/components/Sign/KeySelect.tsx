@@ -8,6 +8,7 @@ import Timeline from "../Timeline/Timeline";
 import FormPassword from "../Form/FormPassword";
 import { FileToUint8 } from '../../utils/encode';
 import { FileLock, Password, Package } from "@phosphor-icons/react";
+import { errorLoadDescription } from '../../EUSign/useEndUserInstance'
 
 function SignSelect() {
     const { keyMediaType, setKeyMediaType, currentLibrary } = useEndUserContext();
@@ -103,8 +104,6 @@ function SignSelect() {
                     if (await currentLibrary.library?.IsPrivateKeyReaded()) {
                         await currentLibrary.library?.ResetPrivateKey();
                     }
-                    /* Зчитування ключа */
-                    //CtxReadPrivateKeyBinary-вернет контекст
                     const ownerInfo = await currentLibrary.library?.ReadPrivateKeyBinary(keySelect.privatKey, password, keySelect.certificates ?? null, null);
                     const ownCertificates = await currentLibrary.library?.GetOwnCertificates();
                     const isPrivateKeyReaded = await currentLibrary.library?.IsPrivateKeyReaded();
@@ -133,6 +132,11 @@ function SignSelect() {
         }
     }, [error]);
 
+    //const libLoaded = currentLibrary?.info.loaded && !currentLibrary.loading;
+    const showJKS = keyMediaType === KeyMediaType.File && file && !privateKey && jksPrivateKeys && jksPrivateKeys.length > 1;
+    const showPass = keyMediaType === KeyMediaType.File && file && !privateKey;
+    const showKeyMedia = keyMediaType === KeyMediaType.Hardware;
+
     return (
         <>
             <Timeline.Item
@@ -146,24 +150,25 @@ function SignSelect() {
                     accept='.dat,.pfx,.pk8,.zs2,.jks'
                     error={error}
                     withToken={true} />
-                {currentLibrary?.info.loaded && file && !privateKey && jksPrivateKeys && jksPrivateKeys.length > 1 && (
+                {showJKS && (
                     <Form.Select className="mb-1"
                         onChange={(ev) => setAliasSelect(ev.currentTarget.value)}>
                         {jksPrivateKeys.map((item) => <option
                             key={item.alias}>{item.alias} ({item.certificates?.at(0)?.infoEx.subjCN})</option>)}
                     </Form.Select>
                 )}
-                {currentLibrary?.info.loaded && file && !privateKey && <FormPassword
+                {showPass && <FormPassword
                     title='зчитати'
                     onChange={() => handlePassChange()}
                     onSubmit={(pass) => { handlePassChange(); setPassword(pass) }}
                     loading={loading} />}
+                {showKeyMedia && 'keymed'}
             </Timeline.Item>
-            {(currentLibrary?.loading || currentLibrary?.error) &&
+            {(currentLibrary?.loading || (!currentLibrary?.info.loaded && currentLibrary?.error)) &&
                 <Timeline.Spinner
                     title='Завантаження бібліотеки'
                     icon={<Package />}
-                    error={currentLibrary.error?.toString()}
+                    error={errorLoadDescription(currentLibrary)}
                 />
             }
             {loading &&

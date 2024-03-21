@@ -1,6 +1,9 @@
 export interface EndUserError {
     errorCode: number;
     message: string;
+    toString(): string;
+    GetErrorCode(): number;
+    GetMessage(): string;
 }
 
 export interface EndUserByteArray {

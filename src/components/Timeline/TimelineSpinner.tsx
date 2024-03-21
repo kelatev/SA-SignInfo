@@ -5,7 +5,7 @@ import AlertDanger from "../Form/AlertDanger";
 interface Props {
     title: string
     icon: React.ReactNode
-    error?: string
+    error?: string | React.ReactNode
 }
 
 export default function TimelineSpinner(props: Props) {

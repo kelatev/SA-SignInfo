@@ -371,8 +371,8 @@ export default class EndUserAgent implements EndUserLibrary {
                                   return reject(this.MapError(e));
                               });
                       })
-                      .catch(t => {
-                          var i = this.MapError(t);
+                      .catch(e => {
+                          var i = this.MapError(e);
                           libraryInfo.loaded = false;
                           libraryInfo.isNativeLibraryNeedUpdate =
                               this.m_library.IsLibraryVersionNotSupportedError(i.errorCode);
