@@ -185,11 +185,11 @@ export default class EndUserWorker implements EndUserLibrary {
     }
     SignHash(
         signAlgo: EndUserSignAlgo,
-        hash: Uint8Array,
+        hash: Uint8Array | string,
         appendCert: boolean,
         asBase64String?: boolean,
     ) {
-        return this.command<Uint8Array>(
+        return this.command<Uint8Array | string>(
             "SignHash",
             signAlgo,
             hash,
@@ -199,12 +199,12 @@ export default class EndUserWorker implements EndUserLibrary {
     }
     SignDataEx(
         signAlgo: EndUserSignAlgo,
-        data: Uint8Array,
+        data: Uint8Array | string,
         external: boolean,
         appendCert: boolean,
         asBase64String?: boolean,
     ) {
-        return this.command<Uint8Array>(
+        return this.command<Uint8Array | string>(
             "SignDataEx",
             signAlgo,
             data,
@@ -215,12 +215,12 @@ export default class EndUserWorker implements EndUserLibrary {
     }
     AppendSign(
         signAlgo: EndUserSignAlgo,
-        data: Uint8Array,
-        previousSign: Uint8Array,
+        data: Uint8Array | string,
+        previousSign: Uint8Array | string,
         appendCert: boolean,
         asBase64String?: boolean,
     ) {
-        return this.command<Uint8Array>(
+        return this.command<Uint8Array | string>(
             "AppendSign",
             signAlgo,
             data,
@@ -231,12 +231,12 @@ export default class EndUserWorker implements EndUserLibrary {
     }
     AppendSignHash(
         signAlgo: EndUserSignAlgo,
-        hash: Uint8Array,
-        previousSign: Uint8Array,
+        hash: Uint8Array | string,
+        previousSign: Uint8Array | string,
         appendCert: boolean,
         asBase64String?: boolean,
     ) {
-        return this.command<Uint8Array>(
+        return this.command<Uint8Array | string>(
             "AppendSignHash",
             signAlgo,
             hash,
@@ -246,10 +246,10 @@ export default class EndUserWorker implements EndUserLibrary {
         );
     }
     VerifyHash(hash: Uint8Array, sign: Uint8Array, signIndex: number) {
-        return this.command<EndUserSignInfo>("VerifyHash", hash, sign, signIndex);
+        return this.command<EndUserSignInfo | EndUserSignInfo[]>("VerifyHash", hash, sign, signIndex);
     }
     VerifyData(data: Uint8Array, sign: Uint8Array, signIndex: number) {
-        return this.command<EndUserSignInfo>("VerifyData", data, sign, signIndex);
+        return this.command<EndUserSignInfo | EndUserSignInfo[]>("VerifyData", data, sign, signIndex);
     }
     VerifyDataInternal(sign: Uint8Array, signIndex?: number) {
         return this.command<EndUserSignInfo | EndUserSignInfo[]>(
@@ -296,7 +296,7 @@ export default class EndUserWorker implements EndUserLibrary {
     //XAdESGetSigner
     //XAdESSignData
     //XAdESVerifyData
-    GetSignContainerInfo(signature: Uint8Array) {
+    GetSignContainerInfo(signature: Uint8Array | string) {
         return this.command<SignContainerInfo>("GetSignContainerInfo", signature);
     }
 }

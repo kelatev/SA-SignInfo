@@ -33,7 +33,7 @@ export default function KeySign() {
                         privateKey?.settings?.signType === EndUserCAdESType.Detached,
                         true,
                     );
-                    setSignedData(result);
+                    setSignedData(result as Uint8Array);
                 } catch (e: any) {
                     console.log(e);
                     setError(`${e.message} (${e.code})`);

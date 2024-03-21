@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import useEndUserInstance, { EndUserLibraryType } from "./useEndUserInstance";
 import EndUserLibrary from "./EndUserLibrary";
 import EndUserWorker from "./EndUserWorker";
@@ -35,6 +35,14 @@ export default function useEndUserController() {
     const currentLibrary = useMemo(() => {
         return keyMediaType === KeyMediaType.Hardware ? instanceJS : instanceSW;
     }, [keyMediaType, instanceJS, instanceSW]);
+
+    useEffect(() => {
+        if (currentLibrary && !currentLibrary.info?.loaded && !currentLibrary.loading && !currentLibrary.error) {
+            console.log('useEndUserController.Load');
+            
+            currentLibrary.Load().catch(e => {});
+        }
+    }, [currentLibrary]);
 
     /* const m_isPKActionDone = false;
     const m_KM = null;

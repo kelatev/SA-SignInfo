@@ -1,5 +1,6 @@
 import { useState, useCallback } from "react";
 import EndUserLibrary, { EndUserEventType, LibraryInfo } from "./EndUserLibrary";
+import { EndUserError } from "./eusw";
 import Settings from "./LIBRARY_SETTINGS.json";
 
 export enum EndUserLibraryType {
@@ -17,7 +18,7 @@ export interface EndUserInstance {
     library: EndUserLibrary | undefined;
     info: LibraryInfo;
     loading: boolean;
-    error: string | undefined;
+    error: typeof EndUserError | undefined;
     Load: (callback?: any) => Promise<void>;
 }
 
@@ -28,7 +29,7 @@ export default function useEndUserInstance(props: Props): EndUserInstance {
         loaded: false,
     });
     const [loading, setLoading] = useState(false);
-    const [error, setError] = useState<string>();
+    const [error, setError] = useState<typeof EndUserError>();
 
     const Load = useCallback(
         (callback?: any) => {

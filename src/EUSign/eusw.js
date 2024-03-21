@@ -9076,6 +9076,62 @@ EUSignCP.prototype.IsDataInSignedFileAvailable = function(
         onSuccess, onError, null);
 };
 
+EUSignCP.prototype.XAdESGetType = function(
+    xadesData, onSuccess, onError) {
+    if (typeof xadesData != 'string') {
+        xadesData = this._base64Encode(xadesData, onError);
+        if (xadesData == null)
+            return;
+    }
+        
+    var params = this._funcMakeParams([xadesData]);
+
+    return this._funcCall('XAdESGetType', params,
+        onSuccess, onError, null);
+};
+
+EUSignCP.prototype.PDFGetSignsCount = function(
+    signedData, onSuccess, onError) {
+    if (typeof signedData != 'string') {
+        signedData = this._base64Encode(signedData, onError);
+        if (signedData == null)
+            return;
+    }
+        
+    var params = this._funcMakeParams([xadesData]);
+
+    return this._funcCall('PDFGetSignsCount', params,
+        onSuccess, onError, null);
+};
+
+EUSignCP.prototype.ASiCGetASiCType = function(
+    signedData, onSuccess, onError) {
+    if (typeof signedData != 'string') {
+        signedData = this._base64Encode(signedData, onError);
+        if (signedData == null)
+            return;
+    }
+        
+    var params = this._funcMakeParams([xadesData]);
+
+    return this._funcCall('ASiCGetASiCType', params,
+        onSuccess, onError, null);
+};
+
+EUSignCP.prototype.ASiCGetSignType = function(
+    signedData, onSuccess, onError) {
+    if (typeof signedData != 'string') {
+        signedData = this._base64Encode(signedData, onError);
+        if (signedData == null)
+            return;
+    }
+        
+    var params = this._funcMakeParams([xadesData]);
+
+    return this._funcCall('ASiCGetSignType', params,
+        onSuccess, onError, null);
+};
+
 //--------------------------------------------------------------------------------
 
 EUSignCP.prototype.GetDataFromSignedData = function(

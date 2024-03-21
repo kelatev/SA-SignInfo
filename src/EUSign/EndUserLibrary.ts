@@ -164,41 +164,41 @@ export default interface EndUserLibrary {
         signIndex?: number,
         resolveOIDs?: boolean,
     ) => Promise<EndUserCertificate | EndUserCertificate[]>;
-    SignData: (data: Uint8Array | string, asBase64String?: boolean) => Promise<Uint8Array>;
+    SignData: (data: Uint8Array | string, asBase64String?: boolean) => Promise<Uint8Array | string>;
     SignDataInternal: (
         appendCert: boolean,
         data: Uint8Array | string,
         asBase64String?: boolean,
-    ) => Promise<Uint8Array>;
+    ) => Promise<Uint8Array | string>;
     SignHash: (
         signAlgo: EndUserSignAlgo,
-        hash: Uint8Array,
+        hash: Uint8Array | string,
         appendCert: boolean,
         asBase64String?: boolean,
-    ) => Promise<Uint8Array>;
+    ) => Promise<Uint8Array | string>;
     SignDataEx: (
         signAlgo: EndUserSignAlgo,
-        data: Uint8Array,
+        data: Uint8Array | string,
         external: boolean,
         appendCert: boolean,
         asBase64String?: boolean,
-    ) => Promise<Uint8Array>;
+    ) => Promise<Uint8Array | string>;
     AppendSign: (
         signAlgo: EndUserSignAlgo,
-        data: Uint8Array,
-        previousSign: Uint8Array,
+        data: Uint8Array | string,
+        previousSign: Uint8Array | string,
         appendCert: boolean,
         asBase64String?: boolean,
-    ) => Promise<Uint8Array>;
+    ) => Promise<Uint8Array | string>;
     AppendSignHash: (
         signAlgo: EndUserSignAlgo,
-        hash: Uint8Array,
+        hash: Uint8Array | string,
         previousSign: Uint8Array,
         appendCert: boolean,
         asBase64String?: boolean,
-    ) => Promise<Uint8Array>;
-    VerifyHash: (hash: Uint8Array, sign: Uint8Array, signIndex: number) => Promise<EndUserSignInfo>;
-    VerifyData: (data: Uint8Array, sign: Uint8Array, signIndex: number) => Promise<EndUserSignInfo>;
+    ) => Promise<Uint8Array | string>;
+    VerifyHash: (hash: Uint8Array, sign: Uint8Array, signIndex: number) => Promise<EndUserSignInfo | EndUserSignInfo[]>;
+    VerifyData: (data: Uint8Array, sign: Uint8Array, signIndex: number) => Promise<EndUserSignInfo | EndUserSignInfo[]>;
     VerifyDataInternal: (
         sign: Uint8Array,
         signIndex?: number,
@@ -235,5 +235,5 @@ export default interface EndUserLibrary {
     //XAdESGetSigner
     //XAdESSignData
     //XAdESVerifyData
-    GetSignContainerInfo: (signature: Uint8Array) => Promise<SignContainerInfo>;
+    GetSignContainerInfo: (signature: Uint8Array | string) => Promise<SignContainerInfo>;
 }

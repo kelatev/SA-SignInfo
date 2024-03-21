@@ -7,7 +7,7 @@ import { KeyMediaType } from '../../EUSign/useEndUserController';
 import Timeline from "../Timeline/Timeline";
 import FormPassword from "../Form/FormPassword";
 import { FileToUint8 } from '../../utils/encode';
-import { FileLock, Password } from "@phosphor-icons/react";
+import { FileLock, Password, Package } from "@phosphor-icons/react";
 
 function SignSelect() {
     const { keyMediaType, setKeyMediaType, currentLibrary } = useEndUserContext();
@@ -146,19 +146,26 @@ function SignSelect() {
                     accept='.dat,.pfx,.pk8,.zs2,.jks'
                     error={error}
                     withToken={true} />
-                {file && !privateKey && jksPrivateKeys && jksPrivateKeys.length > 1 && (
+                {currentLibrary?.info.loaded && file && !privateKey && jksPrivateKeys && jksPrivateKeys.length > 1 && (
                     <Form.Select className="mb-1"
                         onChange={(ev) => setAliasSelect(ev.currentTarget.value)}>
                         {jksPrivateKeys.map((item) => <option
                             key={item.alias}>{item.alias} ({item.certificates?.at(0)?.infoEx.subjCN})</option>)}
                     </Form.Select>
                 )}
-                {file && !privateKey && <FormPassword
+                {currentLibrary?.info.loaded && file && !privateKey && <FormPassword
                     title='зчитати'
                     onChange={() => handlePassChange()}
                     onSubmit={(pass) => { handlePassChange(); setPassword(pass) }}
                     loading={loading} />}
             </Timeline.Item>
+            {(currentLibrary?.loading || currentLibrary?.error) &&
+                <Timeline.Spinner
+                    title='Завантаження бібліотеки'
+                    icon={<Package />}
+                    error={currentLibrary.error?.toString()}
+                />
+            }
             {loading &&
                 <Timeline.Spinner
                     title='Зчитування ключу'

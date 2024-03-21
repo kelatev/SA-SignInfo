@@ -21,6 +21,8 @@ import {
     EndUserContextClass,
     EndUserPrivateKeyContextClass,
     EndUserParamsClass,
+    EndUserTimeInfoClass,
+    EndUserSignInfoClass,
 } from "./EndUserClass";
 
 export default class EUSignCPAgent {
@@ -1048,9 +1050,231 @@ export default class EUSignCPAgent {
         });
     }
 
-    CtxHash(context: EndUserContextClass | null, hashAlgo: number, certificate: Uint8Array | null, data: Uint8Array) {
+    CtxHash(
+        context: EndUserContextClass | null,
+        hashAlgo: number,
+        certificate: Uint8Array | null,
+        data: Uint8Array,
+    ) {
         return new Promise<string>((resolve, reject) => {
             this.m_library.CtxHash(context, hashAlgo, certificate, data, resolve, reject);
+        });
+    }
+
+    GetSignType(signIndex: number, signature: string | Uint8Array): Promise<number> {
+        return new Promise((resolve, reject) => {
+            this.m_library.GetSignType(signIndex, signature, resolve, reject);
+        });
+    }
+
+    GetSignsCount(signature: Uint8Array | string): Promise<number> {
+        return new Promise((resolve, reject) => {
+            this.m_library.GetSignsCount(signature, resolve, reject);
+        });
+    }
+
+    GetSignTimeInfo(
+        signIndex: number,
+        signature: Uint8Array | string,
+    ): Promise<EndUserTimeInfoClass> {
+        return new Promise((resolve, reject) => {
+            this.m_library.GetSignTimeInfo(signIndex, signature, resolve, reject);
+        });
+    }
+
+    VerifyHashOnTimeEx(
+        hash: Uint8Array | string,
+        signIndex: number,
+        signature: Uint8Array | string,
+        onTime: string | null,
+        forceUseOffline: boolean,
+        noCRL: boolean,
+        showSignerInfo?: boolean,
+    ): Promise<EndUserSignInfoClass> {
+        return new Promise((resolve, reject) => {
+            this.m_library.VerifyHashOnTimeEx(
+                hash,
+                signIndex,
+                signature,
+                onTime,
+                forceUseOffline,
+                noCRL,
+                showSignerInfo,
+                resolve,
+                reject,
+            );
+        });
+    }
+
+    VerifyDataOnTimeEx(
+        data: Uint8Array | string,
+        signIndex: number,
+        signature: Uint8Array | string,
+        onTime: string | null,
+        forceUseOffline: boolean,
+        noCRL: boolean,
+        showSignerInfo?: boolean,
+    ): Promise<EndUserSignInfoClass> {
+        return new Promise((resolve, reject) => {
+            this.m_library.VerifyDataOnTimeEx(
+                data,
+                signIndex,
+                signature,
+                onTime,
+                forceUseOffline,
+                noCRL,
+                showSignerInfo,
+                resolve,
+                reject,
+            );
+        });
+    }
+
+    VerifyDataInternalOnTimeEx(
+        signedData: Uint8Array | string,
+        signIndex: number,
+        onTime: string | null,
+        forceUseOffline: boolean,
+        noCRL: boolean,
+        showSignerInfo?: boolean,
+    ): Promise<EndUserSignInfoClass> {
+        return new Promise((resolve, reject) => {
+            this.m_library.VerifyDataInternalOnTimeEx(
+                signedData,
+                signIndex,
+                onTime,
+                forceUseOffline,
+                noCRL,
+                showSignerInfo,
+                resolve,
+                reject,
+            );
+        });
+    }
+
+    CtxGetSignerInfo(
+        context: EndUserContextClass,
+        signIndex: number,
+        signature: Uint8Array | string,
+    ): Promise<EndUserCertificateClass> {
+        return new Promise((resolve, reject) => {
+            this.m_library.CtxGetSignerInfo(context, signIndex, signature, resolve, reject);
+        });
+    }
+
+    GetSignerInfo(
+        signIndex: number,
+        signature: Uint8Array | string,
+    ): Promise<EndUserCertificateClass> {
+        return new Promise((resolve, reject) => {
+            this.m_library.GetSignerInfo(signIndex, signature, resolve, reject);
+        });
+    }
+
+    CtxSign(
+        pkContext: EndUserContextClass,
+        signAlgo: number,
+        data: Uint8Array | string,
+        external: boolean,
+        appendCert: boolean,
+    ) {
+        return new Promise<string>((resolve, reject) => {
+            this.m_library.CtxSign(
+                pkContext,
+                signAlgo,
+                data,
+                appendCert,
+                external,
+                resolve,
+                reject,
+            );
+        });
+    }
+
+    CtxSignHash(
+        pkContext: EndUserContextClass,
+        signAlgo: number,
+        hash: Uint8Array | string,
+        appendCert: boolean,
+    ) {
+        return new Promise<string>((resolve, reject) => {
+            this.m_library.CtxSignHash(pkContext, signAlgo, hash, appendCert, resolve, reject);
+        });
+    }
+
+    CtxAppendSignHash(
+        pkContext: EndUserContextClass,
+        signAlgo: number,
+        hash: Uint8Array | string,
+        previousSign: Uint8Array | string,
+        appendCert: boolean,
+    ) {
+        return new Promise<string>((resolve, reject) => {
+            this.m_library.CtxAppendSignHash(
+                pkContext,
+                signAlgo,
+                hash,
+                previousSign,
+                appendCert,
+                resolve,
+                reject,
+            );
+        });
+    }
+
+    CtxAppendSign(
+        pkContext: EndUserContextClass,
+        signAlgo: number,
+        data: Uint8Array | string | null,
+        previousSign: Uint8Array | string,
+        appendCert: boolean,
+    ) {
+        return new Promise<string>((resolve, reject) => {
+            this.m_library.CtxAppendSign(
+                pkContext,
+                signAlgo,
+                data,
+                previousSign,
+                appendCert,
+                resolve,
+                reject,
+            );
+        });
+    }
+
+    IsDataInSignedDataAvailable(signedData: Uint8Array): Promise<boolean> {
+        return new Promise((resolve, reject) => {
+            this.m_library.IsDataInSignedDataAvailable(signedData, resolve, reject);
+        });
+    }
+
+    IsDataInSignedFileAvailable(fileNameWithSignedData: Uint8Array): Promise<boolean> {
+        return new Promise((resolve, reject) => {
+            this.m_library.IsDataInSignedFileAvailable(fileNameWithSignedData, resolve, reject);
+        });
+    }
+
+    XAdESGetType(signedData: Uint8Array | string) {
+        return new Promise<number>((resolve, reject) => {
+            this.m_library.XAdESGetType(signedData, resolve, reject);
+        });
+    }
+
+    PDFGetSignsCount(signedData: Uint8Array | string) {
+        return new Promise<number>((resolve, reject) => {
+            this.m_library.PDFGetSignsCount(signedData, resolve, reject);
+        });
+    }
+
+    ASiCGetASiCType(signedData: Uint8Array | string) {
+        return new Promise<number>((resolve, reject) => {
+            this.m_library.ASiCGetASiCType(signedData, resolve, reject);
+        });
+    }
+
+    ASiCGetSignType(signedData: Uint8Array | string) {
+        return new Promise<number>((resolve, reject) => {
+            this.m_library.ASiCGetSignType(signedData, resolve, reject);
         });
     }
 }

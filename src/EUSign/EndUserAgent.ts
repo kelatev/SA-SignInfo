@@ -3,7 +3,6 @@ import EUSignCPAgent from "./EUSignCPAgent";
 import {
     EndUserPrivateKey,
     EndUserCertificate,
-    EndUserCertificateInfoEx,
     EndUserContext,
     EndUserProxySettings,
     EndUserError as EndUserErrorType,
@@ -26,16 +25,22 @@ import {
     MapEndUserOwnerInfo,
     MapToEndUserParams,
     MapToEndUserCertificate,
+    MapToEndUserSignInfo,
+    MapToEndUserTimeInfo,
 } from "./EndUserConvert";
 import EndUserLibrary, {
     EndUserEventType,
     LibraryInfo,
     ClientRegistrationTokenKSP,
-    SignContainerInfo,
     EndUserSettings,
     EndUserSettingsCA,
 } from "./EndUserLibrary";
-import { EndUserSignAlgo, EndUserCMPCompatibility } from "./EndUserConstants";
+import {
+    EndUserSignAlgo,
+    EndUserCMPCompatibility,
+    EndUserSignContainerType,
+    EndUserCAdESType,
+} from "./EndUserConstants";
 
 export default class EndUserAgent implements EndUserLibrary {
     m_library;
@@ -68,55 +73,6 @@ export default class EndUserAgent implements EndUserLibrary {
         }
 
         return endUserError;
-    }
-
-    ProcessArray<T>(items: any[], callback: (item: any) => Promise<T>) {
-        return new Promise<T[]>((resolve, reject) => {
-            const result: T[] = [];
-            let index = 0;
-            const run = () => {
-                if (index >= items.length) {
-                    resolve(result);
-                } else {
-                    callback(items[index])
-                        .then(data => {
-                            result.push(data);
-                            run();
-                        })
-                        .catch((err: any) => reject(this.MapError(err)));
-                    index++;
-                }
-            };
-            run();
-        });
-    }
-
-    DataToNamedDataArray(data: any[] | any) {
-        data = null != data ? data : [];
-        data = Array.isArray(data) ? data : [data];
-        let namesData = [];
-        for (let i = 0; i < data.length; i++) {
-            const exist = data[i].name !== undefined && data[i].val !== undefined;
-            namesData.push({
-                name: exist ? data[i].name : "Ім'я відсутнє",
-                val: exist ? data[i].val : data[i],
-            });
-        }
-        return namesData;
-    }
-
-    DataToResult(data: any[] | any, value: any) {
-        const isArray = !Array.isArray(data);
-        data = Array.isArray(data) ? data : [data];
-        const result = [];
-        for (let i = 0; i < data.length; i++) {
-            var item =
-                data[i].name !== undefined && data[i].val !== undefined
-                    ? { name: data[i].name, val: value[i] }
-                    : value[i];
-            result.push(item);
-        }
-        return isArray ? result[0] : result;
     }
 
     OnEvent(event: any) {
@@ -266,9 +222,7 @@ export default class EndUserAgent implements EndUserLibrary {
                     if (info)
                         for (let i = 0; i < info.GetCertificatesCount(); i++)
                             result.push(info.GetCertificate(i));
-                    return this.ProcessArray(result, item =>
-                        this.m_library.ParseCertificateEx(item),
-                    );
+                    return Promise.all(result.map(item => this.m_library.ParseCertificateEx(item)));
                 })
                 .then(infoExArr => {
                     var n: EndUserPrivateKey = {} as any;
@@ -310,8 +264,75 @@ export default class EndUserAgent implements EndUserLibrary {
     //GetUserCertificatesFromCertificates
     //GeneratePrivateKeyInternal
     //GetHashAlgoBySignAlgo
-    //CtxSignHashInternal
-    //CtxSignDataInternal
+    async CtxSignHashInternal(
+        context: EndUserContextClass | null,
+        signAlgo: EndUserSignAlgo,
+        hash: Uint8Array | string,
+        previousSign: Uint8Array | string | null,
+        appendCert: boolean,
+        asBase64String?: boolean,
+    ) {
+        try {
+            await this.CheckInitialize();
+            if (context == null) throw this.m_library.MakeError(EndUserError.ERROR_BAD_CERT, "");
+            const sign =
+                previousSign != null
+                    ? await this.m_library.CtxAppendSignHash(
+                          context,
+                          signAlgo,
+                          hash,
+                          previousSign,
+                          appendCert,
+                      )
+                    : await this.m_library.CtxSignHash(context, signAlgo, hash, appendCert);
+            return asBase64String ? sign : this.m_library.BASE64Decode(sign);
+        } catch (e) {
+            throw this.MapError(e);
+        }
+    }
+    async CtxSignDataInternal(
+        context: EndUserContextClass | null,
+        signAlgo: EndUserSignAlgo,
+        dataOrHash: Uint8Array | string,
+        previousSign: Uint8Array | string | null,
+        external: boolean,
+        appendCert: boolean,
+        asBase64String?: boolean,
+    ) {
+        try {
+            await this.CheckInitialize();
+            if (context == null) throw this.m_library.MakeError(EndUserError.ERROR_BAD_CERT, "");
+            const sign =
+                previousSign != null
+                    ? external
+                        ? await this.m_library.CtxAppendSignHash(
+                              context,
+                              signAlgo,
+                              dataOrHash,
+                              previousSign,
+                              appendCert,
+                          )
+                        : await this.m_library.CtxAppendSign(
+                              context,
+                              signAlgo,
+                              null,
+                              previousSign,
+                              appendCert,
+                          )
+                    : external
+                    ? await this.m_library.CtxSignHash(context, signAlgo, dataOrHash, appendCert)
+                    : await this.m_library.CtxSign(
+                          context,
+                          signAlgo,
+                          dataOrHash,
+                          false,
+                          appendCert,
+                      );
+            return asBase64String ? sign : this.m_library.BASE64Decode(sign);
+        } catch (e) {
+            throw this.MapError(e);
+        }
+    }
     //LoadTaxReportPKey
     //ProtectTaxReport
     //UnprotectTaxReceipt
@@ -577,7 +598,7 @@ export default class EndUserAgent implements EndUserLibrary {
                             index < allowedDevice.length;
                             index++
                         )
-                            if (!device || -1 != device.indexOf(allowedDevice[index])) {
+                            if (!device || -1 !== device.indexOf(allowedDevice[index])) {
                                 var map: EndUserKeyMedia = {} as any;
                                 map.typeIndex = allowedType;
                                 map.devIndex = index;
@@ -998,16 +1019,223 @@ export default class EndUserAgent implements EndUserLibrary {
             throw this.MapError(e);
         }
     }
-    //GetSigner
-    //SignData
-    //SignDataInternal
-    //SignHash
-    //SignDataEx
-    //AppendSign
-    //AppendSignHash
-    //VerifyHash
-    //VerifyData
-    //VerifyDataInternal
+    async GetSigner(
+        sign: Uint8Array,
+        signIndex?: number,
+        resolveOIDs?: boolean,
+    ): Promise<EndUserCertificate | EndUserCertificate[]> {
+        signIndex = signIndex ? signIndex : -1;
+        let context: EndUserContextClass | null = null;
+        let signersInfo: EndUserCertificate[] = [];
+        try {
+            await this.CheckInitialize();
+            context = await this.m_library.CtxCreate();
+            this.m_library.CtxSetParameter(
+                context,
+                this.m_library.EU_RESOLVE_OIDS_PARAMETER,
+                resolveOIDs ?? false,
+            );
+            const signsCount = signIndex === -1 ? this.m_library.GetSignsCount(sign) : 1;
+            const indexToResult =
+                signIndex !== -1 ? [signIndex] : Array.from(Array(signsCount).keys());
+            signersInfo = await Promise.all(
+                indexToResult.map(index => {
+                    return this.m_library
+                        .CtxGetSignerInfo(context as EndUserContextClass, index, sign)
+                        .then(signerInfo => MapToEndUserCertificate(signerInfo));
+                }),
+            );
+            await this.m_library.CtxFree(context);
+            context = null;
+            return signIndex !== -1 ? signersInfo[0] : signersInfo;
+        } catch (e) {
+            if (context) {
+                try {
+                    await this.m_library.CtxFree(context);
+                    throw this.MapError(e);
+                } catch (e) {
+                    throw this.MapError(e);
+                }
+            } else {
+                throw this.MapError(e);
+            }
+        }
+    }
+    SignData(data: Uint8Array | string, asBase64String?: boolean) {
+        return this.SignDataEx(
+            EndUserSignAlgo.DSTU4145WithGOST34311,
+            data,
+            true,
+            true,
+            asBase64String,
+        );
+    }
+    SignDataInternal(appendCert: boolean, data: Uint8Array | string, asBase64String?: boolean) {
+        return this.SignDataEx(
+            EndUserSignAlgo.DSTU4145WithGOST34311,
+            data,
+            false,
+            appendCert,
+            asBase64String,
+        );
+    }
+    SignHash(
+        signAlgo: EndUserSignAlgo,
+        hash: Uint8Array | string,
+        appendCert: boolean,
+        asBase64String?: boolean,
+    ) {
+        return this.CtxSignHashInternal(
+            this.m_pkContext,
+            signAlgo,
+            hash,
+            null,
+            appendCert,
+            asBase64String,
+        );
+    }
+    SignDataEx(
+        signAlgo: EndUserSignAlgo,
+        data: Uint8Array | string,
+        external: boolean,
+        appendCert: boolean,
+        asBase64String?: boolean,
+    ) {
+        return this.CtxSignDataInternal(
+            this.m_pkContext,
+            signAlgo,
+            data,
+            null,
+            external,
+            appendCert,
+            asBase64String,
+        );
+    }
+    AppendSign(
+        signAlgo: EndUserSignAlgo,
+        data: Uint8Array | string,
+        previousSign: Uint8Array | string,
+        appendCert: boolean,
+        asBase64String?: boolean,
+    ) {
+        return this.CtxSignDataInternal(
+            this.m_pkContext,
+            signAlgo,
+            data,
+            previousSign,
+            data != null,
+            appendCert,
+            asBase64String,
+        );
+    }
+    AppendSignHash(
+        signAlgo: EndUserSignAlgo,
+        hash: Uint8Array | string,
+        previousSign: Uint8Array,
+        appendCert: boolean,
+        asBase64String?: boolean,
+    ) {
+        return this.CtxSignHashInternal(
+            this.m_pkContext,
+            signAlgo,
+            hash,
+            previousSign,
+            appendCert,
+            asBase64String,
+        );
+    }
+    async VerifyHash(hash: Uint8Array, sign: Uint8Array, signIndex: number) {
+        try {
+            signIndex = signIndex ? signIndex : -1;
+            await this.CheckInitialize();
+            const signsCount = signIndex === -1 ? this.m_library.GetSignsCount(sign) : 1;
+            const indexToResult =
+                signIndex !== -1 ? [signIndex] : Array.from(Array(signsCount).keys());
+            const result = await Promise.all(
+                indexToResult.map(async index => {
+                    const signInfo = MapToEndUserSignInfo(
+                        await this.m_library.VerifyHashOnTimeEx(
+                            hash,
+                            index,
+                            sign,
+                            null,
+                            false,
+                            false,
+                        ),
+                    );
+                    signInfo.timeInfo = MapToEndUserTimeInfo(
+                        await this.m_library.GetSignTimeInfo(index, sign),
+                    );
+                    signInfo.signLevel = await this.m_library.GetSignType(index, sign);
+                    return signInfo;
+                }),
+            );
+            return signIndex !== -1 ? result[0] : result;
+        } catch (e) {
+            throw this.MapError(e);
+        }
+    }
+    async VerifyData(data: Uint8Array, sign: Uint8Array, signIndex: number) {
+        try {
+            signIndex = signIndex ? signIndex : -1;
+            await this.CheckInitialize();
+            const signsCount = signIndex === -1 ? this.m_library.GetSignsCount(sign) : 1;
+            const indexToResult =
+                signIndex !== -1 ? [signIndex] : Array.from(Array(signsCount).keys());
+            const result = await Promise.all(
+                indexToResult.map(async index => {
+                    const signInfo = MapToEndUserSignInfo(
+                        await this.m_library.VerifyDataOnTimeEx(
+                            data,
+                            index,
+                            sign,
+                            null,
+                            false,
+                            false,
+                        ),
+                    );
+                    signInfo.timeInfo = MapToEndUserTimeInfo(
+                        await this.m_library.GetSignTimeInfo(index, sign),
+                    );
+                    signInfo.signLevel = await this.m_library.GetSignType(index, sign);
+                    return signInfo;
+                }),
+            );
+            return signIndex !== -1 ? result[0] : result;
+        } catch (e) {
+            throw this.MapError(e);
+        }
+    }
+    async VerifyDataInternal(sign: Uint8Array, signIndex?: number) {
+        try {
+            signIndex = signIndex ? signIndex : -1;
+            await this.CheckInitialize();
+            const signsCount = signIndex === -1 ? this.m_library.GetSignsCount(sign) : 1;
+            const indexToResult =
+                signIndex !== -1 ? [signIndex] : Array.from(Array(signsCount).keys());
+            const result = await Promise.all(
+                indexToResult.map(async index => {
+                    const signInfo = MapToEndUserSignInfo(
+                        await this.m_library.VerifyDataInternalOnTimeEx(
+                            sign,
+                            index,
+                            null,
+                            false,
+                            false,
+                        ),
+                    );
+                    signInfo.timeInfo = MapToEndUserTimeInfo(
+                        await this.m_library.GetSignTimeInfo(index, sign),
+                    );
+                    signInfo.signLevel = await this.m_library.GetSignType(index, sign);
+                    return signInfo;
+                }),
+            );
+            return signIndex !== -1 ? result[0] : result;
+        } catch (e) {
+            throw this.MapError(e);
+        }
+    }
     //EnvelopData
     //DevelopData
     //ProtectDataByPassword
@@ -1015,17 +1243,106 @@ export default class EndUserAgent implements EndUserLibrary {
     //CreateAuthData
     //GetTSPByAccessInfo
     //CheckTSP
-    //CtxCreate
-    //CtxFree
-    //CtxSetParameter
+    async CtxCreate() {
+        try {
+            await this.CheckInitialize();
+            const context = await this.m_library.CtxCreate();
+            await this.m_library.CtxSetParameter(
+                context,
+                this.m_library.EU_RESOLVE_OIDS_PARAMETER,
+                this.m_resolveOIDs,
+            );
+            return context as unknown as EndUserContext;
+        } catch (e) {
+            throw this.MapError(e);
+        }
+    }
+    async CtxFree(context: EndUserContext) {
+        try {
+            await this.CheckInitialize();
+            await this.m_library.CtxFree(context as unknown as EndUserContextClass);
+        } catch (e) {
+            throw this.MapError(e);
+        }
+    }
+    async CtxSetParameter(context: EndUserContext, name: string, value: boolean) {
+        try {
+            await this.CheckInitialize();
+            await this.m_library.CtxSetParameter(
+                (context ?? this.m_context) as unknown as EndUserContextClass,
+                name,
+                value,
+            );
+        } catch (e) {
+            throw this.MapError(e);
+        }
+    }
     //CtxReadPrivateKey
     //CtxReadPrivateKeyBinary
     //CtxFreePrivateKey
     //CtxGetOwnCertificates
-    //CtxSignHash
-    //CtxSignData
-    //CtxAppendSignHash
-    //CtxAppendSign
+    CtxSignHash(
+        context: EndUserContextClass | null,
+        signAlgo: EndUserSignAlgo,
+        hash: Uint8Array | string,
+        appendCert: boolean,
+        asBase64String?: boolean,
+    ) {
+        return this.CtxSignHashInternal(context, signAlgo, hash, null, appendCert, asBase64String);
+    }
+    CtxSignData(
+        context: EndUserContextClass | null,
+        signAlgo: EndUserSignAlgo,
+        hash: Uint8Array | string,
+        external: boolean,
+        appendCert: boolean,
+        asBase64String?: boolean,
+    ) {
+        return this.CtxSignDataInternal(
+            context,
+            signAlgo,
+            hash,
+            null,
+            external,
+            appendCert,
+            asBase64String,
+        );
+    }
+    CtxAppendSignHash(
+        context: EndUserContextClass | null,
+        signAlgo: EndUserSignAlgo,
+        dataOrHash: Uint8Array | string,
+        previousSign: Uint8Array | string | null,
+        appendCert: boolean,
+        asBase64String?: boolean,
+    ) {
+        return this.CtxSignHashInternal(
+            context,
+            signAlgo,
+            dataOrHash,
+            previousSign,
+            appendCert,
+            asBase64String,
+        );
+    }
+    CtxAppendSign(
+        context: EndUserContextClass | null,
+        signAlgo: EndUserSignAlgo,
+        dataOrHash: Uint8Array | string,
+        previousSign: Uint8Array | string | null,
+        appendCert: boolean,
+        asBase64String?: boolean,
+    ) {
+        return this.CtxSignDataInternal(
+            context,
+            signAlgo,
+            dataOrHash,
+            previousSign,
+            dataOrHash != null,
+            appendCert,
+            asBase64String,
+        );
+    }
     //CtxEnvelopData
     //CtxDevelopData
     //ProtectTaxReports
@@ -1040,5 +1357,89 @@ export default class EndUserAgent implements EndUserLibrary {
     //XAdESGetSigner
     //XAdESSignData
     //XAdESVerifyData
-    //GetSignContainerInfo
+    async GetSignContainerInfo(signature: Uint8Array | string) {
+        try {
+            await this.CheckInitialize();
+            const sign =
+                typeof signature == "string"
+                    ? await this.m_library.BASE64Decode(signature)
+                    : signature;
+
+            const makeSignContainerInfo = (type: number, subType: number, asicSignType: number) => {
+                return {
+                    type: type || 0,
+                    subType: subType || 0,
+                    asicSignType: asicSignType || 0,
+                };
+            };
+
+            const getCAdESInfo = async (signature: Uint8Array) => {
+                try {
+                    var isInternal = await this.m_library.IsDataInSignedDataAvailable(signature);
+                    return makeSignContainerInfo(
+                        EndUserSignContainerType.CAdES,
+                        isInternal ? EndUserCAdESType.Enveloped : EndUserCAdESType.Detached,
+                        0,
+                    );
+                } catch (e) {
+                    return null;
+                }
+            };
+
+            const getXAdESInfo = async (signature: Uint8Array) => {
+                try {
+                    var type = await this.m_library.XAdESGetType(signature);
+                    return makeSignContainerInfo(EndUserSignContainerType.XAdES, type, 0);
+                } catch (e) {
+                    return null;
+                }
+            };
+
+            const getPAdESInfo = async (signature: Uint8Array) => {
+                try {
+                    await this.m_library.PDFGetSignsCount(signature);
+                    return makeSignContainerInfo(EndUserSignContainerType.PAdES, 0, 0);
+                } catch (e) {
+                    return null;
+                }
+            };
+
+            const getASiCInfo = async (signature: Uint8Array) => {
+                try {
+                    var asicType = await this.m_library.ASiCGetASiCType(signature);
+                    var signType = await this.m_library.ASiCGetSignType(signature);
+                    return makeSignContainerInfo(EndUserSignContainerType.ASiC, asicType, signType);
+                } catch (e) {
+                    return null;
+                }
+            };
+
+            const isArrayStartsWith = (arr: Uint8Array, firstBytes: number[]) => {
+                if (arr.length < firstBytes.length) return false;
+                for (let i = 0; i < firstBytes.length; i++)
+                    if (arr[i] !== firstBytes[i]) return false;
+                return true;
+            };
+            const chain = isArrayStartsWith(sign, [60, 63, 120, 109, 108])
+                ? [getXAdESInfo, getCAdESInfo, getPAdESInfo, getASiCInfo]
+                : isArrayStartsWith(sign, [37, 80, 68, 70])
+                ? [getPAdESInfo, getCAdESInfo, getXAdESInfo, getASiCInfo]
+                : isArrayStartsWith(sign, [80, 75])
+                ? [getASiCInfo, getCAdESInfo, getXAdESInfo, getPAdESInfo]
+                : [getCAdESInfo, getXAdESInfo, getPAdESInfo, getASiCInfo];
+
+            let info = null;
+            for (var i = 0; i < chain.length; i++) {
+                info = await chain[i](sign);
+                if (info != null) break;
+            }
+
+            if (info == null) {
+                info = makeSignContainerInfo(EndUserSignContainerType.Unknown, 0, 0);
+            }
+            return info;
+        } catch (e) {
+            throw this.MapError(e);
+        }
+    }
 }
