@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import { EndUserPrivateKey } from "../../EUSign/eusign.types";
+import { EndUserPrivateKey } from "../../EUSign/EndUserTypes";
 import { useEndUserContext } from '../../EUSign/EndUserContext';
 import { useKeyContext } from './KeyContext';
 import Form from "react-bootstrap/Form";

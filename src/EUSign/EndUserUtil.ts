@@ -13,7 +13,7 @@ import {
     EndUserXAdESType,
     EndUserASiCType,
 } from "./EndUserConstants";
-import { EndUserCertificate } from "./eusign.types";
+import { EndUserCertificate } from "./EndUserTypes";
 
 const TEXT_KEY_TYPE_DSTU4145 = "ДСТУ 4145";
 const TEXT_KEY_TYPE_RSA = "RSA";

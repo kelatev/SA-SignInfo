@@ -1,30 +1,50 @@
+import { EndUserError } from "./eusw";
+import EUSignCPAgent from "./EUSignCPAgent";
 import {
-    EndUserSettings,
-    EndUserSettingsCA,
     EndUserPrivateKey,
     EndUserCertificate,
     EndUserCertificateInfoEx,
     EndUserContext,
-} from "./eusign.types";
-import { MapToEndUserCertificateInfoEx } from "./EndUserConvert";
-import EUSignCPAgent from "./EUSignCPAgent";
+    EndUserProxySettings,
+    EndUserError as EndUserErrorType,
+    EndUserKeyMedia,
+    EndUserOwnerInfo,
+    EndUserPrivateKeyContext,
+    EndUserParams,
+} from "./EndUserTypes";
+import {
+    EndUserContextClass,
+    EndUserKeyMediaClass,
+    EndUserPrivateKeyContextClass,
+    EndUserPrivateKeyInfoClass,
+} from "./EndUserClass";
+import {
+    MapToEndUserCertificateInfoEx,
+    MapToProxySettings,
+    MapFromProxySettings,
+    MapFromKeyMedia,
+    MapEndUserOwnerInfo,
+    MapToEndUserParams,
+    MapToEndUserCertificate,
+} from "./EndUserConvert";
 import EndUserLibrary, {
     EndUserEventType,
     LibraryInfo,
     ClientRegistrationTokenKSP,
     SignContainerInfo,
+    EndUserSettings,
+    EndUserSettingsCA,
 } from "./EndUserLibrary";
-import { EndUserSignAlgo } from "./EndUserConstants";
-import { EndUserError } from "./EndUserObject";
+import { EndUserSignAlgo, EndUserCMPCompatibility } from "./EndUserConstants";
 
 export default class EndUserAgent implements EndUserLibrary {
     m_library;
     m_settings: EndUserSettings = {} as any;
     m_initialized = false;
-    m_kmTypes = null;
+    m_kmTypes: string[] | null = null;
     m_kmActiveOperation = false;
-    m_context: EndUserContext | null = null;
-    m_pkContext = null;
+    m_context: EndUserContextClass | null = null;
+    m_pkContext: EndUserPrivateKeyContextClass | null = null;
     m_eventListeners: any[];
     m_resolveOIDs = false;
 
@@ -33,7 +53,7 @@ export default class EndUserAgent implements EndUserLibrary {
         this.m_eventListeners = [];
     }
 
-    MapError(error: any): EndUserError {
+    MapError(error: any): EndUserErrorType {
         const endUserError = new EndUserError();
 
         if (undefined !== error.GetErrorCode && undefined !== error.GetMessage) {
@@ -117,9 +137,7 @@ export default class EndUserAgent implements EndUserLibrary {
                 ].indexOf(eventType) < 0
             ) {
                 reject(
-                    this.MapError(
-                        this.m_library.MakeError(EndUserError.EU_ERROR_BAD_PARAMETER, ""),
-                    ),
+                    this.MapError(this.m_library.MakeError(EndUserError.ERROR_BAD_PARAMETER, "")),
                 );
             } else {
                 switch (eventType) {
@@ -200,7 +218,7 @@ export default class EndUserAgent implements EndUserLibrary {
                 : null;
 
         if (issuerCN && caSettings === null) {
-            throw this.m_library.MakeError(EndUserError.EU_ERROR_WRITE_SETTINGS, "");
+            throw this.m_library.MakeError(EndUserError.ERROR_WRITE_SETTINGS, "");
         }
 
         const tsp = caSettings && caSettings.tspAddress ? caSettings : defaultCASettings;
@@ -248,58 +266,37 @@ export default class EndUserAgent implements EndUserLibrary {
                     if (info)
                         for (let i = 0; i < info.GetCertificatesCount(); i++)
                             result.push(info.GetCertificate(i));
-                    return this.ProcessArray<EndUserCertificateInfoEx>(result, item =>
+                    return this.ProcessArray(result, item =>
                         this.m_library.ParseCertificateEx(item),
                     );
                 })
                 .then(infoExArr => {
-                    var n = new EndUserPrivateKey();
+                    var n: EndUserPrivateKey = {} as any;
                     n.alias = privateKey.alias;
                     n.privateKey = privateKey.info.GetPrivateKey();
                     n.certificates = [];
                     n.digitalStamp = false;
                     for (var r = 0; r < infoExArr.length; r++) {
-                        var o = infoExArr[r];
-                        if (o.GetSubjType() === this.m_library.EU_SUBJECT_TYPE_END_USER) {
-                            o.GetPublicKeyType() === this.m_library.EU_CERT_KEY_TYPE_DSTU4145 &&
-                                (o.GetKeyUsageType() &
+                        var infoEx = infoExArr[r];
+                        if (infoEx.GetSubjType() === this.m_library.EU_SUBJECT_TYPE_END_USER) {
+                            infoEx.GetPublicKeyType() ===
+                                this.m_library.EU_CERT_KEY_TYPE_DSTU4145 &&
+                                (infoEx.GetKeyUsageType() &
                                     this.m_library.EU_KEY_USAGE_DIGITAL_SIGNATURE) ===
                                     this.m_library.EU_KEY_USAGE_DIGITAL_SIGNATURE &&
                                 (n.digitalStamp =
-                                    o
+                                    infoEx
                                         .GetExtKeyUsages()
                                         .indexOf(this.m_library.EU_UA_OID_EXT_KEY_USAGE_STAMP) >
                                     -1);
-                            var l = new EndUserCertificate();
+                            var l: EndUserCertificate = {} as any;
                             l.data = privateKey.info.GetCertificate(r);
-                            l.infoEx = MapToEndUserCertificateInfoEx(o, new p.a());
+                            l.infoEx = MapToEndUserCertificateInfoEx(infoEx);
                             n.certificates.push(l);
                         }
                     }
                     n.digitalStamp = false;
                     resolve(n);
-                })
-                .catch(e => reject(this.MapError(e)));
-        });
-    }
-    GetJKSPrivateKeys(jks: Uint8Array) {
-        return new Promise<EndUserPrivateKey[]>((resolve, reject) => {
-            this.CheckInitialize()
-                .then(() => {
-                    const result: EndUserPrivateKey[] = [];
-                    const run = (index: number) => {
-                        this.GetJKSPrivateKey(jks, index)
-                            .then(privateKey => {
-                                if (privateKey) {
-                                    result.push(privateKey);
-                                    run(index + 1);
-                                } else {
-                                    resolve(result);
-                                }
-                            })
-                            .catch(e => reject(this.MapError(e)));
-                    };
-                    run(0);
                 })
                 .catch(e => reject(this.MapError(e)));
         });
@@ -517,30 +514,490 @@ export default class EndUserAgent implements EndUserLibrary {
                 .catch(e => reject(this.MapError(e)));
         });
     }
-    //GetProxySettings
-    //SetProxySettings
-    //GetKeyMedias
-    //GetJKSPrivateKeys
-    //IsPrivateKeyReaded
-    //ResetPrivateKey
-    //ResetOperationKSP
-    //ReadPrivateKey
-    //ReadPrivateKeyBinary
-    //ReadPrivateKeySIM
-    //ReadPrivateKeyKSP
-    //GetOwnCertificates
-    //GetOwnEUserParams
-    //ChangeOwnCertificatesStatus
+    GetProxySettings() {
+        return new Promise<EndUserProxySettings>((resolve, reject) => {
+            this.CheckInitialize()
+                .then(() => this.m_library.GetProxySettings())
+                .then(data => {
+                    resolve(MapToProxySettings(data));
+                })
+                .catch(e => reject(this.MapError(e)));
+        });
+    }
+    SetProxySettings(settings: EndUserProxySettings) {
+        return new Promise<void>((resolve, reject) => {
+            this.CheckInitialize()
+                .then(() =>
+                    this.m_library.SetProxySettings(
+                        MapFromProxySettings(settings, this.m_library.CreateProxySettings()),
+                    ),
+                )
+                .then(resolve)
+                .catch(e => reject(this.MapError(e)));
+        });
+    }
+    GetKeyMedias() {
+        let allowedKeyMediaDevices: any = null;
+        if (this.m_settings.allowedKeyMediaDevices) {
+            allowedKeyMediaDevices = {};
+            this.m_settings.allowedKeyMediaDevices.forEach(e => {
+                allowedKeyMediaDevices[e.type] = e.devices;
+            });
+        }
+        let allowedKeyMediaTypes: number[] = [];
+
+        return new Promise((resolve, reject) => {
+            this.CheckInitialize()
+                .then(() => this.BeginKMOperation())
+                .then(() => (this.m_kmTypes ? this.m_kmTypes : this.m_library.GetKeyMediaTypes()))
+                .then(kmTypes => {
+                    this.m_kmTypes = kmTypes;
+                    allowedKeyMediaTypes = [];
+                    for (let i = 0; i < kmTypes.length; i++) {
+                        (!this.m_settings.allowedKeyMediaTypes ||
+                            this.m_settings.allowedKeyMediaTypes.indexOf(kmTypes[i]) >= 0) &&
+                            allowedKeyMediaTypes.push(i);
+                    }
+                    return this.m_library.GetKeyMediaDevices(allowedKeyMediaTypes);
+                })
+                .then(keyMediaDevices => {
+                    let result = [];
+                    for (let i = 0; i < keyMediaDevices.length; i++)
+                        for (
+                            var allowedType = allowedKeyMediaTypes[i],
+                                type = this.m_kmTypes?.at(allowedType),
+                                allowedDevice = keyMediaDevices[i],
+                                device =
+                                    type &&
+                                    allowedKeyMediaDevices &&
+                                    allowedKeyMediaDevices.at(type)
+                                        ? allowedKeyMediaDevices.at(type)
+                                        : null,
+                                index = 0;
+                            index < allowedDevice.length;
+                            index++
+                        )
+                            if (!device || -1 != device.indexOf(allowedDevice[index])) {
+                                var map: EndUserKeyMedia = {} as any;
+                                map.typeIndex = allowedType;
+                                map.devIndex = index;
+                                map.password = null;
+                                map.type = type;
+                                map.device = allowedDevice[index];
+                                map.visibleName = map.device + "(" + map.type + ")";
+                                result.push(map);
+                            }
+                    this.EndKMOperation();
+                    resolve(result);
+                })
+                .catch(e => {
+                    this.EndKMOperation();
+                    reject(this.MapError(e));
+                });
+        });
+    }
+    GetJKSPrivateKeys(jks: Uint8Array) {
+        return new Promise<EndUserPrivateKey[]>((resolve, reject) => {
+            this.CheckInitialize()
+                .then(() => {
+                    const result: EndUserPrivateKey[] = [];
+                    const run = (index: number) => {
+                        this.GetJKSPrivateKey(jks, index)
+                            .then(privateKey => {
+                                if (privateKey) {
+                                    result.push(privateKey);
+                                    run(index + 1);
+                                } else {
+                                    resolve(result);
+                                }
+                            })
+                            .catch(e => reject(this.MapError(e)));
+                    };
+                    run(0);
+                })
+                .catch(e => reject(this.MapError(e)));
+        });
+    }
+    IsPrivateKeyReaded() {
+        return new Promise<boolean>((resolve, reject) => {
+            this.CheckInitialize()
+                .then(() => resolve(this.m_pkContext != null))
+                .catch(e => reject(this.MapError(e)));
+        });
+    }
+    ResetPrivateKeyInternal() {
+        return new Promise<void>((resolve, reject) => {
+            if (this.m_pkContext != null) {
+                this.m_library
+                    .CtxFreePrivateKey(this.m_pkContext)
+                    .then(() => {
+                        this.m_pkContext = null;
+                        resolve();
+                    })
+                    .catch(e => reject(this.MapError(e)));
+            } else {
+                resolve();
+            }
+        });
+    }
+    async ResetPrivateKey() {
+        try {
+            await this.CheckInitialize();
+            await this.ResetPrivateKeyInternal();
+        } catch (e) {
+            throw this.MapError(e);
+        }
+    }
+    async ResetOperationKSP() {
+        try {
+            await this.CheckInitialize();
+            throw this.m_library.MakeError(EndUserError.ERROR_NOT_SUPPORTED, "");
+        } catch (e) {
+            throw this.MapError(e);
+        }
+    }
+    async SaveCertificatesInternal(
+        certificates: Uint8Array[] | Uint8Array | null | undefined,
+    ): Promise<void> {
+        if (Array.isArray(certificates)) {
+            return Promise.all(
+                certificates.map(async cert => {
+                    await this.m_library.SaveCertificate(cert);
+                }),
+            ).then(() => Promise.resolve());
+        } else if (certificates) {
+            return this.m_library.SaveCertificate(certificates);
+        } else {
+            return Promise.resolve();
+        }
+    }
+    async CtxReadPrivateKeyInternal(
+        context: EndUserContextClass | null,
+        privateKey: Uint8Array | null,
+        password: string | null,
+        keyMedia: EndUserKeyMediaClass | null,
+        certificates: Uint8Array[] | Uint8Array | null | undefined,
+        issuerCN: string | null,
+    ): Promise<EndUserPrivateKeyContextClass> {
+        context = context || this.m_context;
+        let pkContext: EndUserPrivateKeyContextClass | null = null;
+        try {
+            await this.SaveCertificatesInternal(certificates);
+            await this.SetSettings(issuerCN);
+            if (privateKey !== null && password !== null) {
+                pkContext = await this.m_library.CtxReadPrivateKeyBinary(
+                    context,
+                    privateKey,
+                    password,
+                );
+            } else if (keyMedia) {
+                pkContext = await this.m_library.CtxReadPrivateKey(context, keyMedia);
+            } else {
+                throw this.m_library.MakeError(EndUserError.ERROR_BAD_PRIVATE_KEY, "");
+            }
+            const ownerInfo = pkContext.GetOwnerInfo();
+            if (issuerCN === null) {
+                ownerInfo && (await this.SetSettings(ownerInfo.GetIssuerCN()));
+                return pkContext;
+            }
+            const settings = ownerInfo && this.GetCASettings(ownerInfo.GetIssuerCN());
+            if (!settings || settings.issuerCNs.indexOf(issuerCN) === -1)
+                throw this.m_library.MakeError(EndUserError.ERROR_CERT_NOT_FOUND, "");
+            return pkContext;
+        } catch (e: any) {
+            if (pkContext == null) {
+                if (this.MapError(e).errorCode !== EndUserError.ERROR_CERT_NOT_FOUND || issuerCN) {
+                    throw this.MapError(e);
+                } else {
+                    try {
+                        const keyCertificate = await this.SearchPrivateKeyCertificatesWithCMP(
+                            privateKey,
+                            password,
+                            keyMedia,
+                        );
+                        return this.CtxReadPrivateKeyInternal(
+                            context,
+                            privateKey,
+                            password,
+                            keyMedia,
+                            keyCertificate.certs,
+                            keyCertificate.CACommonName,
+                        );
+                    } catch (e) {
+                        throw this.MapError(e);
+                    }
+                }
+            } else {
+                try {
+                    await this.m_library.CtxFreePrivateKey(pkContext);
+                    throw this.MapError(e);
+                } catch (e) {
+                    throw this.MapError(e);
+                }
+            }
+        }
+    }
+    async SearchPrivateKeyCertificatesWithCMP(
+        privateKey: Uint8Array | null,
+        password: string | null,
+        keyMedia: EndUserKeyMediaClass | null,
+        issuerCN?: string,
+    ): Promise<{
+        certs: Uint8Array | null;
+        CACommonName: string | null;
+    }> {
+        const CAs = this.m_settings.CAs as EndUserSettingsCA[];
+        try {
+            let keyInfo: EndUserPrivateKeyInfoClass;
+            if (null != privateKey && null != password) {
+                keyInfo = await this.m_library.GetKeyInfoBinary(privateKey, password);
+            } else if (keyMedia) {
+                keyInfo = await this.m_library.GetKeyInfo(keyMedia);
+            } else {
+                return {
+                    certs: null,
+                    CACommonName: null,
+                };
+            }
+
+            return new Promise((resolve, reject) => {
+                const func = (index: number, errorCertNotFound: boolean) => {
+                    if (index >= CAs.length) {
+                        throw this.m_library.m_library.MakeError(
+                            errorCertNotFound
+                                ? EndUserError.ERROR_CERT_NOT_FOUND
+                                : EndUserError.ERROR_TRANSMIT_REQUEST,
+                            "",
+                        );
+                    } else {
+                        const action = issuerCN
+                            ? EndUserCMPCompatibility.DownloadEUCerts
+                            : EndUserCMPCompatibility.SearchEUCerts;
+                        if (this.IsCMPCompatible(CAs[index], action)) {
+                            if (issuerCN && CAs[index].issuerCNs.indexOf(issuerCN) === -1) {
+                                func(index + 1, errorCertNotFound);
+                            } else {
+                                this.m_library
+                                    .GetCertificatesByKeyInfo(
+                                        keyInfo,
+                                        [CAs[index].cmpAddress],
+                                        ["80"],
+                                    )
+                                    .then(certificates => {
+                                        resolve({
+                                            certs: certificates,
+                                            CACommonName: CAs[index].issuerCNs[0],
+                                        });
+                                    })
+                                    .catch(error => {
+                                        const code = error.GetErrorCode();
+                                        if (
+                                            code === EndUserError.ERROR_CERT_NOT_FOUND ||
+                                            code === EndUserError.ERROR_TRANSMIT_REQUEST
+                                        ) {
+                                            return func(
+                                                index + 1,
+                                                errorCertNotFound ||
+                                                    code === EndUserError.ERROR_CERT_NOT_FOUND,
+                                            );
+                                        }
+                                        reject(this.MapError(error));
+                                    });
+                            }
+                        } else {
+                            func(index + 1, errorCertNotFound);
+                        }
+                    }
+                };
+                func(0, false);
+            });
+        } catch (e) {
+            throw this.MapError(e);
+        }
+    }
+    ReadPrivateKeyInternal(
+        privateKey: Uint8Array | null,
+        password: string | null,
+        keyMedia: EndUserKeyMediaClass | null,
+        certs: Uint8Array[] | Uint8Array | null,
+        CACommonName: string | null,
+    ) {
+        return new Promise<EndUserOwnerInfo>((resolve, reject) => {
+            this.ResetPrivateKeyInternal()
+                .then(() =>
+                    this.CtxReadPrivateKeyInternal(
+                        this.m_context,
+                        privateKey,
+                        password,
+                        keyMedia,
+                        certs,
+                        CACommonName,
+                    ),
+                )
+                .then(context => {
+                    this.m_pkContext = context;
+                    resolve(MapEndUserOwnerInfo(context?.GetOwnerInfo()));
+                })
+                .catch(e => reject(this.MapError(e)));
+        });
+    }
+    ReadPrivateKey(
+        keyMedia: EndUserKeyMedia,
+        certs: Uint8Array[] | Uint8Array | null,
+        CACommonName: string | null,
+    ) {
+        return new Promise<EndUserOwnerInfo>((resolve, reject) => {
+            this.CheckInitialize()
+                .then(() => this.BeginKMOperation())
+                .then(() => {
+                    const keyMediaMap = MapFromKeyMedia(keyMedia, this.m_library.CreateKeyMedia());
+                    return this.ReadPrivateKeyInternal(
+                        null,
+                        null,
+                        keyMediaMap,
+                        certs,
+                        CACommonName,
+                    );
+                })
+                .then(ownerInfo => {
+                    this.EndKMOperation();
+                    resolve(ownerInfo);
+                })
+                .catch(e => {
+                    this.EndKMOperation();
+                    reject(this.MapError(e));
+                });
+        });
+    }
+    ReadPrivateKeyBinary(
+        privateKey: Uint8Array,
+        password: string,
+        certs: Uint8Array[] | Uint8Array | null,
+        CACommonName: string | null,
+    ) {
+        return new Promise<EndUserOwnerInfo>((resolve, reject) => {
+            this.CheckInitialize()
+                .then(() => this.BeginKMOperation())
+                .then(() =>
+                    this.ReadPrivateKeyInternal(privateKey, password, null, certs, CACommonName),
+                )
+                .then(ownerInfo => {
+                    this.EndKMOperation();
+                    resolve(ownerInfo);
+                })
+                .catch(e => {
+                    this.EndKMOperation();
+                    reject(this.MapError(e));
+                });
+        });
+    }
+    ReadPrivateKeySIM(msisdn: string, operator: string | number, getCerts: boolean, keyId: number) {
+        return new Promise<EndUserPrivateKeyContext>((resolve, reject) => {
+            this.CheckInitialize()
+                .then(() => this.m_library.MakeError(EndUserError.ERROR_NOT_SUPPORTED, ""))
+                .catch(e => reject(this.MapError(e)));
+        });
+    }
+    ReadPrivateKeyKSP(userId: string, ksp: string | number, getCerts: boolean, keyId: number) {
+        return new Promise<EndUserPrivateKeyContext>((resolve, reject) => {
+            this.CheckInitialize()
+                .then(() => this.m_library.MakeError(EndUserError.ERROR_NOT_SUPPORTED, ""))
+                .catch(e => reject(this.MapError(e)));
+        });
+    }
+    async CtxGetOwnCertificates(context: EndUserPrivateKeyContextClass | null) {
+        try {
+            await this.CheckInitialize();
+            if (context == null) throw this.m_library.MakeError(EndUserError.ERROR_BAD_CERT, "");
+            const result: EndUserCertificate[] = [];
+            const func = async (index: number): Promise<EndUserCertificate[]> => {
+                const cert = await this.m_library.CtxEnumOwnCertificates(context, index);
+                if (cert) {
+                    result.push(MapToEndUserCertificate(cert));
+                    return await func(index + 1);
+                } else {
+                    return result;
+                }
+            };
+            return await func(0);
+        } catch (e) {
+            throw this.MapError(e);
+        }
+    }
+    GetOwnCertificates() {
+        return this.CtxGetOwnCertificates(this.m_pkContext);
+    }
+    async GetOwnEUserParams(): Promise<EndUserParams> {
+        try {
+            await this.CheckInitialize();
+            if (this.m_pkContext == null)
+                throw this.m_library.MakeError(EndUserError.ERROR_BAD_CERT, "");
+            const result = await this.m_library.CtxGetOwnEUserParams(this.m_pkContext);
+            return MapToEndUserParams(result);
+        } catch (e) {
+            throw this.MapError(e);
+        }
+    }
+    async ChangeOwnCertificatesStatus(requestType: number, revocationReason: number) {
+        try {
+            await this.CheckInitialize();
+            if (this.m_pkContext == null)
+                throw this.m_library.MakeError(EndUserError.ERROR_BAD_CERT, "");
+            await this.m_library.CtxChangeOwnCertificatesStatus(
+                this.m_pkContext,
+                requestType,
+                revocationReason,
+            );
+        } catch (e) {
+            throw this.MapError(e);
+        }
+    }
     //MakeNewCertificate
     //MakeDeviceCertificate
     //ChangePrivateKeyPassword
     //ChangePrivateKeyPasswordBinary
     //GeneratePrivateKey
     //GeneratePrivateKeyBinary
-    //GetKeyInfo
-    //GetKeyInfoBinary
-    //GetClientRegistrationTokenKSP
-    //HashData
+    async GetKeyInfo(keyMedia: EndUserKeyMedia) {
+        try {
+            await this.CheckInitialize();
+            await this.BeginKMOperation();
+            const result = await this.m_library.GetKeyInfo(
+                MapFromKeyMedia(keyMedia, this.m_library.CreateKeyMedia()),
+            );
+            this.EndKMOperation();
+            return result.GetPrivateKeyInfo();
+        } catch (e) {
+            this.EndKMOperation();
+            throw this.MapError(e);
+        }
+    }
+    async GetKeyInfoBinary(privateKey: Uint8Array, password: string) {
+        try {
+            await this.CheckInitialize();
+            const result = await this.m_library.GetKeyInfoBinary(privateKey, password);
+            return result.GetPrivateKeyInfo();
+        } catch (e) {
+            throw this.MapError(e);
+        }
+    }
+    async GetClientRegistrationTokenKSP(ksp: string | number): Promise<ClientRegistrationTokenKSP> {
+        try {
+            await this.CheckInitialize();
+            throw this.m_library.MakeError(EndUserError.ERROR_NOT_SUPPORTED, "");
+        } catch (e) {
+            throw this.MapError(e);
+        }
+    }
+    async HashData(hashAlgo: number, data: Uint8Array, asBase64String?: boolean) {
+        try {
+            await this.CheckInitialize();
+            const hash = await this.m_library.CtxHash(this.m_context, hashAlgo, null, data);
+            return asBase64String ? hash : this.m_library.BASE64Decode(hash);
+        } catch (e) {
+            throw this.MapError(e);
+        }
+    }
     //GetSigner
     //SignData
     //SignDataInternal

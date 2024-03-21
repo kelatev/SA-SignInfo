@@ -1,5 +1,4 @@
 import {
-    EndUserSettings,
     EndUserProxySettings,
     EndUserPrivateKey,
     EndUserOwnerInfo,
@@ -9,14 +8,15 @@ import {
     EndUserCertificate,
     EndUserSignInfo,
     EndUserContext,
-    EndUserSettingsCA,
-} from "./eusign.types";
+} from "./EndUserTypes";
 import EUSignCPWorker from "./EUSignCPWorker";
 import EndUserLibrary, {
     EndUserEventType,
     LibraryInfo,
     ClientRegistrationTokenKSP,
     SignContainerInfo,
+    EndUserSettings,
+    EndUserSettingsCA,
 } from "./EndUserLibrary";
 import { EndUserSignAlgo } from "./EndUserConstants";
 
@@ -162,7 +162,7 @@ export default class EndUserWorker implements EndUserLibrary {
         return this.command<ClientRegistrationTokenKSP>("GetClientRegistrationTokenKSP", ksp);
     }
     HashData(hashAlgo: number, data: Uint8Array, asBase64String?: boolean) {
-        return this.command<Uint8Array>("HashData", hashAlgo, data, Number(asBase64String));
+        return this.command<Uint8Array | string>("HashData", hashAlgo, data, Number(asBase64String));
     }
     GetSigner(sign: Uint8Array, signIndex?: number, resolveOIDs?: boolean) {
         return this.command<EndUserCertificate | EndUserCertificate[]>(

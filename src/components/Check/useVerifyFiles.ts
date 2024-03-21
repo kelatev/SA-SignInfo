@@ -7,7 +7,7 @@ import {
     EndUserTimeInfo,
     EndUserSignInfo,
     EndUserCertificate,
-} from "../../EUSign/eusign.types";
+} from "../../EUSign/EndUserTypes";
 import { EndUserSignContainerType } from "../../EUSign/EndUserConstants";
 import {
     IsDigitalStamp,

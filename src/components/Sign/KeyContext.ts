@@ -1,5 +1,5 @@
 import { createContext, useContext } from "react";
-import { EndUserCertificate, EndUserOwnerInfo, EndUserPrivateKeyContext } from "../../EUSign/eusign.types";
+import { EndUserCertificate, EndUserOwnerInfo, EndUserPrivateKeyContext } from "../../EUSign/EndUserTypes";
 import { SettingsType } from "./types";
 
 export type PrivatKeyType =

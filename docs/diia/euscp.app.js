@@ -12519,7 +12519,7 @@
                             (l.data = s.info.GetCertificate(r)),
                               (l.infoEx = c.a.MapToEndUserCertificateInfoEx(
                                 o,
-                                new p.a()
+                                new p. a()
                               )),
                               n.certificates.push(l);
                           }

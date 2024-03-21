@@ -1,5 +1,4 @@
 import {
-    EndUserSettings,
     EndUserProxySettings,
     EndUserPrivateKey,
     EndUserOwnerInfo,
@@ -9,14 +8,66 @@ import {
     EndUserCertificate,
     EndUserSignInfo,
     EndUserContext,
-    EndUserSettingsCA,
-} from "./eusign.types";
+} from "./EndUserTypes";
 import { EndUserSignAlgo } from "./EndUserConstants";
 
 export enum EndUserEventType {
     "None" = 0,
     "All" = 1,
     "ConfirmKSPOperation" = 2,
+}
+
+enum EndUserLanguage {
+    EU_DEFAULT_LANG = 0,
+    EU_UA_LANG = 1,
+    EU_RU_LANG = 2,
+    EU_EN_LANG = 3,
+}
+
+export interface EndUserSettingsCA {
+    issuerCNs: string[];
+    address: string;
+    ocspAccessPointAddress: string;
+    ocspAccessPointPort: string;
+    cmpAddress: string;
+    tspAddress: string;
+    tspAddressPort: string;
+    directAccess?: boolean;
+    qscdSNInCert?: boolean;
+    certsInKey?: boolean;
+    cmpCompatibility?: number;
+}
+
+export interface EndUserSettingsKSP {
+    name: string;
+    ksp: number;
+    address: string;
+    port: string;
+    directAccess: boolean;
+    clientIdPrefix?: string;
+    confirmationURL?: string;
+    mobileAppName?: string;
+    systemId?: string;
+}
+
+export interface EndUserSettings {
+    downloadsURL?: string;
+    language: EndUserLanguage | string;
+    encoding: string;
+    directAccess: boolean;
+    httpProxyServiceURL: string;
+    CAs: string | EndUserSettingsCA[];
+    CACertificates: string | Uint8Array;
+    allowedKeyMediaTypes?: string[];
+    allowedKeyMediaDevices?: Array<{ type: string; devices: string }>;
+    passwordRequirements?: null;
+    KSPs?: EndUserSettingsKSP[];
+    allowMakeNewCertOnNewKeyMedia: boolean;
+    allowMakeNewCertOnFileKeyMedia: boolean;
+    signInfoTmpl?: string;
+    connectionTimeout: number;
+    ocspResponseExpireTime: number;
+    TSLAddress?: string;
 }
 
 export interface LibraryInfo {
@@ -107,7 +158,7 @@ export default interface EndUserLibrary {
     GetKeyInfo: (keyMedia: EndUserKeyMedia) => Promise<Uint8Array>;
     GetKeyInfoBinary: (privateKey: Uint8Array, password: string) => Promise<Uint8Array>;
     GetClientRegistrationTokenKSP: (ksp: string | number) => Promise<ClientRegistrationTokenKSP>;
-    HashData: (hashAlgo: number, data: Uint8Array, asBase64String?: boolean) => Promise<Uint8Array>;
+    HashData: (hashAlgo: number, data: Uint8Array, asBase64String?: boolean) => Promise<Uint8Array | string>;
     GetSigner: (
         sign: Uint8Array,
         signIndex?: number,

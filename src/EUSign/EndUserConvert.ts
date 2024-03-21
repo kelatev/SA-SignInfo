@@ -1,19 +1,41 @@
-import { KeyMedia, ProxySettings, OwnerInfo, CertificateInfoEx } from "./EndUserMap";
+import {
+    EndUserKeyMediaClass,
+    EndUserProxySettingsClass,
+    EndUserOwnerInfoClass,
+    EndUserCertificateInfoExClass,
+    EndUserParamsClass,
+    EndUserTimeInfoClass,
+    EndUserSignInfoClass,
+    EndUserSenderInfoClass,
+    EndUserCertificateClass,
+    EndUserInfoClass,
+    EndUserRequestInfoClass,
+    EndUserReferenceClass,
+} from "./EndUserClass";
 import {
     EndUserKeyMedia,
     EndUserProxySettings,
     EndUserOwnerInfo,
     EndUserCertificateInfoEx,
-} from "./eusign.types";
+    EndUserParams,
+    EndUserTimeInfo,
+    EndUserSignInfo,
+    EndUserSenderInfo,
+    EndUserCertificate,
+    EndUserInfo,
+    EndUserRequestInfo,
+    EndUserReference,
+} from "./EndUserTypes";
 
-export function MapFromKeyMedia(map: KeyMedia, c: EndUserKeyMedia) {
+export function MapFromKeyMedia(map: EndUserKeyMedia, c: EndUserKeyMediaClass) {
     c.SetTypeIndex(map.typeIndex);
     c.SetDevIndex(map.devIndex);
     c.SetPassword(map.user ? "##" + map.user + "##" + map.password : map.password);
     return c;
 }
 
-export function MapToProxySettings(e: EndUserProxySettings, map: ProxySettings) {
+export function MapToProxySettings(e: EndUserProxySettingsClass) {
+    const map: EndUserProxySettings = {} as any;
     map.useProxy = e.GetUseProxy();
     map.address = e.GetAddress();
     map.port = e.GetPort();
@@ -24,7 +46,7 @@ export function MapToProxySettings(e: EndUserProxySettings, map: ProxySettings) 
     return map;
 }
 
-export function MapFromProxySettings(map: ProxySettings, t: EndUserProxySettings) {
+export function MapFromProxySettings(map: EndUserProxySettings, t: EndUserProxySettingsClass) {
     t.SetUseProxy(map.useProxy);
     t.SetAddress(map.address);
     t.SetPort(map.port);
@@ -35,7 +57,8 @@ export function MapFromProxySettings(map: ProxySettings, t: EndUserProxySettings
     return t;
 }
 
-export function MapEndUserOwnerInfo(c: EndUserOwnerInfo, map: OwnerInfo) {
+export function MapEndUserOwnerInfo(c: EndUserOwnerInfoClass) {
+    const map: EndUserOwnerInfo = {} as any;
     map.isFilled = c.IsFilled();
     map.issuer = c.GetIssuer();
     map.issuerCN = c.GetIssuerCN();
@@ -57,12 +80,164 @@ export function MapEndUserOwnerInfo(c: EndUserOwnerInfo, map: OwnerInfo) {
     return map;
 }
 
-export function MapToEndUserCertificateInfoEx(e: EndUserCertificateInfoEx, map: CertificateInfoEx) {
-    map.isFilled = e.IsFilled();
-    map.version = e.GetVersion();
-    map.issuer = e.GetIssuer();
-    map.issuerCN = e.GetIssuerCN();
-    map.serial = e.GetSerial();
+export function MapToEndUserCertificateInfoEx(c: EndUserCertificateInfoExClass) {
+    const map: EndUserCertificateInfoEx = {} as any;
+    map.isFilled = c.IsFilled();
+    map.version = c.GetVersion();
+    map.issuer = c.GetIssuer();
+    map.issuerCN = c.GetIssuerCN();
+    map.serial = c.GetSerial();
+    map.subject = c.GetSubject();
+    map.subjCN = c.GetSubjCN();
+    map.subjOrg = c.GetSubjOrg();
+    map.subjOrgUnit = c.GetSubjOrgUnit();
+    map.subjTitle = c.GetSubjTitle();
+    map.subjState = c.GetSubjState();
+    map.subjLocality = c.GetSubjLocality();
+    map.subjFullName = c.GetSubjFullName();
+    map.subjAddress = c.GetSubjAddress();
+    map.subjPhone = c.GetSubjPhone();
+    map.subjEMail = c.GetSubjEMail();
+    map.subjDNS = c.GetSubjDNS();
+    map.subjEDRPOUCode = c.GetSubjEDRPOUCode();
+    map.subjDRFOCode = c.GetSubjDRFOCode();
+    map.subjNBUCode = c.GetSubjNBUCode();
+    map.subjSPFMCode = c.GetSubjSPFMCode();
+    map.subjOCode = c.GetSubjOCode();
+    map.subjOUCode = c.GetSubjOUCode();
+    map.subjUserCode = c.GetSubjUserCode();
+    map.certBeginTime = c.GetCertBeginTime();
+    map.certEndTime = c.GetCertEndTime();
+    map.isPrivKeyTimesAvail = c.IsPrivKeyTimesAvail();
+    map.privKeyBeginTime = c.GetPrivKeyBeginTime();
+    map.privKeyEndTime = c.GetPrivKeyEndTime();
+    map.publicKeyBits = c.GetPublicKeyBits();
+    map.publicKey = c.GetPublicKey();
+    map.publicKeyID = c.GetPublicKeyID();
+    map.issuerPublicKeyID = c.GetIssuerPublicKeyID();
+    map.keyUsage = c.GetKeyUsage();
+    map.extKeyUsages = c.GetExtKeyUsages();
+    map.policies = c.GetPolicies();
+    map.crlDistribPoint1 = c.GetCRLDistribPoint1();
+    map.crlDistribPoint2 = c.GetCRLDistribPoint2();
+    map.isPowerCert = c.IsPowerCert();
+    map.isSubjTypeAvail = c.IsSubjTypeAvail();
+    map.isSubjCA = c.IsSubjCA();
+    map.chainLength = c.GetChainLength();
+    map.UPN = c.GetUPN();
+    map.publicKeyType = c.GetPublicKeyType();
+    map.keyUsageType = c.GetKeyUsageType();
+    map.RSAModul = c.GetRSAModul();
+    map.RSAExponent = c.GetRSAExponent();
+    map.OCSPAccessInfo = c.GetOCSPAccessInfo();
+    map.issuerAccessInfo = c.GetIssuerAccessInfo();
+    map.TSPAccessInfo = c.GetTSPAccessInfo();
+    map.isLimitValueAvailable = c.IsLimitValueAvail();
+    map.limitValue = c.GetLimitValue();
+    map.limitValueCurrency = c.GetLimitValueCurrency();
+    map.subjType = c.GetSubjType();
+    map.subjSubType = c.GetSubjSubType();
+    map.subjUNZR = c.GetSubjUNZR();
+    map.subjCountry = c.GetSubjCountry();
+    map.isQSCD = c.IsQSCD();
+    map.subjUserID = c.GetSubjUserID();
+    return map;
+}
+
+export function MapToEndUserParams(c: EndUserParamsClass) {
+    const map: EndUserParams = {} as any;
+    map.SN = c.GetSN();
+    map.commonName = c.GetCommonName();
+    map.locality = c.GetLocality();
+    map.state = c.GetState();
+    map.organization = c.GetOrganization();
+    map.orgUnit = c.GetOrgUnit();
+    map.title = c.GetTitle();
+    map.street = c.GetStreet();
+    map.phone = c.GetPhone();
+    map.surname = c.GetSurname();
+    map.givenname = c.GetGivenname();
+    map.EMail = c.GetEMail();
+    map.DNS = c.GetDNS();
+    map.EDRPOUCode = c.GetEDRPOUCode();
+    map.DRFOCode = c.GetDRFOCode();
+    map.NBUCode = c.GetNBUCode();
+    map.SPFMCode = c.GetSPFMCode();
+    map.information = c.GetInformation();
+    map.passPhrase = c.GetPassPhrase();
+    map.isPublishCertificate = c.GetIsPublishCertificate();
+    map.RAAdminSN = c.GetRAAdminSN();
+    return map;
+}
+
+export function MapToEndUserTimeInfo(c: EndUserTimeInfoClass) {
+    const map: EndUserTimeInfo = {} as any;
+    map.version = c.GetVersion();
+    map.isTimeAvail = c.IsTimeAvail();
+    map.isTimeStamp = c.IsTimeStamp();
+    map.time = c.GetTime();
+    map.isSignTimeStampAvail = c.IsSignTimeStampAvail();
+    map.signTimeStamp = c.GetSignTimeStamp();
+    return map;
+}
+
+export function MapToEndUserSignInfo(c: EndUserSignInfoClass) {
+    const map: EndUserSignInfo = {} as any;
+    map.ownerInfo = MapEndUserOwnerInfo(c.GetOwnerInfo());
+    map.timeInfo = MapToEndUserTimeInfo(c.GetTimeInfo());
+    map.data = c.GetData();
+    map.signLevel = 0;
+    return map;
+}
+
+export function MapToEndUserSenderInfo(c: EndUserSenderInfoClass) {
+    const map: EndUserSenderInfo = {} as any;
+    map.ownerInfo = MapEndUserOwnerInfo(c.GetOwnerInfo());
+    map.timeInfo = MapToEndUserTimeInfo(c.GetTimeInfo());
+    map.data = c.GetData();
+    return map;
+}
+
+export function MapToEndUserCertificate(c: EndUserCertificateClass) {
+    const map: EndUserCertificate = {} as any;
+    map.data = c.GetData();
+    map.infoEx = MapToEndUserCertificateInfoEx(c.GetInfoEx());
+    return map;
+}
+
+export function MapFromEndUserInfo(map: EndUserInfo, c: EndUserInfoClass) {
+    c.SetCommonName(map.commonName);
+    c.SetLocality(map.locality);
+    c.SetState(map.state);
+    c.SetOrganization(map.organization);
+    c.SetOrgUnit(map.orgUnit);
+    c.SetTitle(map.title);
+    c.SetStreet(map.street);
+    c.SetPhone(map.phone);
+    c.SetSurname(map.surname);
+    c.SetGivenname(map.givenname);
+    c.SetEMail(map.EMail);
+    c.SetDNS(map.DNS);
+    c.SetEDRPOUCode(map.EDRPOUCode);
+    c.SetDRFOCode(map.DRFOCode);
+    c.SetNBUCode(map.NBUCode);
+    c.SetSPFMCode(map.SPFMCode);
+    c.SetOCode(map.OCode);
+    c.SetOUCode(map.OUCode);
+    c.SetUserCode(map.userCode);
+    c.SetUPN(map.UPN);
+    c.SetUNZR(map.UNZR);
+    c.SetCountry(map.country);
+    return c;
+}
+
+export function MapToEndUserRequestInfo(e: EndUserRequestInfoClass) {
+    const map: EndUserRequestInfo = {} as any;
+    map.isFilled = true;
+    map.request = e.GetRequest();
+    map.requestType = e.GetRequestType();
+    map.defaultRequestFileName = e.GetDefaultRequestFileName();
+    map.isSimple = e.IsSimple();
     map.subject = e.GetSubject();
     map.subjCN = e.GetSubjCN();
     map.subjOrg = e.GetSubjOrg();
@@ -87,192 +262,37 @@ export function MapToEndUserCertificateInfoEx(e: EndUserCertificateInfoEx, map: 
     map.isPrivKeyTimesAvail = e.IsPrivKeyTimesAvail();
     map.privKeyBeginTime = e.GetPrivKeyBeginTime();
     map.privKeyEndTime = e.GetPrivKeyEndTime();
-    map.publicKeyBits = e.GetPublicKeyBits();
-    map.publicKey = e.GetPublicKey();
-    map.publicKeyID = e.GetPublicKeyID();
-    map.issuerPublicKeyID = e.GetIssuerPublicKeyID();
-    map.keyUsage = e.GetKeyUsage();
-    map.extKeyUsages = e.GetExtKeyUsages();
-    map.policies = e.GetPolicies();
-    map.crlDistribPoint1 = e.GetCRLDistribPoint1();
-    map.crlDistribPoint2 = e.GetCRLDistribPoint2();
-    map.isPowerCert = e.IsPowerCert();
-    map.isSubjTypeAvail = e.IsSubjTypeAvail();
-    map.isSubjCA = e.IsSubjCA();
-    map.chainLength = e.GetChainLength();
-    map.UPN = e.GetUPN();
     map.publicKeyType = e.GetPublicKeyType();
-    map.keyUsageType = e.GetKeyUsageType();
+    map.publicKeyBits = e.GetPublicKeyBits();
     map.RSAModul = e.GetRSAModul();
     map.RSAExponent = e.GetRSAExponent();
-    map.OCSPAccessInfo = e.GetOCSPAccessInfo();
-    map.issuerAccessInfo = e.GetIssuerAccessInfo();
-    map.TSPAccessInfo = e.GetTSPAccessInfo();
-    map.isLimitValueAvailable = e.IsLimitValueAvail();
-    map.limitValue = e.GetLimitValue();
-    map.limitValueCurrency = e.GetLimitValueCurrency();
+    map.publicKey = e.GetPublicKey();
+    map.publicKeyID = e.GetPublicKeyID();
+    map.extKeyUsages = e.GetExtKeyUsages();
+    map.crlDistribPoint1 = e.GetCRLDistribPoint1();
+    map.crlDistribPoint2 = e.GetCRLDistribPoint2();
+    map.isSubjTypeAvail = e.IsSubjTypeAvail();
     map.subjType = e.GetSubjType();
     map.subjSubType = e.GetSubjSubType();
+    map.isSelfSigned = e.IsSelfSigned();
+    map.signIssuer = e.GetSignIssuer();
+    map.signSerial = e.GetSignSerial();
     map.subjUNZR = e.GetSubjUNZR();
     map.subjCountry = e.GetSubjCountry();
     map.isQSCD = e.IsQSCD();
-    map.subjUserID = e.GetSubjUserID();
+
     return map;
 }
 
-export function MapToEndUserParams(e, t) {
-    return (
-        (t.SN = e.GetSN()),
-        (t.commonName = e.GetCommonName()),
-        (t.locality = e.GetLocality()),
-        (t.state = e.GetState()),
-        (t.organization = e.GetOrganization()),
-        (t.orgUnit = e.GetOrgUnit()),
-        (t.title = e.GetTitle()),
-        (t.street = e.GetStreet()),
-        (t.phone = e.GetPhone()),
-        (t.surname = e.GetSurname()),
-        (t.givenname = e.GetGivenname()),
-        (t.EMail = e.GetEMail()),
-        (t.DNS = e.GetDNS()),
-        (t.EDRPOUCode = e.GetEDRPOUCode()),
-        (t.DRFOCode = e.GetDRFOCode()),
-        (t.NBUCode = e.GetNBUCode()),
-        (t.SPFMCode = e.GetSPFMCode()),
-        (t.information = e.GetInformation()),
-        (t.passPhrase = e.GetPassPhrase()),
-        (t.isPublishCertificate = e.GetIsPublishCertificate()),
-        (t.RAAdminSN = e.GetRAAdminSN()),
-        t
-    );
+export function MapToEndUserReference(c: EndUserReferenceClass) {
+    const map: EndUserReference = {} as any;
+    map.name = c.GetName();
+    map.data = c.GetData();
+    return map;
 }
 
-export function MapToEndUserTimeInfo(e, t) {
-    return (
-        (t.version = e.GetVersion()),
-        (t.isTimeAvail = e.IsTimeAvail()),
-        (t.isTimeStamp = e.IsTimeStamp()),
-        (t.time = e.GetTime()),
-        (t.isSignTimeStampAvail = e.IsSignTimeStampAvail()),
-        (t.signTimeStamp = e.GetSignTimeStamp()),
-        t
-    );
-}
-
-export function MapToEndUserSignInfo(t, n) {
-    return (
-        (n.ownerInfo = MapEndUserOwnerInfo(t.GetOwnerInfo(), new i.a())),
-        (n.timeInfo = MapToEndUserTimeInfo(t.GetTimeInfo(), new o.EndUserTimeInfo())),
-        (n.data = t.GetData()),
-        (n.signLevel = 0),
-        n
-    );
-}
-
-export function MapToEndUserSenderInfo(t, n) {
-    return (
-        (n.ownerInfo = MapEndUserOwnerInfo(t.GetOwnerInfo(), new i.a())),
-        (n.timeInfo = MapToEndUserTimeInfo(t.GetTimeInfo(), new o.EndUserTimeInfo())),
-        (n.data = t.GetData()),
-        n
-    );
-}
-
-export function MapToEndUserCertificate(t, n) {
-    n.data = t.GetData();
-    n.infoEx = MapToEndUserCertificateInfoEx(t.GetInfoEx(), new r.a());
-    return n;
-}
-
-export function MapFromEndUserInfo(e, t) {
-    return (
-        t.SetCommonName(e.commonName),
-        t.SetLocality(e.locality),
-        t.SetState(e.state),
-        t.SetOrganization(e.organization),
-        t.SetOrgUnit(e.orgUnit),
-        t.SetTitle(e.title),
-        t.SetStreet(e.street),
-        t.SetPhone(e.phone),
-        t.SetSurname(e.surname),
-        t.SetGivenname(e.givenname),
-        t.SetEMail(e.EMail),
-        t.SetDNS(e.DNS),
-        t.SetEDRPOUCode(e.EDRPOUCode),
-        t.SetDRFOCode(e.DRFOCode),
-        t.SetNBUCode(e.NBUCode),
-        t.SetSPFMCode(e.SPFMCode),
-        t.SetOCode(e.OCode),
-        t.SetOUCode(e.OUCode),
-        t.SetUserCode(e.userCode),
-        t.SetUPN(e.UPN),
-        t.SetUNZR(e.UNZR),
-        t.SetCountry(e.country),
-        t
-    );
-}
-
-export function MapToEndUserRequestInfo(e, t) {
-    return (
-        (t.isFilled = !0),
-        (t.data = e.GetRequest()),
-        (t.type = e.GetRequestType()),
-        (t.fileName = e.GetDefaultRequestFileName()),
-        (t.isSimple = e.IsSimple()),
-        (t.subject = e.GetSubject()),
-        (t.subjCN = e.GetSubjCN()),
-        (t.subjOrg = e.GetSubjOrg()),
-        (t.subjOrgUnit = e.GetSubjOrgUnit()),
-        (t.subjTitle = e.GetSubjTitle()),
-        (t.subjState = e.GetSubjState()),
-        (t.subjLocality = e.GetSubjLocality()),
-        (t.subjFullName = e.GetSubjFullName()),
-        (t.subjAddress = e.GetSubjAddress()),
-        (t.subjPhone = e.GetSubjPhone()),
-        (t.subjEMail = e.GetSubjEMail()),
-        (t.subjDNS = e.GetSubjDNS()),
-        (t.subjEDRPOUCode = e.GetSubjEDRPOUCode()),
-        (t.subjDRFOCode = e.GetSubjDRFOCode()),
-        (t.subjNBUCode = e.GetSubjNBUCode()),
-        (t.subjSPFMCode = e.GetSubjSPFMCode()),
-        (t.subjOCode = e.GetSubjOCode()),
-        (t.subjOUCode = e.GetSubjOUCode()),
-        (t.subjUserCode = e.GetSubjUserCode()),
-        (t.certBeginTime = e.GetCertBeginTime()),
-        (t.certEndTime = e.GetCertEndTime()),
-        (t.isPrivKeyTimesAvail = e.IsPrivKeyTimesAvail()),
-        (t.privKeyBeginTime = e.GetPrivKeyBeginTime()),
-        (t.privKeyEndTime = e.GetPrivKeyEndTime()),
-        (t.publicKeyType = e.GetPublicKeyType()),
-        (t.publicKeyBits = e.GetPublicKeyBits()),
-        (t.RSAModul = e.GetRSAModul()),
-        (t.RSAExponent = e.GetRSAExponent()),
-        (t.publicKey = e.GetPublicKey()),
-        (t.publicKeyID = e.GetPublicKeyID()),
-        (t.extKeyUsages = e.GetExtKeyUsages()),
-        (t.crlDistribPoint1 = e.GetCRLDistribPoint1()),
-        (t.crlDistribPoint2 = e.GetCRLDistribPoint2()),
-        (t.isSubjTypeAvail = e.IsSubjTypeAvail()),
-        (t.subjType = e.GetSubjType()),
-        (t.subjSubType = e.GetSubjSubType()),
-        (t.isSelfSigned = e.IsSelfSigned()),
-        (t.signIssuer = e.GetSignIssuer()),
-        (t.signSerial = e.GetSignSerial()),
-        (t.subjUNZR = e.GetSubjUNZR()),
-        (t.subjCountry = e.GetSubjCountry()),
-        (t.isQSCD = e.IsQSCD()),
-        t
-    );
-}
-
-export function MapToEndUserReference(e, t) {
-    t.name = e.GetName();
-    t.val = e.GetData();
-    return t;
-}
-
-export function MapFromEndUserReference(e, t) {
-    t.SetName(e.name);
-    t.SetData(e.val);
+export function MapFromEndUserReference(map: EndUserReference, t: EndUserReferenceClass) {
+    t.SetName(map.name);
+    t.SetData(map.data);
     return t;
 }

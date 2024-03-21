@@ -1,71 +1,16 @@
-import { CertificateInfoEx, Certificate } from "./EndUserMap";
-
-enum EndUserLanguage {
-    EU_DEFAULT_LANG = 0,
-    EU_UA_LANG = 1,
-    EU_RU_LANG = 2,
-    EU_EN_LANG = 3,
-}
-
-export interface EndUserSettingsCA {
-    issuerCNs: string[];
-    address: string;
-    ocspAccessPointAddress: string;
-    ocspAccessPointPort: string;
-    cmpAddress: string;
-    tspAddress: string;
-    tspAddressPort: string;
-    directAccess?: boolean;
-    qscdSNInCert?: boolean;
-    certsInKey?: boolean;
-    cmpCompatibility?: number;
-}
-
-export interface EndUserSettingsKSP {
-    name: string;
-    ksp: number;
-    address: string;
-    port: string;
-    directAccess: boolean;
-    clientIdPrefix?: string;
-    confirmationURL?: string;
-    mobileAppName?: string;
-    systemId?: string;
-}
-
-export interface EndUserSettings {
-    downloadsURL?: string;
-    language: EndUserLanguage | string;
-    encoding: string;
-    directAccess: boolean;
-    httpProxyServiceURL: string;
-    CAs: string | EndUserSettingsCA[];
-    CACertificates: string | Uint8Array;
-    allowedKeyMediaTypes: string[];
-    passwordRequirements?: null;
-    KSPs?: EndUserSettingsKSP[];
-    allowMakeNewCertOnNewKeyMedia: boolean;
-    allowMakeNewCertOnFileKeyMedia: boolean;
-    signInfoTmpl?: string;
-    connectionTimeout: number;
-    ocspResponseExpireTime: number;
-    TSLAddress?: string;
-}
-
-export interface EndUserError {
-    errorCode: number;
+export interface EndUserErrorClass {
     GetErrorCode(): number;
-    message: string;
+
     GetMessage(): string;
     toString(): string;
 }
 
-export interface EndUserByteArray {
+export interface EndUserByteArrayClass {
     GetData(): Uint8Array;
     SetData(data: Uint8Array): void;
 }
 
-export interface EndUserKeyMedia {
+export interface EndUserKeyMediaClass {
     GetTypeIndex(): number;
     SetTypeIndex(typeIndex: number): void;
 
@@ -73,10 +18,10 @@ export interface EndUserKeyMedia {
     SetDevIndex(devIndex: number): void;
 
     GetPassword(): string;
-    SetPassword(password: string): void;
+    SetPassword(password: string | null): void;
 }
 
-export interface EndUserFileStoreSettings {
+export interface EndUserFileStoreSettingsClass {
     GetPath(): string;
     SetPath(path: string): void;
 
@@ -102,7 +47,7 @@ export interface EndUserFileStoreSettings {
     SetExpireTime(expireTime: number): void;
 }
 
-export interface EndUserProxySettings {
+export interface EndUserProxySettingsClass {
     GetUseProxy(): boolean;
     SetUseProxy(useProxy: boolean): void;
 
@@ -125,7 +70,7 @@ export interface EndUserProxySettings {
     SetSavePassword(savePassword: boolean): void;
 }
 
-export interface EndUserTSPSettings {
+export interface EndUserTSPSettingsClass {
     GetGetStamps(): boolean;
     SetGetStamps(getStamps: boolean): void;
 
@@ -136,8 +81,7 @@ export interface EndUserTSPSettings {
     SetPort(port: string): void;
 }
 
-// Клас, що містить інформацію про параметри OCSP-сервера (див. табл. 3.1)
-export interface EndUserOCSPSettings {
+export interface EndUserOCSPSettingsClass {
     GetUseOCSP(): boolean;
     SetUseOCSP(useOCSP: boolean): void;
 
@@ -151,8 +95,7 @@ export interface EndUserOCSPSettings {
     SetPort(port: string): void;
 }
 
-// Клас, що містить інформацію про параметри LDAP-сервера (див. табл. 3.1)
-export interface EndUserLDAPSettings {
+export interface EndUserLDAPSettingsClass {
     GetUseLDAP(): boolean;
     SetUseLDAP(useCMP: boolean): void;
 
@@ -172,8 +115,7 @@ export interface EndUserLDAPSettings {
     SetPassword(password: string): void;
 }
 
-// Клас, що містить інформацію про параметри CMP-сервера (див. табл. 3.1)
-export interface EndUserCMPSettings {
+export interface EndUserCMPSettingsClass {
     GetUseCMP(): boolean;
     SetUseCMP(useCMP: boolean): void;
 
@@ -187,7 +129,7 @@ export interface EndUserCMPSettings {
     SetCommonName(commonName: string): void;
 }
 
-export interface EndUserTSLSettings {
+export interface EndUserTSLSettingsClass {
     GetUseTSL(): boolean;
     SetUseTSL(useTSL: boolean): void;
 
@@ -198,21 +140,20 @@ export interface EndUserTSLSettings {
     SetTSLAddress(tslAddress: string): void;
 }
 
-// Клас, що містить інформацію про взаємодію з серверами ЦСК
-export interface EndUserModeSettings {
+export interface EndUserModeSettingsClass {
     GetOfflineMode(): boolean;
     SetOfflineMode(offlineMode: boolean): void;
 }
 
 // Клас, що містить інформацію про параметри використання точок
 // доступу до OCSP-серверів
-export interface EndUserOCSPAccessInfoModeSettings {
+export interface EndUserOCSPAccessInfoModeSettingsClass {
     GetEnabled(): boolean;
     SetEnabled(enabled: boolean): void;
 }
 
 // Клас, що містить інформацію про параметри точок доступу до OCSP-серверів
-export interface EndUserOCSPAccessInfoSettings {
+export interface EndUserOCSPAccessInfoSettingsClass {
     GetIssuerCN(): string;
     SetIssuerCN(issuerCN: string): void;
 
@@ -223,18 +164,18 @@ export interface EndUserOCSPAccessInfoSettings {
     SetPort(port: string): void;
 }
 
-export interface EndUserKeyMediaSettings {
+export interface EndUserKeyMediaSettingsClass {
     GetSourceType(): number;
     SetSourceType(sourceType: number): void;
 
     GetShowErrors(): boolean;
     SetShowErrors(showErrors: boolean): void;
 
-    GetKeyMedia(): EndUserKeyMedia;
-    SetKeyMedia(keyMedia: EndUserKeyMedia): void;
+    GetKeyMedia(): EndUserKeyMediaClass;
+    SetKeyMedia(keyMedia: EndUserKeyMediaClass): void;
 }
 
-export interface EndUserOwnerInfo {
+export interface EndUserOwnerInfoClass {
     IsFilled(): boolean;
     GetIssuer(): string;
     GetIssuerCN(): string;
@@ -255,7 +196,7 @@ export interface EndUserOwnerInfo {
     GetSubjDRFOCode(): string;
 }
 
-export interface EndUserTimeInfo {
+export interface EndUserTimeInfoClass {
     GetVersion(): number;
     IsTimeAvail(): boolean;
     IsTimeStamp(): boolean;
@@ -264,21 +205,21 @@ export interface EndUserTimeInfo {
     GetSignTimeStamp(): Date;
 }
 
-export interface EndUserSignInfo {
-    GetOwnerInfo(): EndUserOwnerInfo;
-    GetTimeInfo(): EndUserTimeInfo;
+export interface EndUserSignInfoClass {
+    GetOwnerInfo(): EndUserOwnerInfoClass;
+    GetTimeInfo(): EndUserTimeInfoClass;
     GetData(): Uint8Array;
     GetDataString(charset?: string): string;
 }
 
-export interface EndUserSenderInfo {
-    GetOwnerInfo(): EndUserOwnerInfo;
-    GetTimeInfo(): EndUserTimeInfo;
+export interface EndUserSenderInfoClass {
+    GetOwnerInfo(): EndUserOwnerInfoClass;
+    GetTimeInfo(): EndUserTimeInfoClass;
     GetData(): Uint8Array;
     GetDataString(charset?: string): string;
 }
 
-export interface EndUserCertificateInfo {
+export interface EndUserCertificateInfoClass {
     IsFilled(): boolean;
     GetVersion(): number;
     GetIssuer(): string;
@@ -326,7 +267,7 @@ export interface EndUserCertificateInfo {
     IsSubjCA(): boolean;
 }
 
-export interface EndUserCertificateInfoEx extends EndUserCertificateInfo {
+export interface EndUserCertificateInfoExClass extends EndUserCertificateInfoClass {
     GetChainLength(): number;
     GetUPN(): string;
     GetPublicKeyType(): number;
@@ -348,301 +289,256 @@ export interface EndUserCertificateInfoEx extends EndUserCertificateInfo {
     GetSubjUserID(): string;
 }
 
-export class EndUserCertificate implements Certificate {
-    infoEx!: CertificateInfoEx;
-    data!: Uint8Array;
-    GetInfoEx() {
-        return this.infoEx;
-    }
-    SetInfoEx(infoEx: CertificateInfoEx) {
-        this.infoEx = infoEx;
-    }
-    GetData() {
-        return this.data;
-    }
-    SetData(data: Uint8Array) {
-        this.data = data;
-    }
+export interface EndUserCertificateClass {
+    GetInfoEx(): EndUserCertificateInfoExClass;
+    SetInfoEx(infoEx: EndUserCertificateInfoExClass): void;
+
+    GetData(): Uint8Array;
+    SetData(data: Uint8Array): void;
 }
 
-export interface EndUserCRLInfo {
+export interface EndUserCRLInfoClass {
     IsFilled(): boolean;
-
     GetIssuer(): string;
-
     GetIssuerCN(): string;
-
     GetCRLNumber(): number;
-
     GetThisUpdate(): Date;
-
     GetNextUpdate(): Date;
 }
 
-export interface EndUserCRLDetailedInfo {
-    IsFilled(): boolean;
-
+export interface EndUserCRLDetailedInfoClass extends EndUserCRLInfoClass {
     GetVersion(): number;
-
-    GetIssuer(): string;
-
-    GetIssuerCN(): string;
-
     GetIssuerPublicKeyID(): string;
-
-    GetCRLNumber(): number;
-
-    GetThisUpdate(): Date;
-
-    GetNextUpdate(): Date;
-
     GetRevokedItemsCount(): number;
 }
 
-export interface EndUserPrivateKeyInfo {
+export interface EndUserPrivateKeyInfoClass {
     GetPrivateKey(): Uint8Array;
-
-    SetPrivateKey(issuerCN: Uint8Array): void;
+    SetPrivateKey(privateKey: Uint8Array): void;
 
     GetPrivateKeyInfo(): Uint8Array;
-
-    SetPrivateKeyInfo(address: Uint8Array): void;
+    SetPrivateKeyInfo(privateKeyInfo: Uint8Array): void;
 }
 
-export class EndUserPrivateKey {
-    alias: string | undefined;
-    certificates: EndUserCertificate[] | undefined;
-    privateKey: Uint8Array | undefined;
-    digitalStamp: boolean | undefined;
-}
-
-export interface EndUserJKSPrivateKey extends EndUserPrivateKey {
+export interface EndUserJKSPrivateKeyClass {
     GetPrivateKey(): Uint8Array;
 
     GetCertificate(index: number): Uint8Array;
     GetCertificatesCount(): number;
     GetCertificates(): Uint8Array[];
-
-    info: {
-        alias: string;
-        certificates: EndUserCertificate[];
-        digitalStamp: boolean;
-    };
 }
 
-export interface EndUserRequestInfo {
+export interface EndUserRequestInfoClass {
     GetRequest(): Uint8Array;
-
     GetRequestType(): number;
-
     GetDefaultRequestFileName(): string;
-
     IsSimple(): boolean;
-
     GetSubject(): string;
-
     GetSubjCN(): string;
-
     GetSubjOrg(): string;
-
     GetSubjOrgUnit(): string;
-
     GetSubjTitle(): string;
-
     GetSubjState(): string;
-
     GetSubjLocality(): string;
-
     GetSubjFullName(): string;
-
     GetSubjAddress(): string;
-
     GetSubjPhone(): string;
-
     GetSubjEMail(): string;
-
     GetSubjDNS(): string;
-
     GetSubjEDRPOUCode(): string;
-
     GetSubjDRFOCode(): string;
-
     GetSubjNBUCode(): string;
-
     GetSubjSPFMCode(): string;
-
     GetSubjOCode(): string;
-
     GetSubjOUCode(): string;
-
     GetSubjUserCode(): string;
-
     GetCertBeginTime(): Date;
-
     GetCertEndTime(): Date;
-
     IsPrivKeyTimesAvail(): boolean;
-
     GetPrivKeyBeginTime(): Date;
-
     GetPrivKeyEndTime(): Date;
-
     GetPublicKeyType(): number;
-
     GetPublicKeyBits(): number;
-
     GetRSAModul(): string;
-
     GetRSAExponent(): string;
-
     GetPublicKey(): string;
-
     GetPublicKeyID(): string;
-
     GetExtKeyUsages(): string;
-
     GetCRLDistribPoint1(): string;
-
     GetCRLDistribPoint2(): string;
-
     IsSubjTypeAvail(): boolean;
-
     GetSubjType(): number;
-
     GetSubjSubType(): number;
-
     IsSelfSigned(): boolean;
-
     GetSignIssuer(): string;
-
     GetSignSerial(): string;
-
     GetSubjUNZR(): string;
-
     GetSubjCountry(): string;
-
     IsQSCD(): boolean;
 }
 
-export interface EndUserInfo {}
-
-export interface EndUserParams {
-    SN: number;
-    GetSN(): number;
-    SetSN(value: string): void;
-    commonName: string;
+export interface EndUserInfoClass {
     GetCommonName(): string;
     SetCommonName(value: string): void;
-    locality: string;
     GetLocality(): string;
     SetLocality(value: string): void;
-    state: string;
     GetState(): string;
     SetState(value: string): void;
-    organization: string;
     GetOrganization(): string;
     SetOrganization(value: string): void;
-    orgUnit: string;
     GetOrgUnit(): string;
     SetOrgUnit(value: string): void;
-    title: string;
     GetTitle(): string;
     SetTitle(value: string): void;
-    street: string;
     GetStreet(): string;
     SetStreet(value: string): void;
-    phone: string;
     GetPhone(): string;
     SetPhone(value: string): void;
-    surname: string;
     GetSurname(): string;
     SetSurname(value: string): void;
-    givenname: string;
     GetGivenname(): string;
     SetGivenname(value: string): void;
-    EMail: string;
     GetEMail(): string;
     SetEMail(value: string): void;
-    DNS: string;
     GetDNS(): string;
     SetDNS(value: string): void;
-    EDRPOUCode: string;
     GetEDRPOUCode(): string;
     SetEDRPOUCode(value: string): void;
-    DRFOCode: string;
     GetDRFOCode(): string;
     SetDRFOCode(value: string): void;
-    NBUCode: string;
     GetNBUCode(): string;
     SetNBUCode(value: string): void;
-    SPFMCode: string;
     GetSPFMCode(): string;
     SetSPFMCode(value: string): void;
-    information: string;
-    GetInformation(): string;
-    SetInformation(value: string): void;
-    passPhrase: string;
-    GetPassPhrase(): string;
-    SetPassPhrase(value: string): void;
-    isPublishCertificate: boolean;
-    IsPublishCertificate(): boolean;
-    IsPublishCertificate(value: boolean): void;
-    RAAdminSN: number;
-    GetRAAdminSN(): number;
-    SetRAAdminSN(value: string): void;
+    GetOCode(): string;
+    SetOCode(value: string): void;
+    GetOUCode(): string;
+    SetOUCode(value: string): void;
+    GetUserCode(): string;
+    SetUserCode(value: string): void;
+    GetUPN(): string;
+    SetUPN(value: string): void;
+    GetUNZR(): string;
+    SetUNZR(value: string): void;
+    GetCountry(): string;
+    SetCountry(value: string): void;
 }
 
-export interface EndUserOperationContext {
+export interface EndUserParamsClass {
+    GetSN(): number;
+    SetSN(value: string): void;
+
+    GetCommonName(): string;
+    SetCommonName(value: string): void;
+
+    GetLocality(): string;
+    SetLocality(value: string): void;
+
+    GetState(): string;
+    SetState(value: string): void;
+
+    GetOrganization(): string;
+    SetOrganization(value: string): void;
+
+    GetOrgUnit(): string;
+    SetOrgUnit(value: string): void;
+
+    GetTitle(): string;
+    SetTitle(value: string): void;
+
+    GetStreet(): string;
+    SetStreet(value: string): void;
+
+    GetPhone(): string;
+    SetPhone(value: string): void;
+
+    GetSurname(): string;
+    SetSurname(value: string): void;
+
+    GetGivenname(): string;
+    SetGivenname(value: string): void;
+
+    GetEMail(): string;
+    SetEMail(value: string): void;
+
+    GetDNS(): string;
+    SetDNS(value: string): void;
+
+    GetEDRPOUCode(): string;
+    SetEDRPOUCode(value: string): void;
+
+    GetDRFOCode(): string;
+    SetDRFOCode(value: string): void;
+
+    GetNBUCode(): string;
+    SetNBUCode(value: string): void;
+
+    GetSPFMCode(): string;
+    SetSPFMCode(value: string): void;
+
+    GetInformation(): string;
+    SetInformation(value: string): void;
+
+    GetPassPhrase(): string;
+    SetPassPhrase(passPhrase: string): void;
+
+    GetIsPublishCertificate(): boolean;
+    SetIsPublishCertificate(isPublishCertificate: boolean): void;
+
+    GetRAAdminSN(): number;
+    SetRAAdminSN(RAAdminSN: string): void;
+}
+
+export interface EndUserOperationContextClass {
     GetHandle(): string;
 }
 
-export interface EndUserSession {
+export interface EndUserSessionClass {
     GetHandle(): string;
 
     GetData(): Uint8Array;
-
     SetData(data: Uint8Array): void;
 }
 
-export interface EndUserSCClientStatistic {
+export interface EndUserSCClientStatisticClass {
     GetActiveSessions(): number;
-
     GetGatedSessions(): number;
-
     GetUnprotectedData(): number;
-
     GetProtectedData(): number;
 }
 
-export interface EndUserDeviceContext {
+export interface EndUserDeviceContextClass {
     GetHandle(): string;
 }
 
-export interface EndUserTransportHeader {
+export interface EndUserTransportHeaderClass {
     GetReceiptNumber(): number;
-
     GetCryptoData(): Uint8Array;
 }
 
-export interface EndUserCryptoHeader {
+export interface EndUserCryptoHeaderClass {
     GetCAType(): string;
-
     GetHeaderType(): number;
-
     GetHeaderSize(): number;
-
     GetCryptoData(): Uint8Array;
 }
 
-export interface EndUserContext {
+export interface EndUserContextClass {
     GetHandle(): string;
 }
 
-export interface EndUserHashContext {
+export interface EndUserHashContextClass {
     GetHandle(): string;
 }
 
-export interface EndUserPrivateKeyContext {
+export interface EndUserPrivateKeyContextClass extends EndUserContextClass {
     GetHandle(): string;
-    GetOwnerInfo(): EndUserOwnerInfo;
+    GetOwnerInfo(): EndUserOwnerInfoClass;
+}
+
+export interface EndUserReferenceClass {
+    GetName(): string;
+    SetName(name: string): void;
+    GetData(): Uint8Array;
+    SetData(data: Uint8Array): void;
 }

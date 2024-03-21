@@ -103,3 +103,9 @@ export enum EndUserSignContainerType {
     PAdES = 3,
     ASiC = 4,
 }
+
+export enum EndUserCMPCompatibility {
+    None = 0,
+    DownloadEUCerts = 1,
+    SearchEUCerts = 2
+}

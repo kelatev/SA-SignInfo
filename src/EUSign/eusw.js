@@ -3261,7 +3261,7 @@ EndUserPrivateKeyInfo.prototype.SetPrivateKeyInfo = function(privateKeyInfo) {
 
 //--------------------------------------------------------------------------------
 
-var EndUserJKSPrivateKey = function() {
+export var EndUserJKSPrivateKey = function() {
     this.setClassInfo('EndUserJKSPrivateKey', 1);
 
     this.fields = {

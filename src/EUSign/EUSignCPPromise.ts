@@ -7,7 +7,7 @@ import {
     EndUserJKSPrivateKey,
     EndUserKeyMedia,
     EndUserPrivateKeyInfo,
-} from "./eusign.types";
+} from "./EndUserTypes";
 
 const enum EndUserLibraryType {
     JS,
