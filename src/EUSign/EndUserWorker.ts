@@ -9,6 +9,7 @@ import {
     EndUserSignInfo,
     EndUserContext,
 } from "./EndUserTypes";
+import { EndUserContextClass } from "./EndUserClass";
 import EUSignCPWorker from "./EUSignCPWorker";
 import EndUserLibrary, {
     EndUserEventType,
@@ -162,7 +163,12 @@ export default class EndUserWorker implements EndUserLibrary {
         return this.command<ClientRegistrationTokenKSP>("GetClientRegistrationTokenKSP", ksp);
     }
     HashData(hashAlgo: number, data: Uint8Array, asBase64String?: boolean) {
-        return this.command<Uint8Array | string>("HashData", hashAlgo, data, Number(asBase64String));
+        return this.command<Uint8Array | string>(
+            "HashData",
+            hashAlgo,
+            data,
+            Number(asBase64String),
+        );
     }
     GetSigner(sign: Uint8Array, signIndex?: number, resolveOIDs?: boolean) {
         return this.command<EndUserCertificate | EndUserCertificate[]>(
@@ -246,10 +252,20 @@ export default class EndUserWorker implements EndUserLibrary {
         );
     }
     VerifyHash(hash: Uint8Array, sign: Uint8Array, signIndex: number) {
-        return this.command<EndUserSignInfo | EndUserSignInfo[]>("VerifyHash", hash, sign, signIndex);
+        return this.command<EndUserSignInfo | EndUserSignInfo[]>(
+            "VerifyHash",
+            hash,
+            sign,
+            signIndex,
+        );
     }
     VerifyData(data: Uint8Array, sign: Uint8Array, signIndex: number) {
-        return this.command<EndUserSignInfo | EndUserSignInfo[]>("VerifyData", data, sign, signIndex);
+        return this.command<EndUserSignInfo | EndUserSignInfo[]>(
+            "VerifyData",
+            data,
+            sign,
+            signIndex,
+        );
     }
     VerifyDataInternal(sign: Uint8Array, signIndex?: number) {
         return this.command<EndUserSignInfo | EndUserSignInfo[]>(
@@ -268,10 +284,10 @@ export default class EndUserWorker implements EndUserLibrary {
     CtxCreate() {
         return this.command<EndUserContext>("CtxCreate");
     }
-    CtxFree(context: EndUserContext) {
+    CtxFree(context: EndUserContext | EndUserContextClass) {
         return this.command<void>("CtxFree", context);
     }
-    CtxSetParameter(context: EndUserContext, name: string, value: boolean) {
+    CtxSetParameter(context: EndUserContext | EndUserContextClass, name: string, value: boolean) {
         return this.command<void>("CtxSetParameter", context, name, value);
     }
     //CtxReadPrivateKey

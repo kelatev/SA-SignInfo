@@ -9,6 +9,7 @@ import {
     EndUserSignInfo,
     EndUserContext,
 } from "./EndUserTypes";
+import { EndUserContextClass } from "./EndUserClass";
 import { EndUserSignAlgo } from "./EndUserConstants";
 
 export enum EndUserEventType {
@@ -118,7 +119,7 @@ export default interface EndUserLibrary {
     GetCAs: () => Promise<string | EndUserSettingsCA[]>;
     GetProxySettings: () => Promise<EndUserProxySettings>;
     SetProxySettings: (settings: EndUserProxySettings) => Promise<void>;
-    GetKeyMedias: () => Promise<any>;
+    GetKeyMedias: () => Promise<EndUserKeyMedia[]>;
     GetJKSPrivateKeys: (jks: Uint8Array) => Promise<EndUserPrivateKey[]>;
     IsPrivateKeyReaded: () => Promise<boolean>;
     ResetPrivateKey: () => Promise<void>;
@@ -158,7 +159,11 @@ export default interface EndUserLibrary {
     GetKeyInfo: (keyMedia: EndUserKeyMedia) => Promise<Uint8Array>;
     GetKeyInfoBinary: (privateKey: Uint8Array, password: string) => Promise<Uint8Array>;
     GetClientRegistrationTokenKSP: (ksp: string | number) => Promise<ClientRegistrationTokenKSP>;
-    HashData: (hashAlgo: number, data: Uint8Array, asBase64String?: boolean) => Promise<Uint8Array | string>;
+    HashData: (
+        hashAlgo: number,
+        data: Uint8Array,
+        asBase64String?: boolean,
+    ) => Promise<Uint8Array | string>;
     GetSigner: (
         sign: Uint8Array,
         signIndex?: number,
@@ -197,8 +202,16 @@ export default interface EndUserLibrary {
         appendCert: boolean,
         asBase64String?: boolean,
     ) => Promise<Uint8Array | string>;
-    VerifyHash: (hash: Uint8Array, sign: Uint8Array, signIndex: number) => Promise<EndUserSignInfo | EndUserSignInfo[]>;
-    VerifyData: (data: Uint8Array, sign: Uint8Array, signIndex: number) => Promise<EndUserSignInfo | EndUserSignInfo[]>;
+    VerifyHash: (
+        hash: Uint8Array,
+        sign: Uint8Array,
+        signIndex: number,
+    ) => Promise<EndUserSignInfo | EndUserSignInfo[]>;
+    VerifyData: (
+        data: Uint8Array,
+        sign: Uint8Array,
+        signIndex: number,
+    ) => Promise<EndUserSignInfo | EndUserSignInfo[]>;
     VerifyDataInternal: (
         sign: Uint8Array,
         signIndex?: number,
@@ -210,9 +223,13 @@ export default interface EndUserLibrary {
     //CreateAuthData
     //GetTSPByAccessInfo
     //CheckTSP
-    CtxCreate: () => Promise<EndUserContext>;
-    CtxFree: (context: EndUserContext) => Promise<void>;
-    CtxSetParameter: (context: EndUserContext, name: string, value: boolean) => Promise<void>;
+    CtxCreate: () => Promise<EndUserContext | EndUserContextClass>;
+    CtxFree: (context: EndUserContext | EndUserContextClass) => Promise<void>;
+    CtxSetParameter: (
+        context: EndUserContext | EndUserContextClass,
+        name: string,
+        value: boolean,
+    ) => Promise<void>;
     //CtxReadPrivateKey
     //CtxReadPrivateKeyBinary
     //CtxFreePrivateKey

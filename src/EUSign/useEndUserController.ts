@@ -44,12 +44,5 @@ export default function useEndUserController() {
         }
     }, [currentLibrary]);
 
-    /* const m_isPKActionDone = false;
-    const m_KM = null;
-    const m_updateKM = false;
-    const m_updatingKM = false;
-    const m_readedPKey = null;
-    const m_KMs = []; */
-
     return { keyMediaType, setKeyMediaType, librarySW: instanceSW, currentLibrary };
 }

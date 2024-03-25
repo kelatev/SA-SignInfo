@@ -1,8 +1,7 @@
 import React from 'react';
-import Loader from "../components/Loader";
 import PanelCheck from "../components/Check";
 import PanelSign from "../components/Sign";
-import Layout from "../components/Layout";
+import Layout from "./Layout";
 import { EndUserContext } from '../EUSign/EndUserContext';
 import useEndUserController from '../EUSign/useEndUserController';
 
@@ -11,11 +10,11 @@ function Home() {
 
     return (
         <EndUserContext.Provider value={{ keyMediaType, setKeyMediaType, librarySW, currentLibrary }}>
-            {librarySW.loading && <Loader error={librarySW.error?.toString()} />}
             <Layout
                 title="SA - UA Sign"
                 subtitle="ЕЦП (ДСТУ 4145-2002)"
-                showOverlay={librarySW.loading}
+                loading={librarySW.loading}
+                error={librarySW.error?.toString()}
                 left={<PanelCheck />}
                 right={<PanelSign />}
             />

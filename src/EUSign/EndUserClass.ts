@@ -507,9 +507,7 @@ export interface EndUserSCClientStatisticClass {
     GetProtectedData(): number;
 }
 
-export interface EndUserDeviceContextClass {
-    GetHandle(): string;
-}
+export interface EndUserDeviceContextClass extends EndUserContextClass {}
 
 export interface EndUserTransportHeaderClass {
     GetReceiptNumber(): number;
@@ -524,15 +522,13 @@ export interface EndUserCryptoHeaderClass {
 }
 
 export interface EndUserContextClass {
+    handle: string;
     GetHandle(): string;
 }
 
-export interface EndUserHashContextClass {
-    GetHandle(): string;
-}
+export interface EndUserHashContextClass extends EndUserContextClass {}
 
 export interface EndUserPrivateKeyContextClass extends EndUserContextClass {
-    GetHandle(): string;
     GetOwnerInfo(): EndUserOwnerInfoClass;
 }
 

@@ -567,7 +567,7 @@ export default class EndUserAgent implements EndUserLibrary {
         }
         let allowedKeyMediaTypes: number[] = [];
 
-        return new Promise((resolve, reject) => {
+        return new Promise<EndUserKeyMedia[]>((resolve, reject) => {
             this.CheckInitialize()
                 .then(() => this.BeginKMOperation())
                 .then(() => (this.m_kmTypes ? this.m_kmTypes : this.m_library.GetKeyMediaTypes()))
@@ -1257,7 +1257,7 @@ export default class EndUserAgent implements EndUserLibrary {
             throw this.MapError(e);
         }
     }
-    async CtxFree(context: EndUserContext) {
+    async CtxFree(context: EndUserContext| EndUserContextClass) {
         try {
             await this.CheckInitialize();
             await this.m_library.CtxFree(context as unknown as EndUserContextClass);
@@ -1265,7 +1265,7 @@ export default class EndUserAgent implements EndUserLibrary {
             throw this.MapError(e);
         }
     }
-    async CtxSetParameter(context: EndUserContext, name: string, value: boolean) {
+    async CtxSetParameter(context: EndUserContext| EndUserContextClass, name: string, value: boolean) {
         try {
             await this.CheckInitialize();
             await this.m_library.CtxSetParameter(

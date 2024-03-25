@@ -370,9 +370,7 @@ export interface EndUserSCClientStatistic {
     protectedData: number;
 }
 
-export interface EndUserDeviceContext {
-    handle: string;
-}
+export interface EndUserDeviceContext extends EndUserContext {}
 
 export interface EndUserTransportHeader {
     receiptNumber: number;
@@ -387,15 +385,12 @@ export interface EndUserCryptoHeader {
 }
 
 export interface EndUserContext {
-    handle: string;
+    context: string;
 }
 
-export interface EndUserHashContext {
-    handle: string;
-}
+export interface EndUserHashContext extends EndUserContext {}
 
 export interface EndUserPrivateKeyContext {
-    handle: string;
     ownerInfo: EndUserOwnerInfo;
 }
 

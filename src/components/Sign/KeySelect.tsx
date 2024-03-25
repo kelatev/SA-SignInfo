@@ -48,7 +48,7 @@ function SignSelect() {
     }, [keyMediaType, file, setKeyMediaType]);
 
     useEffect(() => {
-        if (currentLibrary?.info.loaded && file) {
+        if (file) {
             FileToUint8(file).then(data => setFileContainer(data)).catch(err => console.log(err));
         } else {
             setFileContainer(undefined);
@@ -59,10 +59,10 @@ function SignSelect() {
         setPassword(undefined);
         setKeySelect(undefined);
         setPrivateKey(undefined);
-    }, [currentLibrary?.info.loaded, file, setPrivateKey]);
+    }, [file, setPrivateKey]);
 
     useEffect(() => {
-        if (currentLibrary?.info.loaded && fileContainer) {
+        if (currentLibrary?.info.loaded && keyMediaType === KeyMediaType.File && fileContainer) {
             (async function () {
                 try {
                     setError(undefined);
@@ -79,7 +79,7 @@ function SignSelect() {
                 }
             })();
         }
-    }, [currentLibrary?.info.loaded, currentLibrary?.library, fileContainer]);
+    }, [currentLibrary?.info.loaded, currentLibrary?.library, keyMediaType, fileContainer]);
 
     useEffect(() => {
         if (jksPrivateKeys && aliasSelect) {
@@ -132,10 +132,10 @@ function SignSelect() {
         }
     }, [error]);
 
-    //const libLoaded = currentLibrary?.info.loaded && !currentLibrary.loading;
+    const libLoaded = currentLibrary?.info.loaded && !currentLibrary.loading;
     const showJKS = keyMediaType === KeyMediaType.File && file && !privateKey && jksPrivateKeys && jksPrivateKeys.length > 1;
     const showPass = keyMediaType === KeyMediaType.File && file && !privateKey;
-    const showKeyMedia = keyMediaType === KeyMediaType.Hardware;
+    const showKeyMedia = keyMediaType === KeyMediaType.Hardware && libLoaded && currentLibrary?.error == null;
 
     return (
         <>
