@@ -11,7 +11,7 @@ export default function useEndUserKeyMedia(props: Props) {
     const updatingKMRef = useRef(false);
     const [KMs, setKMs] = useState<EndUserKeyMedia[]>([]);
 
-    const multiKeyDevice = ["криптомод. ІІТ Гряда-301"];
+    //const multiKeyDevice = ["криптомод. ІІТ Гряда-301"];
 
     const GetKMLocalizedVisibleName = (keyMedia: EndUserKeyMedia) =>
         keyMedia.device + "(" + keyMedia.type + ")";
@@ -24,7 +24,7 @@ export default function useEndUserKeyMedia(props: Props) {
         return result;
     };
 
-    const IsKMMultiKeyDevice = (keyMedia: EndUserKeyMedia) =>
+    /* const IsKMMultiKeyDevice = (keyMedia: EndUserKeyMedia) =>
         keyMedia.type && multiKeyDevice.indexOf(keyMedia.type) > -1;
 
     const IsKMConnected = (item: EndUserKeyMedia, arr: EndUserKeyMedia[]) => {
@@ -40,7 +40,7 @@ export default function useEndUserKeyMedia(props: Props) {
             }
         }
         return false;
-    };
+    }; */
 
     const IsKMsUpdated = (list1: EndUserKeyMedia[], list2: EndUserKeyMedia[]) => {
         const arr1 = GetKMsVisibleNames(list1);
@@ -81,6 +81,7 @@ export default function useEndUserKeyMedia(props: Props) {
         } else {
             StopUpdateKMs();
         }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [props.instance?.type]);
 
     const StopUpdateKMs = () => {

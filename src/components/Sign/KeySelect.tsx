@@ -79,6 +79,7 @@ function SignSelect() {
         setPrivateKey(undefined);
         setLoading(false);
         Confirmation.StopTimer();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [file]);
 
     useEffect(() => {

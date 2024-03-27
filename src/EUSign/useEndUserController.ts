@@ -63,6 +63,7 @@ export default function useEndUserController() {
 
             currentLibrary.Load(event => OnEvent(event)).catch(e => {});
         }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [currentLibrary]);
 
     return {
