@@ -2,7 +2,6 @@ import {
     EndUserProxySettings,
     EndUserPrivateKey,
     EndUserOwnerInfo,
-    EndUserPrivateKeyContext,
     EndUserKeyMedia,
     EndUserParams,
     EndUserCertificate,
@@ -12,21 +11,22 @@ import {
 import { EndUserContextClass } from "./EndUserClass";
 import EUSignCPWorker from "./EUSignCPWorker";
 import EndUserLibrary, {
-    EndUserEventType,
     LibraryInfo,
     ClientRegistrationTokenKSP,
     SignContainerInfo,
     EndUserSettings,
     EndUserSettingsCA,
 } from "./EndUserLibrary";
-import { EndUserSignAlgo } from "./EndUserConstants";
+import { EndUserEventType, EndUserSignAlgo } from "./EndUserConstants";
 
 export default class EndUserWorker implements EndUserLibrary {
     m_worker;
-    m_eventListeners: any[];
+    m_eventListeners: Array<(event: any) => void>;
 
-    constructor() {
-        this.m_worker = new EUSignCPWorker();
+    constructor(workerUrl: string) {
+        this.m_worker = new EUSignCPWorker(workerUrl, result => {
+            this.OnEvent(result);
+        });
         this.m_eventListeners = [];
     }
 
@@ -38,12 +38,12 @@ export default class EndUserWorker implements EndUserLibrary {
 
     OnEvent(event: any) {
         try {
-            var callback =
+            const callback =
                 this.m_eventListeners[event.type] || this.m_eventListeners[EndUserEventType.All];
             callback && callback(event);
         } catch (e) {}
     }
-    AddEventListener(eventType: EndUserEventType, callback: any) {
+    AddEventListener(eventType: EndUserEventType, callback: (event: any) => void) {
         switch (eventType) {
             case EndUserEventType.None:
                 this.m_eventListeners = [];
@@ -121,7 +121,7 @@ export default class EndUserWorker implements EndUserLibrary {
         );
     }
     ReadPrivateKeySIM(msisdn: string, operator: string | number, getCerts: boolean, keyId: number) {
-        return this.command<EndUserPrivateKeyContext>(
+        return this.command<EndUserOwnerInfo>(
             "ReadPrivateKeySIM",
             msisdn,
             operator,
@@ -130,13 +130,7 @@ export default class EndUserWorker implements EndUserLibrary {
         );
     }
     ReadPrivateKeyKSP(userId: string, ksp: string | number, getCerts: boolean, keyId: number) {
-        return this.command<EndUserPrivateKeyContext>(
-            "ReadPrivateKeyKSP",
-            userId,
-            ksp,
-            getCerts,
-            keyId,
-        );
+        return this.command<EndUserOwnerInfo>("ReadPrivateKeyKSP", userId, ksp, getCerts, keyId);
     }
     GetOwnCertificates() {
         return this.command<EndUserCertificate[]>("GetOwnCertificates");

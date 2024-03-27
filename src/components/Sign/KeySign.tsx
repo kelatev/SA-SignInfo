@@ -8,7 +8,7 @@ import { CheckPrivateKey, SignAlgoToPublicKeyType } from '../../EUSign/EndUserUt
 import { EndUserKeyUsage, EndUserSignAlgo, EndUserSignType, EndUserCAdESType, EU_SIGN_TYPE_PARAMETER } from '../../EUSign/EndUserConstants'
 
 export default function KeySign() {
-    const { currentLibrary } = useEndUserContext();
+    const { currentLibrary, Confirmation } = useEndUserContext();
     const { privateKey } = useKeyContext();
 
     const [fileToSign, setFileToSign] = useState<File | null>();
@@ -34,10 +34,12 @@ export default function KeySign() {
                         true,
                     );
                     setSignedData(result as Uint8Array);
+                    Confirmation.StopTimer();
                 } catch (e: any) {
                     console.log(e);
                     setError(`${e.message} (${e.code})`);
                     setSignedData(undefined);
+                    Confirmation.StopTimer();
                 }
             })();
         }
@@ -49,6 +51,7 @@ export default function KeySign() {
         privateKey?.settings?.signAlgo,
         privateKey?.settings?.signFormat,
         fileToSign,
+        Confirmation
     ]);
 
     return (

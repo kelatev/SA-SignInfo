@@ -4,8 +4,30 @@ export default class EUSignCPWorker {
     m_origin: string;
     m_pathname: string;
 
-    constructor() {
-        this.m_worker = this.loadWorker();
+    constructor(workerUrl: string, onMessage: (result: any) => void) {
+        this.m_worker = this.loadWorker(workerUrl);
+        this.m_worker.onmessage = (event: MessageEvent) => {
+            const data = event.data;
+            if (data.id !== -2) {
+                const itemCallback = this.m_promises[data.id - 1];
+
+                if (itemCallback) {
+                    delete this.m_promises[data.id - 1];
+                    if (data.error == null) {
+                        itemCallback.onSuccess(data.result);
+                    } else {
+                        itemCallback.onError(data.error);
+                    }
+                }
+            } else {
+                onMessage(data.result);
+            }
+        };
+        this.m_worker.onerror = (event: ErrorEvent) => {
+            this.m_promises.forEach(item => item.onError(event?.error));
+            this.m_promises = [];
+        };
+
         this.m_promises = [];
 
         this.m_origin = window.location.origin
@@ -35,27 +57,7 @@ export default class EUSignCPWorker {
         });
     }
 
-    loadWorker() {
-        const instance = new Worker(process.env.PUBLIC_URL + "/eusign/euscp.worker.js?maxDataSize=25");
-
-        instance.onmessage = (event: MessageEvent) => {
-            const data = event.data;
-            const itemCallback = this.m_promises[data.id - 1];
-
-            if (itemCallback) {
-                delete this.m_promises[data.id - 1];
-                if (data.error == null) {
-                    itemCallback.onSuccess(data.result);
-                } else {
-                    itemCallback.onError(data.error);
-                }
-            }
-        };
-        instance.onerror = (event: ErrorEvent) => {
-            this.m_promises.forEach(item => item.onError(event?.error));
-            this.m_promises = [];
-        };
-
-        return instance;
+    loadWorker(url: string) {
+        return new Worker(url);
     }
 }

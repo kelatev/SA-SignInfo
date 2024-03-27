@@ -6,15 +6,15 @@ import { EndUserContext } from '../EUSign/EndUserContext';
 import useEndUserController from '../EUSign/useEndUserController';
 
 function Home() {
-    const { keyMediaType, setKeyMediaType, librarySW, currentLibrary } = useEndUserController();
+    const controller = useEndUserController();
 
     return (
-        <EndUserContext.Provider value={{ keyMediaType, setKeyMediaType, librarySW, currentLibrary }}>
+        <EndUserContext.Provider value={controller}>
             <Layout
                 title="SA - UA Sign"
                 subtitle="ЕЦП (ДСТУ 4145-2002)"
-                loading={librarySW.loading}
-                error={librarySW.error?.toString()}
+                loading={controller.librarySW.loading}
+                error={controller.librarySW.error?.toString()}
                 left={<PanelCheck />}
                 right={<PanelSign />}
             />

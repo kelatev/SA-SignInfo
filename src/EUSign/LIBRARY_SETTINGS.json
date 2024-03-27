@@ -26,15 +26,6 @@
   "passwordRequirements": null,
   "KSPs": [
     {
-      "name": "ДіЯ",
-      "ksp": 7,
-      "address": "Server/KSPSignController.php",
-      "port": "",
-      "directAccess": true,
-      "mobileAppName": "ДіЯ",
-      "systemId": "https://ca.diia.gov.ua/"
-    },
-    {
       "name": "DepositSign - хмарний підпис",
       "ksp": 4,
       "address": "https://depositsign.com/api/v1/informjust/sign-server",

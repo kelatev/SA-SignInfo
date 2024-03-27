@@ -8,7 +8,6 @@ import {
     EndUserError as EndUserErrorType,
     EndUserKeyMedia,
     EndUserOwnerInfo,
-    EndUserPrivateKeyContext,
     EndUserParams,
 } from "./EndUserTypes";
 import {
@@ -29,13 +28,13 @@ import {
     MapToEndUserTimeInfo,
 } from "./EndUserConvert";
 import EndUserLibrary, {
-    EndUserEventType,
     LibraryInfo,
     ClientRegistrationTokenKSP,
     EndUserSettings,
     EndUserSettingsCA,
 } from "./EndUserLibrary";
 import {
+    EndUserEventType,
     EndUserSignAlgo,
     EndUserCMPCompatibility,
     EndUserSignContainerType,
@@ -83,7 +82,7 @@ export default class EndUserAgent implements EndUserLibrary {
         } catch (e) {}
     }
 
-    AddEventListener(eventType: EndUserEventType, callback: any) {
+    AddEventListener(eventType: EndUserEventType, callback: (event: any) => void) {
         return new Promise<void>((resolve, reject) => {
             if (
                 [
@@ -913,14 +912,14 @@ export default class EndUserAgent implements EndUserLibrary {
         });
     }
     ReadPrivateKeySIM(msisdn: string, operator: string | number, getCerts: boolean, keyId: number) {
-        return new Promise<EndUserPrivateKeyContext>((resolve, reject) => {
+        return new Promise<EndUserOwnerInfo>((resolve, reject) => {
             this.CheckInitialize()
                 .then(() => this.m_library.MakeError(EndUserError.ERROR_NOT_SUPPORTED, ""))
                 .catch(e => reject(this.MapError(e)));
         });
     }
     ReadPrivateKeyKSP(userId: string, ksp: string | number, getCerts: boolean, keyId: number) {
-        return new Promise<EndUserPrivateKeyContext>((resolve, reject) => {
+        return new Promise<EndUserOwnerInfo>((resolve, reject) => {
             this.CheckInitialize()
                 .then(() => this.m_library.MakeError(EndUserError.ERROR_NOT_SUPPORTED, ""))
                 .catch(e => reject(this.MapError(e)));

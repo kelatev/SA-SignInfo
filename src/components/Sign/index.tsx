@@ -13,7 +13,7 @@ function PanelSign() {
 
     return (
         <KeyContext.Provider value={{ privateKey, setPrivateKey }}>
-            <Card title='Підписати файл' backgroundColor='#BFDDE3' className='bgi-no-repeat bgi-position-x-end' backgroundImage='url("/media/wave-bg-purple.svg")'>
+            <Card title='Підписати файл' className='bg-teal bgi-no-repeat bgi-position-x-end' backgroundImage='url("/media/wave-bg-purple.svg")'>
                 <Timeline>
                     <KeySelect />
                     {privateKey && (

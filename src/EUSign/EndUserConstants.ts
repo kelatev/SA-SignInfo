@@ -1,6 +1,12 @@
 export const EU_RESOLVE_OIDS_PARAMETER = "ResolveOIDs";
 export const EU_SIGN_TYPE_PARAMETER = "SignType";
 
+export enum EndUserEventType {
+    "None" = 0,
+    "All" = 1,
+    "ConfirmKSPOperation" = 2,
+}
+
 export enum EndUserCertKeyType {
     Unknown = 0,
     DSTU4145 = 1,

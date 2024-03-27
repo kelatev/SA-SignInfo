@@ -1,7 +1,9 @@
 import { useState, useCallback } from "react";
-import EndUserLibrary, { EndUserEventType, LibraryInfo } from "./EndUserLibrary";
+import EndUserLibrary, { LibraryInfo } from "./EndUserLibrary";
+import { EndUserEventType } from './EndUserConstants';
 import { EndUserError } from "./EndUserTypes";
 import Settings from "./LIBRARY_SETTINGS.json";
+import { Repeat } from "@phosphor-icons/react";
 
 export enum EndUserLibraryType {
     SW,
@@ -19,7 +21,7 @@ export interface EndUserInstance {
     info: LibraryInfo;
     loading: boolean;
     error: EndUserError | undefined;
-    Load: (callback?: any) => Promise<void>;
+    Load: (callback: (event: any) => void) => Promise<void>;
 }
 
 export default function useEndUserInstance(props: Props): EndUserInstance {
@@ -32,7 +34,7 @@ export default function useEndUserInstance(props: Props): EndUserInstance {
     const [error, setError] = useState<EndUserError>();
 
     const Load = useCallback(
-        (callback?: any) => {
+        (callback: (event: any) => void) => {
             setLoading(true);
             setError(undefined);
 
@@ -86,5 +88,8 @@ export function errorLoadDescription(instance: EndUserInstance) {
         {label}
         <div><a href={urlLink ?? ''}>{urlText}</a></div>
         <div><a href={instance.info.helpURL ?? ''}>Настанова користувача</a></div>
+        <button type="button" className="btn btn-sm btn-light mt-3" onClick={() => {
+            instance.Load(e => { }).catch(e => { })
+        }}><Repeat className="me-2" />Повторити</button>
     </>);
 }

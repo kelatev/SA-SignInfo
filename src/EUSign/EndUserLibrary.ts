@@ -2,7 +2,6 @@ import {
     EndUserProxySettings,
     EndUserPrivateKey,
     EndUserOwnerInfo,
-    EndUserPrivateKeyContext,
     EndUserKeyMedia,
     EndUserParams,
     EndUserCertificate,
@@ -10,13 +9,7 @@ import {
     EndUserContext,
 } from "./EndUserTypes";
 import { EndUserContextClass } from "./EndUserClass";
-import { EndUserSignAlgo } from "./EndUserConstants";
-
-export enum EndUserEventType {
-    "None" = 0,
-    "All" = 1,
-    "ConfirmKSPOperation" = 2,
-}
+import { EndUserEventType, EndUserSignAlgo } from "./EndUserConstants";
 
 enum EndUserLanguage {
     EU_DEFAULT_LANG = 0,
@@ -109,7 +102,7 @@ export interface SignContainerInfo {
 }
 
 export default interface EndUserLibrary {
-    AddEventListener: (eventType: EndUserEventType, callback: any) => Promise<void>;
+    AddEventListener: (eventType: EndUserEventType, callback: (event: any) => void) => Promise<void>;
     GetLibraryInfo: (downloadsURL?: string) => Promise<LibraryInfo>;
     IsInitialized: () => Promise<boolean>;
     Initialize: (settings: EndUserSettings) => Promise<void>;
@@ -140,13 +133,13 @@ export default interface EndUserLibrary {
         operator: string | number,
         getCerts: boolean,
         keyId: number,
-    ) => Promise<EndUserPrivateKeyContext>;
+    ) => Promise<EndUserOwnerInfo>;
     ReadPrivateKeyKSP: (
         userId: string,
         ksp: string | number,
         getCerts: boolean,
         keyId: number,
-    ) => Promise<EndUserPrivateKeyContext>;
+    ) => Promise<EndUserOwnerInfo>;
     GetOwnCertificates: () => Promise<EndUserCertificate[]>;
     GetOwnEUserParams: () => Promise<EndUserParams>;
     ChangeOwnCertificatesStatus: (requestType: number, revocationReason: number) => Promise<void>;

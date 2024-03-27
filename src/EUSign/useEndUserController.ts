@@ -3,6 +3,8 @@ import useEndUserInstance, { EndUserLibraryType } from "./useEndUserInstance";
 import EndUserLibrary from "./EndUserLibrary";
 import EndUserWorker from "./EndUserWorker";
 import EndUserAgent from "./EndUserAgent";
+import { EndUserEventType } from "./EndUserConstants";
+import useEndUserConfirmationTimer from "./useEndUserConfirmationTimer";
 
 export enum SignContainerType {
     XAdES = 1,
@@ -28,7 +30,8 @@ export enum KeyMediaType {
 export default function useEndUserController() {
     const [keyMediaType, setKeyMediaType] = useState<KeyMediaType>(KeyMediaType.File);
 
-    const librarySW = useMemo<EndUserLibrary>(() => new EndUserWorker(), []);
+    const workerUrl = process.env.PUBLIC_URL + "/eusign/euscp.worker.js?maxDataSize=25";
+    const librarySW = useMemo<EndUserLibrary>(() => new EndUserWorker(workerUrl), [workerUrl]);
     const libraryJS = useMemo<EndUserLibrary>(() => new EndUserAgent(), []);
     const instanceSW = useEndUserInstance({ type: EndUserLibraryType.SW, library: librarySW });
     const instanceJS = useEndUserInstance({ type: EndUserLibraryType.JS, library: libraryJS });
@@ -36,13 +39,37 @@ export default function useEndUserController() {
         return keyMediaType === KeyMediaType.Hardware ? instanceJS : instanceSW;
     }, [keyMediaType, instanceJS, instanceSW]);
 
+    const Confirmation = useEndUserConfirmationTimer();
+    const OnEvent = (event: any) => {
+        switch (event.type) {
+            case EndUserEventType.ConfirmKSPOperation:
+                Confirmation.BeginOperation(
+                    event.url,
+                    event.qrCode,
+                    event.mobileAppName,
+                    event.expireDate,
+                );
+        }
+    };
+
     useEffect(() => {
-        if (currentLibrary && !currentLibrary.info?.loaded && !currentLibrary.loading && !currentLibrary.error) {
-            console.log('useEndUserController.Load');
-            
-            currentLibrary.Load().catch(e => {});
+        if (
+            currentLibrary &&
+            !currentLibrary.info?.loaded &&
+            !currentLibrary.loading &&
+            !currentLibrary.error
+        ) {
+            console.log("useEndUserController.Load");
+
+            currentLibrary.Load(event => OnEvent(event)).catch(e => {});
         }
     }, [currentLibrary]);
 
-    return { keyMediaType, setKeyMediaType, librarySW: instanceSW, currentLibrary };
+    return {
+        keyMediaType,
+        setKeyMediaType,
+        librarySW: instanceSW,
+        currentLibrary,
+        Confirmation,
+    };
 }

@@ -1,5 +1,5 @@
 import React, { ReactElement } from "react";
-import Loader from "./Loader";
+import Card from "../components/Form/Card";
 
 interface LayoutProps {
     title: string
@@ -13,9 +13,8 @@ interface LayoutProps {
 const Layout: React.FC<LayoutProps> = ({ title, subtitle, loading = false, error, left, right }) => {
     return (
         <>
-            {loading && <Loader error={error} />}
             <div className='d-flex flex-column flex-root'>
-                <div className={'page d-flex flex-row flex-column-fluid' + (loading ? ' overlay overlay-block' : '')}>
+                <div className={'page d-flex flex-row flex-column-fluid'}>
                     <div className='wrapper d-flex flex-column flex-row-fluid' id='kt_wrapper'>
 
                         <div id="kt_header" className="app-container container-xxl d-flex align-items-start ">
@@ -31,11 +30,18 @@ const Layout: React.FC<LayoutProps> = ({ title, subtitle, loading = false, error
                             </div>
                         </div>
                         <div id='kt_content' className='container-xxl d-flex flex-column flex-column-fluid'>
-                            <div className='row gy-5 g-xl-10'>
-                                <div className='col-xl-6'>
+                            <div className='row gy-5 g-xl-10 position-relative'>
+                                {loading && <div className="col-xl-8 offset-xl-2 z-index-3 min-h-350px" style={{ 'backgroundColor': 'var(--bs-app-bg-color)' }}>
+                                    <Card title='Завантаження бібліотеки' className="bg-warning-subtle">
+                                        <div className="text-center my-2">
+                                            <span className="spinner-border text-primary" role="status"></span>
+                                        </div>
+                                    </Card>
+                                </div>}
+                                <div className={'position-absolute ' + (loading ? 'col-xl-8 offset-xl-2 mh-300px overflow-hidden' : 'col-xl-6')} style={{ 'transition': 'margin .1s ease, width .3s ease' }}>
                                     {left}
                                 </div>
-                                <div className='col-xl-6'>
+                                <div className={'position-absolute ' + (loading ? 'col-xl-8 offset-xl-2 mh-300px overflow-hidden' : 'col-xl-6 offset-xl-6')} style={{ 'transition': 'margin .3s ease, width .2s ease' }}>
                                     {right}
                                 </div>
                             </div>

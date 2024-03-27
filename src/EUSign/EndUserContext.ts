@@ -1,12 +1,14 @@
 import { createContext, useContext } from "react";
 import { KeyMediaType } from "./useEndUserController";
 import { EndUserInstance } from "./useEndUserInstance";
+import { ConfirmationTimerReturn } from "./useEndUserConfirmationTimer";
 
 interface EndUserContextType {
     keyMediaType: KeyMediaType;
     setKeyMediaType: React.Dispatch<React.SetStateAction<KeyMediaType>>;
     librarySW: EndUserInstance;
     currentLibrary: EndUserInstance | undefined;
+    Confirmation: ConfirmationTimerReturn;
 }
 
 export const EndUserContext = createContext<EndUserContextType>({} as EndUserContextType);

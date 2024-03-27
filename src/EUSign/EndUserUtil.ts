@@ -246,7 +246,11 @@ export function CheckPrivateKey(
         if (skip) {
             resolve();
         } else {
-            for (var l = certificatesInfo ?? [], c = EndUserKeyUsage.Unknown, f = 0; f < l.length; f++) {
+            for (
+                var l = certificatesInfo ?? [], c = EndUserKeyUsage.Unknown, f = 0;
+                f < l.length;
+                f++
+            ) {
                 var _ = l[f].infoEx;
                 (publicKeyType !== EndUserCertKeyType.Unknown &&
                     _.publicKeyType !== publicKeyType) ||
@@ -322,4 +326,28 @@ export function GetSupportedSignAlgos(certificates: EndUserCertificate[]) {
             }
     }
     return result;
+}
+
+export function MakeUserId() {
+    return "undefined" != typeof crypto
+        ? ("" + [1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, data => {
+              const num = Number(data);
+              return (
+                  num ^
+                  (crypto.getRandomValues(new Uint8Array(1))[0] & (15 >> (num / 4)))
+              ).toString(16);
+          })
+        : "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, data => {
+              const num = (16 * Math.random()) | 0;
+              return ("x" === data ? num : (3 & num) | 8).toString(16);
+          });
+}
+
+export function IsQualifiedCertificates(certs: EndUserCertificate[]) {
+    for (let i = 0; i < certs.length; i++) {
+        if (!certs[i].infoEx.isPowerCert) {
+            return false;
+        }
+    }
+    return true;
 }
