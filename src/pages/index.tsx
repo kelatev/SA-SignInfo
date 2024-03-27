@@ -13,7 +13,7 @@ function Home() {
             <Layout
                 title="SA - UA Sign"
                 subtitle="ЕЦП (ДСТУ 4145-2002)"
-                loading={controller.librarySW.loading}
+                loading={controller.librarySW.loading ?? true}
                 error={controller.librarySW.error?.toString()}
                 left={<PanelCheck />}
                 right={<PanelSign />}

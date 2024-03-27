@@ -19,7 +19,7 @@ export interface EndUserInstance {
     type: EndUserLibraryType;
     library: EndUserLibrary | undefined;
     info: LibraryInfo;
-    loading: boolean;
+    loading: boolean | undefined;
     error: EndUserError | undefined;
     Load: (callback: (event: any) => void) => Promise<void>;
 }
@@ -30,7 +30,7 @@ export default function useEndUserInstance(props: Props): EndUserInstance {
         supported: false,
         loaded: false,
     });
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState<boolean>();
     const [error, setError] = useState<EndUserError>();
 
     const Load = useCallback(
