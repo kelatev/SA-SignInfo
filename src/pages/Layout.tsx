@@ -38,10 +38,10 @@ const Layout: React.FC<LayoutProps> = ({ title, subtitle, loading = false, error
                                         </div>
                                     </Card>
                                 </div>}
-                                <div className={'position-absolute ' + (loading ? 'col-xl-8 offset-xl-2 mh-300px overflow-hidden' : 'col-xl-6')} style={{ 'transition': 'margin .1s ease, width .3s ease' }}>
+                                <div className={ (loading ? 'position-absolute col-xl-8 offset-xl-2 mh-300px overflow-hidden' : 'position-xl-absolute col-xl-6')} style={{ 'transition': 'margin .2s ease, width .3s ease' }}>
                                     {left}
                                 </div>
-                                <div className={'position-absolute ' + (loading ? 'col-xl-8 offset-xl-2 mh-300px overflow-hidden' : 'col-xl-6 offset-xl-6')} style={{ 'transition': 'margin .3s ease, width .2s ease' }}>
+                                <div className={ (loading ? 'position-absolute col-xl-8 offset-xl-2 mh-300px overflow-hidden' : 'position-xl-absolute col-xl-6 offset-xl-6')} style={{ 'transition': 'margin .3s ease, width .2s ease' }}>
                                     {right}
                                 </div>
                             </div>
