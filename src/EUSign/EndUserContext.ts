@@ -1,7 +1,7 @@
 import { createContext, useContext } from "react";
 import { KeyMediaType } from "./useEndUserController";
 import { EndUserInstance } from "./useEndUserInstance";
-import { ConfirmationTimerReturn } from "./useEndUserConfirmationTimer";
+import { ConfirmationTimerReturn } from "./useEndUserConfirmation";
 
 interface EndUserContextType {
     keyMediaType: KeyMediaType;

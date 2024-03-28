@@ -29,23 +29,6 @@ export default class EUSignCPAgent {
     m_language = 0;
     m_library!: EUSignCP;
 
-    EU_SAVE_SETTINGS_PARAMETER = "SaveSettings";
-    EU_RESOLVE_OIDS_PARAMETER = "ResolveOIDs";
-    EU_MAKE_PKEY_PFX_CONTAINER_PARAMETER = "MakePKeyPFXContainer";
-    EU_SIGN_INCLUDE_CONTENT_TIME_STAMP_PARAMETER = "SignIncludeContentTimeStamp";
-    EU_SIGN_TYPE_PARAMETER = "SignType";
-    EU_SIGN_INCLUDE_CA_CERTIFICATES_PARAMETER = "SignIncludeCACertificates";
-    EU_FS_CALCULATE_FINGERPRINT = "FSCalculateFingerprint";
-    EU_CHECK_CERT_CHAIN_ON_SIGN_TIME_PARAMETER = "CheckCertChainOnSignTime";
-    EU_CONNECTIONS_TIMEOUT_PARAMETER = "ConnectionsTimeout";
-    EU_LOG_EVENTS_THRESHOLD_PARAMETER = "LogEventsThreshold";
-
-    EU_SETTINGS_ID_PROXY = 2;
-    EU_SUBJECT_TYPE_END_USER = 4;
-    EU_CERT_KEY_TYPE_DSTU4145 = 1;
-    EU_KEY_USAGE_DIGITAL_SIGNATURE = 1;
-    EU_UA_OID_EXT_KEY_USAGE_STAMP = "1.2.804.2.1.1.1.3.9";
-
     MakeURL(url: string) {
         var t = window.location.origin,
             n = window.location.pathname;

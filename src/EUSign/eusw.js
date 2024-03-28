@@ -4547,6 +4547,8 @@ export const EUSignCP = function(address, port) {
     this.EU_SIGN_INCLUDE_CA_CERTIFICATES_PARAMETER =
         'SignIncludeCACertificates';
     this.EU_FS_CALCULATE_FINGERPRINT = 'FSCalculateFingerprint';
+    this.EU_CHECK_CERT_CHAIN_ON_SIGN_TIME_PARAMETER = "CheckCertChainOnSignTime";
+    this.EU_CONNECTIONS_TIMEOUT_PARAMETER = "ConnectionsTimeout";
 
     this.EU_SETTINGS_ID_NONE = 0x00;
     this.EU_SETTINGS_ID_MANDATORY = 0x1F;

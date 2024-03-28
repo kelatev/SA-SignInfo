@@ -231,16 +231,16 @@ export default class EndUserAgent implements EndUserLibrary {
                     n.digitalStamp = false;
                     for (var r = 0; r < infoExArr.length; r++) {
                         var infoEx = infoExArr[r];
-                        if (infoEx.GetSubjType() === this.m_library.EU_SUBJECT_TYPE_END_USER) {
+                        if (infoEx.GetSubjType() === this.m_library.m_library.EU_SUBJECT_TYPE_END_USER) {
                             infoEx.GetPublicKeyType() ===
-                                this.m_library.EU_CERT_KEY_TYPE_DSTU4145 &&
+                                this.m_library.m_library.EU_CERT_KEY_TYPE_DSTU4145 &&
                                 (infoEx.GetKeyUsageType() &
-                                    this.m_library.EU_KEY_USAGE_DIGITAL_SIGNATURE) ===
-                                    this.m_library.EU_KEY_USAGE_DIGITAL_SIGNATURE &&
+                                    this.m_library.m_library.EU_KEY_USAGE_DIGITAL_SIGNATURE) ===
+                                    this.m_library.m_library.EU_KEY_USAGE_DIGITAL_SIGNATURE &&
                                 (n.digitalStamp =
                                     infoEx
                                         .GetExtKeyUsages()
-                                        .indexOf(this.m_library.EU_UA_OID_EXT_KEY_USAGE_STAMP) >
+                                        .indexOf(this.m_library.m_library.EU_UA_OID_EXT_KEY_USAGE_STAMP) >
                                     -1);
                             var l: EndUserCertificate = {} as any;
                             l.data = privateKey.info.GetCertificate(r);
@@ -390,8 +390,8 @@ export default class EndUserAgent implements EndUserLibrary {
                 .Load()
                 .then(() => {
                     return this.m_library.SetRuntimeParameter(
-                        this.m_library.EU_SAVE_SETTINGS_PARAMETER,
-                        this.m_library.EU_SETTINGS_ID_PROXY,
+                        this.m_library.m_library.EU_SAVE_SETTINGS_PARAMETER,
+                        this.m_library.m_library.EU_SETTINGS_ID_PROXY,
                     );
                 })
                 .then(() => this.m_library.SetUIMode(false))
@@ -457,14 +457,14 @@ export default class EndUserAgent implements EndUserLibrary {
                 })
                 .then(() => {
                     return this.m_library.SetRuntimeParameter(
-                        this.m_library.EU_RESOLVE_OIDS_PARAMETER,
+                        this.m_library.m_library.EU_RESOLVE_OIDS_PARAMETER,
                         this.m_resolveOIDs,
                     );
                 })
                 .then(() => {
                     if ("number" == typeof this.m_settings.connectionTimeout)
                         return this.m_library.SetRuntimeParameter(
-                            this.m_library.EU_CONNECTIONS_TIMEOUT_PARAMETER,
+                            this.m_library.m_library.EU_CONNECTIONS_TIMEOUT_PARAMETER,
                             this.m_settings.connectionTimeout,
                         );
                 })
@@ -479,13 +479,13 @@ export default class EndUserAgent implements EndUserLibrary {
                     this.m_context = context;
                     return this.m_library.CtxSetParameter(
                         context,
-                        this.m_library.EU_RESOLVE_OIDS_PARAMETER,
+                        this.m_library.m_library.EU_RESOLVE_OIDS_PARAMETER,
                         this.m_resolveOIDs,
                     );
                 })
                 .then(() =>
                     this.m_library.SetRuntimeParameter(
-                        this.m_library.EU_CHECK_CERT_CHAIN_ON_SIGN_TIME_PARAMETER,
+                        this.m_library.m_library.EU_CHECK_CERT_CHAIN_ON_SIGN_TIME_PARAMETER,
                         true,
                     ),
                 )
@@ -1031,7 +1031,7 @@ export default class EndUserAgent implements EndUserLibrary {
             context = await this.m_library.CtxCreate();
             this.m_library.CtxSetParameter(
                 context,
-                this.m_library.EU_RESOLVE_OIDS_PARAMETER,
+                this.m_library.m_library.EU_RESOLVE_OIDS_PARAMETER,
                 resolveOIDs ?? false,
             );
             const signsCount = signIndex === -1 ? this.m_library.GetSignsCount(sign) : 1;
@@ -1248,7 +1248,7 @@ export default class EndUserAgent implements EndUserLibrary {
             const context = await this.m_library.CtxCreate();
             await this.m_library.CtxSetParameter(
                 context,
-                this.m_library.EU_RESOLVE_OIDS_PARAMETER,
+                this.m_library.m_library.EU_RESOLVE_OIDS_PARAMETER,
                 this.m_resolveOIDs,
             );
             return context as unknown as EndUserContext;

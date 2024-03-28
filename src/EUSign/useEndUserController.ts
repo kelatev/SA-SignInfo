@@ -4,7 +4,7 @@ import EndUserLibrary from "./EndUserLibrary";
 import EndUserWorker from "./EndUserWorker";
 import EndUserAgent from "./EndUserAgent";
 import { EndUserEventType } from "./EndUserConstants";
-import useEndUserConfirmationTimer from "./useEndUserConfirmationTimer";
+import useEndUserConfirmation from "./useEndUserConfirmation";
 
 export enum SignContainerType {
     XAdES = 1,
@@ -39,7 +39,7 @@ export default function useEndUserController() {
         return keyMediaType === KeyMediaType.Hardware ? instanceJS : instanceSW;
     }, [keyMediaType, instanceJS, instanceSW]);
 
-    const Confirmation = useEndUserConfirmationTimer();
+    const Confirmation = useEndUserConfirmation();
     const OnEvent = (event: any) => {
         switch (event.type) {
             case EndUserEventType.ConfirmKSPOperation:
@@ -59,11 +59,9 @@ export default function useEndUserController() {
             !currentLibrary.loading &&
             !currentLibrary.error
         ) {
-            console.log("useEndUserController.Load");
-
             currentLibrary.Load(event => OnEvent(event)).catch(e => {});
         }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [currentLibrary]);
 
     return {

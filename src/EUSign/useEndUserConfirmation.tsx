@@ -8,7 +8,7 @@ export interface ConfirmationTimerReturn {
     BeginOperation: (href: string, qrCode: string, kspProvider: string, expire: Date) => void;
 }
 
-export default function useEndUserConfirmationTimer(): ConfirmationTimerReturn {
+export default function useEndUserConfirmation(): ConfirmationTimerReturn {
     const dimmerViewTimer = useRef<NodeJS.Timeout>();
     const [dimmerViewTimerLabel, setDimmerViewTimerLabel] = useState<string>();
     const [dimmerViewTimerVisible, setDimmerViewTimerVisible] = useState(false);
