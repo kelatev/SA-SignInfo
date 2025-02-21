@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import FormUploadFile from "../Form/FormUploadFile";
+import FormUploadDrop from "../Form/FormUploadDrop";
 import AlertDanger from "../Form/AlertDanger";
 import FormUploadBase64 from "../Form/FormUploadBase64";
 import DetailsFileAction from "./DetailsFileAction";
@@ -35,7 +36,7 @@ const TimelineFileSelect: React.FC<TimelineItemFileInterface> = ({ onFileChange,
     function handleFileChange(file: File) {
         setFile(file);
         onFileChange(file);
-        if (storagePrefix) {
+        if (storagePrefix && file.size < 1000000) {
             (async function () {
                 const content = await blobToBase64(file);
                 sessionStorage.setItem(storageKey, JSON.stringify({ content, name: file.name }));
@@ -58,19 +59,19 @@ const TimelineFileSelect: React.FC<TimelineItemFileInterface> = ({ onFileChange,
                     actionName={'Змінити файл'}
                     onActionClick={handleNewFile} />
             ) : (
-                <>
+                <FormUploadDrop title='Скиньте файл сюди' onChange={handleFileChange}>
                     <FormUploadFile title='Обрати файл' onChange={handleFileChange} accept={accept} />
                     &nbsp;
                     <FormUploadBase64 title='Base64' onChange={handleFileChange} fileName={base64fileName} />
                     {withToken && <>
                         &nbsp;
                         <button onClick={() => handleFileChange(new File([], 'Токен'))}
-                            className="btn btn-secondary border-hover border-gray-400 btn-active-light-primary">Токен</button>
+                            className="btn bts-sm btn-secondary border-hover border-gray-400 btn-active-light-primary">Токен</button>
                         &nbsp;
                         <button onClick={() => handleFileChange(new File([], 'Хмарний'))}
-                            className="btn btn-secondary border-hover border-gray-400 btn-active-light-primary">Хмарний</button>
+                            className="btn bts-sm btn-secondary border-hover border-gray-400 btn-active-light-primary">Хмарний</button>
                     </>}
-                </>
+                </FormUploadDrop>
             )}
 
             {error && <AlertDanger>{error}</AlertDanger>}

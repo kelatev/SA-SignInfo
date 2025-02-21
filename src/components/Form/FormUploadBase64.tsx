@@ -46,7 +46,7 @@ function FormUploadBase64(props: Base64Props) {
     return (
         <>
             <button onClick={handleShow}
-                className="btn btn-secondary border-hover border-gray-400 btn-active-light-primary">{props.title}</button>
+                className="btn bts-sm btn-secondary border-hover border-gray-400 btn-active-light-primary">{props.title}</button>
             <Modal show={show} onHide={handleClose} size="xl">
                 <Modal.Header closeButton>
                     <Modal.Title>Base64</Modal.Title>
@@ -55,9 +55,9 @@ function FormUploadBase64(props: Base64Props) {
                     <FormControl as="textarea" ref={textInput} />
                 </Modal.Body>
                 <Modal.Footer className='border-0 pt-0'>
-                    <Button onClick={handleClose} variant="light">Закрити</Button>
-                    <Button onClick={handleUpload} variant="primary">Завантажити</Button>
-                    {navigator.clipboard && <Button onClick={handleClipboard} variant="primary">Вставити з буферу</Button>}
+                    <Button onClick={handleClose} variant="light" size="sm">Закрити</Button>
+                    <Button onClick={handleUpload} variant="primary" size="sm">Завантажити</Button>
+                    {navigator.clipboard && <Button onClick={handleClipboard} variant="primary" size="sm">Вставити з буферу</Button>}
                 </Modal.Footer>
             </Modal>
         </>
