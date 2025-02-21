@@ -17,7 +17,7 @@ function FormUploadFile(props: FileProps) {
     return (
         <label>
             <input type='file' className='d-none' onChange={handleFileChosen} accept={props.accept} />
-            <span className="btn bts-sm btn-secondary border-hover border-gray-400 btn-active-light-primary">
+            <span className="btn btn-sm btn-secondary border-hover border-gray-400 btn-active-light-primary">
                 {props.title}
             </span>
         </label>
