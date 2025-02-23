@@ -58,7 +58,7 @@ function Settings() {
     }, [privateKey?.certificates, setPrivateKey]);
 
     const printValue = (text: string | undefined, key: React.Key) => {
-        return <div key={key}><span className='badge badge-light-primary'>{text}</span></div>
+        return <span key={key}><span className='badge badge-pill badge-primary badge-light-primary badge-outline me-1 mb-1'>{text}</span></span>
     }
 
     const setSignType = (key: number) => {
@@ -89,7 +89,7 @@ function Settings() {
     if (!editMode) {
         return (
             <Timeline.Item title="Налаштування електронного підпису" icon={<GearSix />}>
-                <div className="border border-dashed border-gray-300 rounded px-5 py-3 mb-5 position-relative">
+                <div className="border border-dashed border-gray-300 rounded px-5 pb-4 pt-5 mt-3 position-relative">
                     <button type='button' className='btn btn-light btn-sm position-absolute top-0 end-0 m-1 d-none' onClick={() => setEditMode(true)}><Pencil /></button>
                     {signType && signType.filter(i => i.value === privateKey?.settings?.signType).map(item => printValue(item.text, item.value))}
                     {signAlgo && signAlgo.filter(i => i.value === privateKey?.settings?.signAlgo).map(item => printValue(item.text, item.value))}

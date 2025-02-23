@@ -39,6 +39,10 @@ function FormFileBase64(props: FormDataProps) {
         }
     }, [props, content, encode]);
 
+    if (content == null) {
+        return;
+    }
+
     return (
         <>
             {props.button(handleShow)}

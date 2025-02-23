@@ -10,7 +10,7 @@ const DetailsFile: React.FC<Props> = ({ icon, file, children }) => {
     const sizeName = fileSizeName(file.size);
 
     return (
-        <div className="d-flex align-items-center border border-dashed border-gray-300 rounded px-5 py-3 mb-5">
+        <div className="d-flex align-items-center border border-dashed border-gray-300 rounded px-5 py-3 mt-3">
             {icon}
             <div className="ms-4 fw-semibold">
                 <span className="fs-6 text-hover-primary fw-bold">{file.name}</span>

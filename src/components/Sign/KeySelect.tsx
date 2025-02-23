@@ -267,14 +267,14 @@ function SignSelect() {
                     error={error}
                     withToken={true} />
                 {showJKS && (
-                    <Form.Select className="mb-1"
+                    <Form.Select className="mt-3"
                         onChange={(ev) => setAliasSelect(ev.currentTarget.value)}>
                         {jksPrivateKeys.map((item) => <option
                             key={item.alias}>{item.alias} ({item.certificates?.at(0)?.infoEx.subjCN})</option>)}
                     </Form.Select>
                 )}
                 {showKeyMedia && KMs.length === 0 && <AlertWarning>Захищений носій не знайдено</AlertWarning>}
-                {showKeyMedia && KMs.length > 0 && <Form.Select className="mb-1"
+                {showKeyMedia && KMs.length > 0 && <Form.Select className="mt-3"
                     onChange={(ev) => setKMSelect(ev.currentTarget.value)}>
                     {KMs.map((item) => <option
                         key={item.devIndex + ':' + item.typeIndex}
@@ -285,13 +285,13 @@ function SignSelect() {
                     onChange={() => handlePassChange()}
                     onSubmit={(pass) => { handlePassChange(); setPassword(pass) }}
                     loading={loading} />}
-                {showKSP && Settings.KSPs.length && <Form.Select className="mb-1"
+                {showKSP && Settings.KSPs.length && <Form.Select className="mt-5"
                     defaultValue={kspSelect ?? Settings.KSPs.at(0)?.name}
                     onChange={(ev) => ev.currentTarget.value && setKSPSelect(ev.currentTarget.value)}>
                     {Settings.KSPs.map((item, index) => <option key={index} value={item.name}>{item.name}</option>)}
                 </Form.Select>}
-                {showKSPUserId && <input className='form-control mb-1' placeholder='Ідентифікатор користувача' onChange={(ev) => setKSPUserId(ev.currentTarget.value)} value={kspUserId} />}
-                {showKSPRead && <button type='button' className='btn btn-primary' onClick={() => handleClickKSP()}>Зчитати</button>}
+                {showKSPUserId && <input className='form-control mt-3' placeholder='Ідентифікатор користувача' onChange={(ev) => setKSPUserId(ev.currentTarget.value)} value={kspUserId} />}
+                {showKSPRead && <button type='button' className='btn btn-sm btn-primary' onClick={() => handleClickKSP()}>Зчитати</button>}
                 {Confirmation.dimmerViewTimerVisible && <>
                     {Confirmation.dimmerViewTimerBlock}
                     <div className='text-center'>{Confirmation.dimmerViewTimerLabel}</div>

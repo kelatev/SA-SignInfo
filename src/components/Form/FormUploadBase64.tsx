@@ -25,7 +25,9 @@ function FormUploadBase64(props: Base64Props) {
         }
 
         const base64 = textInput.current.value;
-        if (isBase64(base64)) {
+        if (base64 == null) {
+            alert('base64 порожній');
+        } else if (isBase64(base64)) {
             props.onChange(dataURLtoFile(base64, props.fileName ?? 'base64.bin'));
         } else {
             alert('base64 не валідний');
@@ -46,7 +48,7 @@ function FormUploadBase64(props: Base64Props) {
     return (
         <>
             <button onClick={handleShow}
-                className="btn btn-sm btn-secondary border-hover border-gray-400 btn-active-light-primary">{props.title}</button>
+                className="btn btn-light btn-bordered btn-active-light-primary">{props.title}</button>
             <Modal show={show} onHide={handleClose} size="xl">
                 <Modal.Header closeButton>
                     <Modal.Title>Base64</Modal.Title>

@@ -28,7 +28,7 @@ function FormPassword(props: PasswordProps) {
 
     return (
         <>
-            <div className="mb-3 position-relative">
+            <div className="mt-3 position-relative">
                 <FormControl
                     type="password"
                     placeholder='пароль'
