@@ -285,13 +285,13 @@ function SignSelect() {
                     onChange={() => handlePassChange()}
                     onSubmit={(pass) => { handlePassChange(); setPassword(pass) }}
                     loading={loading} />}
-                {showKSP && Settings.KSPs.length && <Form.Select className="mt-5"
+                {showKSP && Settings.KSPs.length && <Form.Select className="mt-3"
                     defaultValue={kspSelect ?? Settings.KSPs.at(0)?.name}
                     onChange={(ev) => ev.currentTarget.value && setKSPSelect(ev.currentTarget.value)}>
                     {Settings.KSPs.map((item, index) => <option key={index} value={item.name}>{item.name}</option>)}
                 </Form.Select>}
                 {showKSPUserId && <input className='form-control mt-3' placeholder='Ідентифікатор користувача' onChange={(ev) => setKSPUserId(ev.currentTarget.value)} value={kspUserId} />}
-                {showKSPRead && <button type='button' className='btn btn-sm btn-primary' onClick={() => handleClickKSP()}>Зчитати</button>}
+                {showKSPRead && <button type='button' className='btn btn-sm btn-primary mt-3' onClick={() => handleClickKSP()}>Зчитати</button>}
                 {Confirmation.dimmerViewTimerVisible && <>
                     {Confirmation.dimmerViewTimerBlock}
                     <div className='text-center'>{Confirmation.dimmerViewTimerLabel}</div>
