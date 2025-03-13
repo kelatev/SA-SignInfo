@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { EndUserInstance } from "../../EUSign/useEndUserInstance";
 import { SignContainerInfo } from "../../EUSign/EndUserLibrary";
-import { FileToUint8 } from "../../utils/encode";
+import { IFile } from "../../utils/types";
 import {
     EndUserCertificateInfoEx,
     EndUserTimeInfo,
@@ -40,26 +40,16 @@ export interface EUVerifyResult {
 
 interface Props {
     library: EndUserInstance;
-    file: File | null;
+    file: IFile | null;
+    cert: IFile | null;
 }
 
 export default function useVerifyFiles(props: Props) {
-    const [file, setFile] = useState<Uint8Array>();
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string>();
+    const [errorCode, setErrorCode] = useState<number>();
     const [verifyResult, setVerifyResult] = useState<EUVerifyResult[]>();
     const [signedData, setSignedData] = useState<Uint8Array>();
-
-    useEffect(() => {
-        if (props.file) {
-            FileToUint8(props.file).then(data => setFile(data));
-        } else {
-            setLoading(false);
-            setError(undefined);
-            setVerifyResult(undefined);
-            setSignedData(undefined);
-        }
-    }, [props.file]);
 
     const CreateSignInfoResult = (
         signContainer: SignContainerInfo,
@@ -85,11 +75,11 @@ export default function useVerifyFiles(props: Props) {
         };
     };
 
-    const VerifyFiles = (file: Uint8Array) => {
+    const VerifyFiles = (file: Uint8Array, fileCert: Uint8Array | undefined) => {
         (async function () {
             try {
                 if (props.library.library && file) {
-                    const signContainer = await props.library.library.GetSignContainerInfo(file);
+                    const signContainer = await props.library.library.GetSignContainerInfo(file, fileCert);
                     const signInfo = await props.library.library.VerifyDataInternal(file, 0);
                     const signerCert = await props.library.library.GetSigner(file, 0);
 
@@ -109,6 +99,7 @@ export default function useVerifyFiles(props: Props) {
             } catch (e: any) {
                 console.log(e);
                 setError(`${e.message} (${e.code})`);
+                setErrorCode(e.code);
                 setLoading(false);
             }
         })();
@@ -116,16 +107,17 @@ export default function useVerifyFiles(props: Props) {
 
     useEffect(() => {
         setError(undefined);
+        setErrorCode(undefined);
         setVerifyResult(undefined);
         setSignedData(undefined);
-        if (props.library.info.loaded && file) {
+        if (props.library.info.loaded && props.file?.content) {
             setLoading(true);
-            VerifyFiles(file);
+            VerifyFiles(props.file?.content, props.cert?.content);
         } else {
             setLoading(false);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [props.library.info.loaded, file]);
+    }, [props.library.info.loaded, props.file, props.cert]);
 
-    return { loading, error, verifyResult, signedData };
+    return { loading, error, errorCode, verifyResult, signedData };
 }

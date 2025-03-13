@@ -5,10 +5,11 @@ import AlertDanger from "../Form/AlertDanger";
 import FormUploadBase64 from "../Form/FormUploadBase64";
 import DetailsFileAction from "./DetailsFileAction";
 import { File as IconFile } from "@phosphor-icons/react";
-import { blobToBase64, dataURLtoFile } from '../../utils/encode';
+import { Uint8toBase64, dataURLtoFile } from '../../utils/encode';
+import { IFile, emptyIFile } from "../../utils/types";
 
 interface TimelineItemFileInterface {
-    onFileChange: (file: File | null) => void
+    onFileChange: (file: IFile | null) => void
     storagePrefix?: string
     accept?: string
     error?: string
@@ -19,7 +20,7 @@ interface TimelineItemFileInterface {
 
 const TimelineFileSelect: React.FC<TimelineItemFileInterface> = ({ onFileChange, storagePrefix, accept, error, icon, withToken, base64fileName }) => {
 
-    const [file, setFile] = useState<File>();
+    const [file, setFile] = useState<IFile>();
     const storageKey = `${storagePrefix}-file`;
 
     useEffect(() => {
@@ -33,12 +34,12 @@ const TimelineFileSelect: React.FC<TimelineItemFileInterface> = ({ onFileChange,
         }
     }, [onFileChange, storagePrefix, storageKey]);
 
-    function handleFileChange(file: File) {
+    function handleFileChange(file: IFile) {
         setFile(file);
         onFileChange(file);
         if (storagePrefix && file.size < 1000000) {
             (async function () {
-                const content = await blobToBase64(file);
+                const content = Uint8toBase64(file.content);
                 sessionStorage.setItem(storageKey, JSON.stringify({ content, name: file.name }));
             })();
         }
@@ -65,10 +66,10 @@ const TimelineFileSelect: React.FC<TimelineItemFileInterface> = ({ onFileChange,
                     <FormUploadBase64 title='Base64' onChange={handleFileChange} fileName={base64fileName} />
                     {withToken && <>
                         &nbsp;
-                        <button onClick={() => handleFileChange(new File([], 'Токен'))}
+                        <button onClick={() => handleFileChange(emptyIFile('Токен'))}
                             className="btn btn-light btn-bordered btn-active-light-primary">Токен</button>
                         &nbsp;
-                        <button onClick={() => handleFileChange(new File([], 'Хмарний'))}
+                        <button onClick={() => handleFileChange(emptyIFile('Хмарний'))}
                             className="btn btn-light btn-bordered btn-active-light-primary">Хмарний</button>
                     </>}
                 </FormUploadDrop>

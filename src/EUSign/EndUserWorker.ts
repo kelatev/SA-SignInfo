@@ -41,7 +41,7 @@ export default class EndUserWorker implements EndUserLibrary {
             const callback =
                 this.m_eventListeners[event.type] || this.m_eventListeners[EndUserEventType.All];
             callback && callback(event);
-        } catch (e) {}
+        } catch (e) { }
     }
     AddEventListener(eventType: EndUserEventType, callback: (event: any) => void) {
         switch (eventType) {
@@ -306,7 +306,7 @@ export default class EndUserWorker implements EndUserLibrary {
     //XAdESGetSigner
     //XAdESSignData
     //XAdESVerifyData
-    GetSignContainerInfo(signature: Uint8Array | string) {
-        return this.command<SignContainerInfo>("GetSignContainerInfo", signature);
+    GetSignContainerInfo(signature: Uint8Array | string, certs?: Uint8Array[] | Uint8Array | null) {
+        return this.command<SignContainerInfo>("GetSignContainerInfo", signature, certs);
     }
 }

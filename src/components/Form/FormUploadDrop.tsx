@@ -1,9 +1,11 @@
 import React, { useCallback } from "react";
-import { useDropzone, FileRejection } from 'react-dropzone';
+import { useDropzone } from 'react-dropzone';
+import { FileToIFile } from '../../utils/encode';
+import { IFile } from "../../utils/types";
 
 interface FileProps {
     title: string
-    onChange: (file: File) => void
+    onChange: (file: IFile) => void
     children?: React.ReactNode
 }
 
@@ -11,10 +13,10 @@ type onDropType = (acceptedFiles: File[]) => void
 
 function FormUploadDrop(props: FileProps) {
     const onDrop = useCallback<onDropType>(acceptedFiles => {
-        acceptedFiles.forEach((file) => {
-            props.onChange(file);
+        acceptedFiles.forEach(async (file) => {
+            props.onChange(await FileToIFile(file));
         })
-    }, [])
+    }, [props.onChange])
     const { getRootProps, getInputProps, isDragActive } = useDropzone({
         onDrop,
         noClick: true

@@ -79,7 +79,7 @@ export default class EndUserAgent implements EndUserLibrary {
             var callback =
                 this.m_eventListeners[event.type] || this.m_eventListeners[EndUserEventType.All];
             callback && callback(event);
-        } catch (e) {}
+        } catch (e) { }
     }
 
     AddEventListener(eventType: EndUserEventType, callback: (event: any) => void) {
@@ -236,7 +236,7 @@ export default class EndUserAgent implements EndUserLibrary {
                                 this.m_library.m_library.EU_CERT_KEY_TYPE_DSTU4145 &&
                                 (infoEx.GetKeyUsageType() &
                                     this.m_library.m_library.EU_KEY_USAGE_DIGITAL_SIGNATURE) ===
-                                    this.m_library.m_library.EU_KEY_USAGE_DIGITAL_SIGNATURE &&
+                                this.m_library.m_library.EU_KEY_USAGE_DIGITAL_SIGNATURE &&
                                 (n.digitalStamp =
                                     infoEx
                                         .GetExtKeyUsages()
@@ -277,12 +277,12 @@ export default class EndUserAgent implements EndUserLibrary {
             const sign =
                 previousSign != null
                     ? await this.m_library.CtxAppendSignHash(
-                          context,
-                          signAlgo,
-                          hash,
-                          previousSign,
-                          appendCert,
-                      )
+                        context,
+                        signAlgo,
+                        hash,
+                        previousSign,
+                        appendCert,
+                    )
                     : await this.m_library.CtxSignHash(context, signAlgo, hash, appendCert);
             return asBase64String ? sign : this.m_library.BASE64Decode(sign);
         } catch (e) {
@@ -305,28 +305,28 @@ export default class EndUserAgent implements EndUserLibrary {
                 previousSign != null
                     ? external
                         ? await this.m_library.CtxAppendSignHash(
-                              context,
-                              signAlgo,
-                              dataOrHash,
-                              previousSign,
-                              appendCert,
-                          )
+                            context,
+                            signAlgo,
+                            dataOrHash,
+                            previousSign,
+                            appendCert,
+                        )
                         : await this.m_library.CtxAppendSign(
-                              context,
-                              signAlgo,
-                              null,
-                              previousSign,
-                              appendCert,
-                          )
+                            context,
+                            signAlgo,
+                            null,
+                            previousSign,
+                            appendCert,
+                        )
                     : external
-                    ? await this.m_library.CtxSignHash(context, signAlgo, dataOrHash, appendCert)
-                    : await this.m_library.CtxSign(
-                          context,
-                          signAlgo,
-                          dataOrHash,
-                          false,
-                          appendCert,
-                      );
+                        ? await this.m_library.CtxSignHash(context, signAlgo, dataOrHash, appendCert)
+                        : await this.m_library.CtxSign(
+                            context,
+                            signAlgo,
+                            dataOrHash,
+                            false,
+                            appendCert,
+                        );
             return asBase64String ? sign : this.m_library.BASE64Decode(sign);
         } catch (e) {
             throw this.MapError(e);
@@ -357,26 +357,26 @@ export default class EndUserAgent implements EndUserLibrary {
             libraryInfo.helpURL = this.m_library.GetHelpURL(downloadsURL);
             libraryInfo.supported
                 ? this.m_library
-                      .Load()
-                      .then(() => {
-                          libraryInfo.loaded = true;
-                          this.m_library
-                              .GetVersion()
-                              .then(t => {
-                                  libraryInfo.version = t;
-                                  resolve(libraryInfo);
-                              })
-                              .catch(e => {
-                                  return reject(this.MapError(e));
-                              });
-                      })
-                      .catch(e => {
-                          var i = this.MapError(e);
-                          libraryInfo.loaded = false;
-                          libraryInfo.isNativeLibraryNeedUpdate =
-                              this.m_library.IsLibraryVersionNotSupportedError(i.errorCode);
-                          resolve(libraryInfo);
-                      })
+                    .Load()
+                    .then(() => {
+                        libraryInfo.loaded = true;
+                        this.m_library
+                            .GetVersion()
+                            .then(t => {
+                                libraryInfo.version = t;
+                                resolve(libraryInfo);
+                            })
+                            .catch(e => {
+                                return reject(this.MapError(e));
+                            });
+                    })
+                    .catch(e => {
+                        var i = this.MapError(e);
+                        libraryInfo.loaded = false;
+                        libraryInfo.isNativeLibraryNeedUpdate =
+                            this.m_library.IsLibraryVersionNotSupportedError(i.errorCode);
+                        resolve(libraryInfo);
+                    })
                 : resolve(libraryInfo);
         });
     }
@@ -409,9 +409,9 @@ export default class EndUserAgent implements EndUserLibrary {
                 .then(() => {
                     return this.m_settings.CAs != null && "string" == typeof this.m_settings.CAs
                         ? this.m_library.DownloadData<EndUserSettingsCA[]>(
-                              this.m_settings.CAs,
-                              "json",
-                          )
+                            this.m_settings.CAs,
+                            "json",
+                        )
                         : this.m_settings.CAs;
                 })
                 .then(e => {
@@ -585,15 +585,15 @@ export default class EndUserAgent implements EndUserLibrary {
                     for (let i = 0; i < keyMediaDevices.length; i++)
                         for (
                             var allowedType = allowedKeyMediaTypes[i],
-                                type = this.m_kmTypes?.at(allowedType),
-                                allowedDevice = keyMediaDevices[i],
-                                device =
-                                    type &&
+                            type = this.m_kmTypes?.at(allowedType),
+                            allowedDevice = keyMediaDevices[i],
+                            device =
+                                type &&
                                     allowedKeyMediaDevices &&
                                     allowedKeyMediaDevices.at(type)
-                                        ? allowedKeyMediaDevices.at(type)
-                                        : null,
-                                index = 0;
+                                    ? allowedKeyMediaDevices.at(type)
+                                    : null,
+                            index = 0;
                             index < allowedDevice.length;
                             index++
                         )
@@ -818,7 +818,7 @@ export default class EndUserAgent implements EndUserLibrary {
                                             return func(
                                                 index + 1,
                                                 errorCertNotFound ||
-                                                    code === EndUserError.ERROR_CERT_NOT_FOUND,
+                                                code === EndUserError.ERROR_CERT_NOT_FOUND,
                                             );
                                         }
                                         reject(this.MapError(error));
@@ -1256,7 +1256,7 @@ export default class EndUserAgent implements EndUserLibrary {
             throw this.MapError(e);
         }
     }
-    async CtxFree(context: EndUserContext| EndUserContextClass) {
+    async CtxFree(context: EndUserContext | EndUserContextClass) {
         try {
             await this.CheckInitialize();
             await this.m_library.CtxFree(context as unknown as EndUserContextClass);
@@ -1264,7 +1264,7 @@ export default class EndUserAgent implements EndUserLibrary {
             throw this.MapError(e);
         }
     }
-    async CtxSetParameter(context: EndUserContext| EndUserContextClass, name: string, value: boolean) {
+    async CtxSetParameter(context: EndUserContext | EndUserContextClass, name: string, value: boolean) {
         try {
             await this.CheckInitialize();
             await this.m_library.CtxSetParameter(
@@ -1356,9 +1356,12 @@ export default class EndUserAgent implements EndUserLibrary {
     //XAdESGetSigner
     //XAdESSignData
     //XAdESVerifyData
-    async GetSignContainerInfo(signature: Uint8Array | string) {
+    async GetSignContainerInfo(signature: Uint8Array | string, certs?: Uint8Array[] | Uint8Array | null) {
         try {
             await this.CheckInitialize();
+            if (certs) {
+                await this.SaveCertificatesInternal(certs);
+            }
             const sign =
                 typeof signature == "string"
                     ? await this.m_library.BASE64Decode(signature)
@@ -1422,10 +1425,10 @@ export default class EndUserAgent implements EndUserLibrary {
             const chain = isArrayStartsWith(sign, [60, 63, 120, 109, 108])
                 ? [getXAdESInfo, getCAdESInfo, getPAdESInfo, getASiCInfo]
                 : isArrayStartsWith(sign, [37, 80, 68, 70])
-                ? [getPAdESInfo, getCAdESInfo, getXAdESInfo, getASiCInfo]
-                : isArrayStartsWith(sign, [80, 75])
-                ? [getASiCInfo, getCAdESInfo, getXAdESInfo, getPAdESInfo]
-                : [getCAdESInfo, getXAdESInfo, getPAdESInfo, getASiCInfo];
+                    ? [getPAdESInfo, getCAdESInfo, getXAdESInfo, getASiCInfo]
+                    : isArrayStartsWith(sign, [80, 75])
+                        ? [getASiCInfo, getCAdESInfo, getXAdESInfo, getPAdESInfo]
+                        : [getCAdESInfo, getXAdESInfo, getPAdESInfo, getASiCInfo];
 
             let info = null;
             for (var i = 0; i < chain.length; i++) {

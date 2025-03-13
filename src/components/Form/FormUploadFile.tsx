@@ -1,15 +1,17 @@
 import React from 'react';
+import { IFile } from "../../utils/types";
+import { FileToIFile } from '../../utils/encode';
 
 interface FileProps {
     title: string
     accept?: string
-    onChange: (file: File) => void
+    onChange: (file: IFile) => void
 }
 
 function FormUploadFile(props: FileProps) {
     function handleFileChosen(e: any) {
         if (e.target.files && e.target.files[0]) {
-            props.onChange(e.target.files[0]);
+            FileToIFile(e.target.files[0]).then(data => props.onChange(data));
             e.target.value = null;
         }
     }

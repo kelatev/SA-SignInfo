@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Cursor, FileDashed } from "@phosphor-icons/react";
-import { FileToUint8 } from "../../utils/encode";
+import { IFile } from "../../utils/types";
 import { useEndUserContext } from "../../EUSign/EndUserContext";
 import { useKeyContext } from "./KeyContext";
 import Timeline from "../Timeline/Timeline";
@@ -11,7 +11,7 @@ export default function KeySign() {
     const { currentLibrary, Confirmation } = useEndUserContext();
     const { privateKey } = useKeyContext();
 
-    const [fileToSign, setFileToSign] = useState<File | null>();
+    const [fileToSign, setFileToSign] = useState<IFile | null>();
     const [signedData, setSignedData] = useState<Uint8Array>();
     const [error, setError] = useState<string>();
 
@@ -26,10 +26,9 @@ export default function KeySign() {
                         EndUserKeyUsage.NonRepudation,
                     ], privateKey?.certificates);
                     await currentLibrary.library?.SetRuntimeParameter(EU_SIGN_TYPE_PARAMETER, privateKey?.settings?.signFormat ?? EndUserSignType.CAdES_BES);
-                    const data = await FileToUint8(fileToSign);
                     const result = await currentLibrary.library?.SignDataEx(
                         privateKey?.settings?.signAlgo ?? EndUserSignAlgo.DSTU4145WithGOST34311,
-                        data,
+                        fileToSign.content,
                         privateKey?.settings?.signType === EndUserCAdESType.Detached,
                         true,
                     );

@@ -8,7 +8,7 @@ import { KeyMediaType } from '../../EUSign/useEndUserController';
 import Timeline from "../Timeline/Timeline";
 import FormPassword from "../Form/FormPassword";
 import AlertWarning from "../Form/AlertWarning";
-import { FileToUint8 } from '../../utils/encode';
+import { IFile } from "../../utils/types";
 import { FileLock, Password, Package } from "@phosphor-icons/react";
 import { errorLoadDescription } from '../../EUSign/useEndUserInstance'
 import Settings from "../../EUSign/LIBRARY_SETTINGS.json";
@@ -24,8 +24,7 @@ function SignSelect() {
 
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string>();
-    const [file, setFile] = useState<File | null>();
-    const [fileContainer, setFileContainer] = useState<Uint8Array>();
+    const [file, setFile] = useState<IFile | null>();
     const [jksPrivateKeys, setJKSPrivateKeys] = useState<EndUserPrivateKey[]>();
     const [kmSelect, setKMSelect] = useState<string>();
     const [kspSelect, setKSPSelect] = useState<string | undefined>(Settings.KSPs.at(0)?.name);
@@ -65,11 +64,6 @@ function SignSelect() {
     }, [keyMediaType, file, setKeyMediaType]);
 
     useEffect(() => {
-        if (file) {
-            FileToUint8(file).then(data => setFileContainer(data)).catch(err => console.log(err));
-        } else {
-            setFileContainer(undefined);
-        }
         setError(undefined);
         setJKSPrivateKeys(undefined);
         setKMSelect(undefined);
@@ -79,7 +73,7 @@ function SignSelect() {
         setPrivateKey(undefined);
         setLoading(false);
         Confirmation.StopTimer();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [file]);
 
     useEffect(() => {
@@ -92,16 +86,16 @@ function SignSelect() {
     }, [currentLibrary?.info.loaded, currentLibrary?.loading, keyMediaType]);
 
     useEffect(() => {
-        if (currentLibrary?.info.loaded && keyMediaType === KeyMediaType.File && fileContainer) {
+        if (currentLibrary?.info.loaded && keyMediaType === KeyMediaType.File && file?.content) {
             (async function () {
                 try {
                     setError(undefined);
-                    const privateKeys = await currentLibrary.library?.GetJKSPrivateKeys(fileContainer);
+                    const privateKeys = await currentLibrary.library?.GetJKSPrivateKeys(file?.content);
                     setJKSPrivateKeys(privateKeys);
                     if (privateKeys && privateKeys.length > 0) {
                         setAliasSelect(privateKeys[0].alias);
                     } else {
-                        setKeySelect({ privatKey: fileContainer });
+                        setKeySelect({ privatKey: file?.content });
                     }
                 } catch (e: any) {
                     console.log(e);
@@ -109,7 +103,7 @@ function SignSelect() {
                 }
             })();
         }
-    }, [currentLibrary?.info.loaded, currentLibrary?.library, keyMediaType, fileContainer]);
+    }, [currentLibrary?.info.loaded, currentLibrary?.library, keyMediaType, file]);
 
     useEffect(() => {
         if (jksPrivateKeys && aliasSelect) {

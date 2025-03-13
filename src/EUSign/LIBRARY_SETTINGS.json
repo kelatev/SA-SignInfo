@@ -4,7 +4,7 @@
   "directAccess": true,
   "httpProxyServiceURL": "proxy",
   "CAs": "/eusign/data/CAs.json?v=20240228",
-  "CACertificates": "/eusign/data/CACertificates.p7b?v=20240228",
+  "CACertificates": "/eusign/data/CACertificates.Test.p7b?v=20240228",
   "allowedKeyMediaTypes": [
     "е.ключ BIFIT iToken",
     "криптомод. ІІТ Гряда-61",

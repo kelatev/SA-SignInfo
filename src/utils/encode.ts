@@ -1,5 +1,6 @@
 import { Buffer } from "buffer";
 import { decode } from "windows-1251";
+import { IFile } from "./types";
 
 export function blobToBase64(blob: Blob) {
     return new Promise<string>((resolve, _) => {
@@ -9,7 +10,7 @@ export function blobToBase64(blob: Blob) {
     });
 }
 
-export function dataURLtoFile(dataurl: string, filename: string): File {
+export function dataURLtoFile(dataurl: string, filename: string): IFile {
     const arr = dataurl.split(",");
     let mime = "application/octed-stream";
     if (arr) {
@@ -25,7 +26,7 @@ export function dataURLtoFile(dataurl: string, filename: string): File {
     while (n--) {
         u8arr[n] = bstr.charCodeAt(n);
     }
-    return new File([u8arr], filename, { type: mime });
+    return { content: u8arr, name: filename, mime, size: bstr.length };
 }
 
 export function Uint8toBase64(data: Uint8Array | undefined): string | undefined {
@@ -46,6 +47,10 @@ export function Uint8toWin1251(data: Uint8Array | undefined): string | undefined
 
 export async function FileToUint8(file: File): Promise<Uint8Array> {
     return new Uint8Array(await file.arrayBuffer());
+}
+
+export async function FileToIFile(file: File): Promise<IFile> {
+    return { content: new Uint8Array(await file.arrayBuffer()), name: file.name, mime: file.type, size: file.size };
 }
 
 export function isBase64(data: string): boolean {

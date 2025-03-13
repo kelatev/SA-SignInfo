@@ -49,7 +49,7 @@ export interface EndUserSettings {
     language: EndUserLanguage | string;
     encoding: string;
     directAccess: boolean;
-    httpProxyServiceURL: string;
+    httpProxyServiceURL?: string | null;
     CAs: string | EndUserSettingsCA[];
     CACertificates: string | Uint8Array;
     allowedKeyMediaTypes?: string[];
@@ -245,5 +245,5 @@ export default interface EndUserLibrary {
     //XAdESGetSigner
     //XAdESSignData
     //XAdESVerifyData
-    GetSignContainerInfo: (signature: Uint8Array | string) => Promise<SignContainerInfo>;
+    GetSignContainerInfo: (signature: Uint8Array | string, certs?: Uint8Array[] | Uint8Array | null) => Promise<SignContainerInfo>;
 }

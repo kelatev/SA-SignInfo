@@ -3,12 +3,13 @@ import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import FormControl from "react-bootstrap/FormControl";
 import { dataURLtoFile, isBase64 } from '../../utils/encode'
+import { IFile } from "../../utils/types";
 
 interface Base64Props {
     title: string
     accept?: string
     fileName?: string
-    onChange: (file: File) => void
+    onChange: (file: IFile) => void
 }
 
 function FormUploadBase64(props: Base64Props) {

@@ -13908,8 +13908,10 @@ EndUser.prototype.Initialize = function(settings, onSuccess, onError) {
 		}
 		pThis.m_context = euSign.CtxCreate();
 
-		euSign.SetXMLHTTPProxyService(
-			pThis.MakeURL(settings.httpProxyServiceURL));
+		if (settings.httpProxyServiceURL) {
+			euSign.SetXMLHTTPProxyService(
+				pThis.MakeURL(settings.httpProxyServiceURL));
+		}
 
 		euSign.SetRuntimeParameter(
 			EU_RESOLVE_OIDS_PARAMETER, false);
@@ -15780,10 +15782,14 @@ EndUser.prototype.XAdESVerifyData = function(
 //-------------------------------------------------------------------------------
 
 EndUser.prototype.GetSignContainerInfo = function(
-	signature, onSuccess, onError) {
+	signature, certs, onSuccess, onError) {
 	try {
 		var pThis = this;
 		var euSign = pThis.m_euSign;
+
+		if (certs) {
+			euSign.SaveCertificates(certs);
+		}
 
 		var makeSignContainerInfo = function(type, subType, asicSignType) {
 			return {
