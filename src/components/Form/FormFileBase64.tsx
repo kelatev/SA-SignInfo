@@ -3,8 +3,8 @@ import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import FormControl from "react-bootstrap/FormControl";
 import { FormCheck } from 'react-bootstrap';
-import { CopyToClipboard } from 'react-copy-to-clipboard';
-import { Copy } from "@phosphor-icons/react";
+import { CopyToClipboard } from './CopyToClipboard';
+import { CopyIcon } from "@phosphor-icons/react";
 import { Uint8toBase64, Uint8toAscii, Uint8toUtf8, Uint8toWin1251 } from '../../utils/encode';
 
 interface FormDataProps {
@@ -62,7 +62,7 @@ function FormFileBase64(props: FormDataProps) {
                 <Modal.Footer>
                     <Button onClick={handleClose} variant="link" className='me-6'>Закрити</Button>
                     <CopyToClipboard text={dataToShow} onCopy={handleCopy}>
-                        <Button variant="secondary"><Copy className='me-3' />Copy</Button>
+                        <Button variant="secondary"><CopyIcon className='me-3' />Copy</Button>
                     </CopyToClipboard>
                 </Modal.Footer>
             </Modal>

@@ -9,7 +9,7 @@ import Timeline from "../Timeline/Timeline";
 import FormPassword from "../Form/FormPassword";
 import AlertWarning from "../Form/AlertWarning";
 import { IFile } from "../../utils/types";
-import { FileLock, Password, Package } from "@phosphor-icons/react";
+import { FileLockIcon, PasswordIcon, PackageIcon } from "@phosphor-icons/react";
 import { errorLoadDescription } from '../../EUSign/useEndUserInstance'
 import Settings from "../../EUSign/LIBRARY_SETTINGS.json";
 import { MakeUserId, IsQualifiedCertificates } from '../../EUSign/EndUserUtil'
@@ -251,7 +251,7 @@ function SignSelect() {
         <>
             <Timeline.Item
                 title='Особистий ключ'
-                icon={<FileLock />}
+                icon={<FileLockIcon />}
                 description={'Key-6.dat, *.pfx, *.pk8, *.zs2 або *.jks'}
             >
                 <Timeline.FileSelect
@@ -294,14 +294,14 @@ function SignSelect() {
             {(currentLibrary?.loading || (!currentLibrary?.info.loaded && currentLibrary?.error)) &&
                 <Timeline.Spinner
                     title='Завантаження бібліотеки'
-                    icon={<Package />}
+                    icon={<PackageIcon />}
                     error={errorLoadDescription(currentLibrary)}
                 />
             }
             {loading &&
                 <Timeline.Spinner
                     title='Зчитування ключу'
-                    icon={<Password />}
+                    icon={<PasswordIcon />}
                 />
             }
         </>

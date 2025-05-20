@@ -67,10 +67,10 @@ const TimelineFileSelect: React.FC<TimelineItemFileInterface> = ({ onFileChange,
                     {withToken && <>
                         &nbsp;
                         <button onClick={() => handleFileChange(emptyIFile('Токен'))}
-                            className="btn btn-light btn-bordered btn-active-light-primary">Токен</button>
+                            className="btn btn-light btn-bordered btn-active-light-primary border-hover-primary">Токен</button>
                         &nbsp;
                         <button onClick={() => handleFileChange(emptyIFile('Хмарний'))}
-                            className="btn btn-light btn-bordered btn-active-light-primary">Хмарний</button>
+                            className="btn btn-light btn-bordered btn-active-light-primary border-hover-primary">Хмарний</button>
                     </>}
                 </FormUploadDrop>
             )}

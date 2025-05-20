@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Cursor, FileDashed } from "@phosphor-icons/react";
+import { CursorIcon, FileDashedIcon } from "@phosphor-icons/react";
 import { IFile } from "../../utils/types";
 import { useEndUserContext } from "../../EUSign/EndUserContext";
 import { useKeyContext } from "./KeyContext";
@@ -55,11 +55,11 @@ export default function KeySign() {
 
     return (
         <>
-            <Timeline.Item title='Файл для підпису' icon={<Cursor />}>
+            <Timeline.Item title='Файл для підпису' icon={<CursorIcon />}>
                 <Timeline.FileSelect onFileChange={setFileToSign} />
             </Timeline.Item>
             {fileToSign && !signedData && (
-                <Timeline.Spinner title='Підписування файлу' icon={<FileDashed />} error={error} />
+                <Timeline.Spinner title='Підписування файлу' icon={<FileDashedIcon />} error={error} />
             )}
             {signedData && (
                 <Timeline.FileData title={"Результат"} data={signedData} fileName={"sign.p7s"} />

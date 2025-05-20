@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import Timeline from "../Timeline/Timeline";
 import Form from "react-bootstrap/Form";
 import { useKeyContext } from './KeyContext';
-import { GearSix, Pencil } from "@phosphor-icons/react";
+import { GearSixIcon, PencilIcon } from "@phosphor-icons/react";
 import { GetSupportedSignAlgos, GetSignContainerType } from '../../EUSign/EndUserUtil';
 import { EndUserSignType, EndUserSignContainerType, EndUserCAdESType } from "../../EUSign/EndUserConstants";
 
@@ -88,9 +88,9 @@ function Settings() {
 
     if (!editMode) {
         return (
-            <Timeline.Item title="Налаштування електронного підпису" icon={<GearSix />}>
+            <Timeline.Item title="Налаштування електронного підпису" icon={<GearSixIcon />}>
                 <div className="border border-dashed border-gray-300 rounded px-5 pb-4 pt-5 mt-3 position-relative">
-                    <button type='button' className='btn btn-light btn-sm position-absolute top-0 end-0 m-1 d-none' onClick={() => setEditMode(true)}><Pencil /></button>
+                    <button type='button' className='btn btn-light btn-sm position-absolute top-0 end-0 m-1 d-none' onClick={() => setEditMode(true)}><PencilIcon /></button>
                     {signType && signType.filter(i => i.value === privateKey?.settings?.signType).map(item => printValue(item.text, item.value))}
                     {signAlgo && signAlgo.filter(i => i.value === privateKey?.settings?.signAlgo).map(item => printValue(item.text, item.value))}
                     {signFormatList && signFormatList.filter(i => i.value === privateKey?.settings?.signFormat).map((item) => printValue(item.text, item.value))}
@@ -100,7 +100,7 @@ function Settings() {
     }
 
     return (
-        <Timeline.Item title="Налаштування електронного підпису" icon={<GearSix />}>
+        <Timeline.Item title="Налаштування електронного підпису" icon={<GearSixIcon />}>
             <Form>
                 <Form.Label >Тип підпису</Form.Label>
                 {signType?.map((item) =>

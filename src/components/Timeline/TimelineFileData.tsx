@@ -4,7 +4,7 @@ import Button from 'react-bootstrap/Button';
 import { Buffer } from 'buffer';
 import { saveAs } from "file-saver";
 import { fileSizeName } from "../../utils/fileSizeName";
-import { File } from "@phosphor-icons/react";
+import { FileIcon } from "@phosphor-icons/react";
 import FormFileBase64 from '../Form/FormFileBase64';
 
 interface FormDataProps {
@@ -26,7 +26,7 @@ function TimelineFileData(props: FormDataProps) {
     };
 
     return (
-        <TimelineItem title={props.title} icon={<File />}>
+        <TimelineItem title={props.title} icon={<FileIcon />}>
             {props.data && (
                 <>
                     {props.fileName && (

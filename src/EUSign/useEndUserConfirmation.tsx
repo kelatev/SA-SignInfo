@@ -3,16 +3,16 @@ import { useState, useRef } from "react";
 export interface ConfirmationTimerReturn {
     dimmerViewTimerLabel: string | undefined;
     dimmerViewTimerVisible: boolean;
-    dimmerViewTimerBlock: JSX.Element | undefined;
+    dimmerViewTimerBlock: React.ReactElement | undefined;
     StopTimer: () => void;
     BeginOperation: (href: string, qrCode: string, kspProvider: string, expire: Date) => void;
 }
 
 export default function useEndUserConfirmation(): ConfirmationTimerReturn {
-    const dimmerViewTimer = useRef<NodeJS.Timeout>();
+    const dimmerViewTimer = useRef<NodeJS.Timeout>(null);
     const [dimmerViewTimerLabel, setDimmerViewTimerLabel] = useState<string>();
     const [dimmerViewTimerVisible, setDimmerViewTimerVisible] = useState(false);
-    const [dimmerViewTimerBlock, setDimmerViewTimerBlock] = useState<JSX.Element>();
+    const [dimmerViewTimerBlock, setDimmerViewTimerBlock] = useState<React.ReactElement>();
 
     const BeginTimer = (expire: Date, text: string, callback: () => void) => {
         const func = () => {
@@ -22,8 +22,8 @@ export default function useEndUserConfirmation(): ConfirmationTimerReturn {
                 s = text + " " + ("0" + a).slice(-2) + ":" + ("0" + o).slice(-2);
             setDimmerViewTimerLabel(s);
             if (i <= 0) {
-                clearInterval(dimmerViewTimer.current);
-                dimmerViewTimer.current = (undefined);
+                dimmerViewTimer.current && clearInterval(dimmerViewTimer.current);
+                dimmerViewTimer.current = null;
                 setDimmerViewTimerVisible(false);
                 callback();
             }
@@ -34,9 +34,9 @@ export default function useEndUserConfirmation(): ConfirmationTimerReturn {
     };
 
     const StopTimer = () => {
-        if (dimmerViewTimer.current !== undefined) {
+        if (dimmerViewTimer.current !== null) {
             clearInterval(dimmerViewTimer.current);
-            dimmerViewTimer.current = undefined;
+            dimmerViewTimer.current = null;
             setDimmerViewTimerVisible(false);
         }
     };
