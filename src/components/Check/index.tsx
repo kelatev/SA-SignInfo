@@ -3,7 +3,7 @@ import Card from "../Form/Card";
 import Timeline from "../Timeline/Timeline";
 import InfoSigner from "./InfoSigner";
 import { useEndUserContext } from '../../EUSign/EndUserContext';
-import { FileArchive, FileDashed, FilePlus } from "@phosphor-icons/react";
+import { FileArchiveIcon, FileDashedIcon, FilePlusIcon } from "@phosphor-icons/react";
 import useVerifyFiles from './useVerifyFiles';
 import { IFile } from "../../utils/types";
 
@@ -22,7 +22,7 @@ function PanelCheck() {
         <Card title='Перевірка підпису' className='bg-sand bgi-no-repeat bgi-position-x-end' backgroundImage='url("/media/wave-bg-blue.svg")'>
             <Timeline>
                 {/*, pdf, xml, asics або asice*/}
-                <Timeline.Item title='Підписаний файл' icon={<FileArchive />} description={'p7s'}>
+                <Timeline.Item title='Підписаний файл' icon={<FileArchiveIcon />} description={'p7s'}>
                     <Timeline.FileSelect
                         onFileChange={setFile}
                         storagePrefix='check'
@@ -33,12 +33,12 @@ function PanelCheck() {
                 {(loading || error) &&
                     <Timeline.Spinner
                         title='Перевірка файлу'
-                        icon={<FileDashed />}
+                        icon={<FileDashedIcon />}
                         error={error}
                     />
                 }
                 {errorCode === 83 &&
-                    <Timeline.Item title='Особистий сертифікат' icon={<FilePlus />} description={'*.p7b, *.cer'}>
+                    <Timeline.Item title='Особистий сертифікат' icon={<FilePlusIcon />} description={'*.p7b, *.cer'}>
                         <Timeline.FileSelect
                             onFileChange={setCert}
                             error={undefined}

@@ -4,7 +4,7 @@ import FormUploadDrop from "../Form/FormUploadDrop";
 import AlertDanger from "../Form/AlertDanger";
 import FormUploadBase64 from "../Form/FormUploadBase64";
 import DetailsFileAction from "./DetailsFileAction";
-import { File as IconFile } from "@phosphor-icons/react";
+import { FileIcon } from "@phosphor-icons/react";
 import { Uint8toBase64, dataURLtoFile } from '../../utils/encode';
 import { IFile, emptyIFile } from "../../utils/types";
 
@@ -55,7 +55,7 @@ const TimelineFileSelect: React.FC<TimelineItemFileInterface> = ({ onFileChange,
         <>
             {file ? (
                 <DetailsFileAction
-                    icon={icon || <IconFile size={30} />}
+                    icon={icon || <FileIcon size={30} />}
                     file={file}
                     actionName={'Змінити файл'}
                     onActionClick={handleNewFile} />

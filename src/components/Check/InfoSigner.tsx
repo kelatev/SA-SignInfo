@@ -4,7 +4,7 @@ import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import SyntaxHighlighter from "react-syntax-highlighter";
 import { darcula } from "react-syntax-highlighter/dist/esm/styles/hljs";
-import { Cursor, User, Copy, Certificate } from "@phosphor-icons/react";
+import { CursorIcon, UserIcon, CopyIcon, CertificateIcon } from "@phosphor-icons/react";
 import { EUVerifyResult } from './useVerifyFiles';
 
 interface Props {
@@ -17,7 +17,7 @@ const RowDescription: React.FC<{ title: string; description: string }> = ({
 }) => {
     return (
         <div className="border border-gray-300 border-dashed rounded min-w-80px py-3 px-4 me-2 mb-3">
-            <div className="fs-6 fw-bold text-gray-700">{description}<Copy className="ms-1 text-hover-primary cursor-pointer" onClick={() => navigator.clipboard.writeText(description)} /></div>
+            <div className="fs-6 fw-bold text-gray-700">{description}<CopyIcon className="ms-1 text-hover-primary cursor-pointer" onClick={() => navigator.clipboard.writeText(description)} /></div>
             <div className="fw-semibold text-gray-500">{title}</div>
         </div>
     );
@@ -44,7 +44,7 @@ function InfoSigner(props: Props) {
                 <div key={index0 + '-' + index}>
                     <TimelineItem
                         title={"Підписувач - " + item.signerInfo.subjCN}
-                        icon={<User />}
+                        icon={<UserIcon />}
                     >
                         <div className="d-flex flex-wrap">
                             {item.signerInfo.subjDRFOCode && item.signerInfo.subjDRFOCode !== item.signerInfo.subjEDRPOUCode && (
@@ -69,7 +69,7 @@ function InfoSigner(props: Props) {
                     </TimelineItem>
                     <TimelineItem
                         title={"Підпис"}
-                        icon={<Cursor />}
+                        icon={<CursorIcon />}
                     >
                         <div className="d-flex flex-wrap">
                             <RowDescription
@@ -94,7 +94,7 @@ function InfoSigner(props: Props) {
                     </TimelineItem>
                     <TimelineItem
                         title={"Сертифікат"}
-                        icon={<Certificate />}
+                        icon={<CertificateIcon />}
                     >
                         <div className="d-flex flex-wrap">
                             <RowDescription
