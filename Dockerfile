@@ -1,17 +1,25 @@
-# build environment
-FROM node:alpine as build
+FROM node:20-alpine AS development-dependencies-env
+COPY . /app
 WORKDIR /app
-ENV PATH /app/node_modules/.bin:$PATH
-COPY package*.json ./
-RUN npm install --silent
-COPY . ./
+RUN npm ci
+
+FROM node:20-alpine AS production-dependencies-env
+COPY ./package.json package-lock.json /app/
+WORKDIR /app
+RUN npm ci --omit=dev
+
+FROM node:20-alpine AS build-env
+COPY . /app/
+COPY --from=development-dependencies-env /app/node_modules /app/node_modules
+WORKDIR /app
 RUN npm run build
 
-# production environment
-FROM nginx:stable-alpine
-COPY --from=build /app/build /usr/share/nginx/html
-EXPOSE 80
-CMD ["nginx", "-g", "daemon off;"]
+FROM node:20-alpine
+COPY ./package.json package-lock.json /app/
+COPY --from=production-dependencies-env /app/node_modules /app/node_modules
+COPY --from=build-env /app/build /app/build
+WORKDIR /app
+CMD ["npm", "run", "start"]
 
 #docker build . -t ghcr.io/kelatev/sa-signinfo
 #docker run -it --rm -p 1337:3000 -d ghcr.io/kelatev/sa-signinfo

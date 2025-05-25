@@ -1,6 +1,4 @@
-.github
-node_modules
+.react-router
 build
-.dockerignore
-.gitignore
-Dockerfile
+node_modules
+README.md

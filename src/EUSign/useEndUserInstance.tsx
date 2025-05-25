@@ -3,7 +3,7 @@ import EndUserLibrary, { LibraryInfo } from "./EndUserLibrary";
 import { EndUserEventType } from './EndUserConstants';
 import { EndUserError } from "./EndUserTypes";
 import Settings from "./LIBRARY_SETTINGS.json";
-import { Repeat } from "@phosphor-icons/react";
+import { RepeatIcon } from "@phosphor-icons/react";
 
 export enum EndUserLibraryType {
     SW,
@@ -90,6 +90,6 @@ export function errorLoadDescription(instance: EndUserInstance) {
         <div><a href={instance.info.helpURL ?? ''}>Настанова користувача</a></div>
         <button type="button" className="btn btn-sm btn-light mt-3" onClick={() => {
             instance.Load(e => { }).catch(e => { })
-        }}><Repeat className="me-2" />Повторити</button>
+        }}><RepeatIcon className="me-2" />Повторити</button>
     </>);
 }

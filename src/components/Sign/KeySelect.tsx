@@ -73,7 +73,6 @@ function SignSelect() {
         setPrivateKey(undefined);
         setLoading(false);
         Confirmation.StopTimer();
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [file]);
 
     useEffect(() => {
@@ -82,7 +81,6 @@ function SignSelect() {
         } else if (keyMediaType !== KeyMediaType.Hardware && updateKMRef.current) {
             StopUpdateKMs();
         }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [currentLibrary?.info.loaded, currentLibrary?.loading, keyMediaType]);
 
     useEffect(() => {

@@ -116,7 +116,6 @@ export default function useVerifyFiles(props: Props) {
         } else {
             setLoading(false);
         }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [props.library.info.loaded, props.file, props.cert]);
 
     return { loading, error, errorCode, verifyResult, signedData };

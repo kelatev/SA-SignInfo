@@ -81,7 +81,6 @@ export default function useEndUserKeyMedia(props: Props) {
         } else {
             StopUpdateKMs();
         }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [props.instance?.type]);
 
     const StopUpdateKMs = () => {
