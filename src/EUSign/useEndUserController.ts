@@ -30,7 +30,7 @@ export enum KeyMediaType {
 export default function useEndUserController() {
     const [keyMediaType, setKeyMediaType] = useState<KeyMediaType>(KeyMediaType.File);
 
-    const workerUrl = process.env.PUBLIC_URL + "/eusign/euscp.worker.js?maxDataSize=25";
+    const workerUrl = "/eusign/euscp.worker.js?maxDataSize=25";
     const librarySW = useMemo<EndUserLibrary>(() => new EndUserWorker(workerUrl), [workerUrl]);
     const libraryJS = useMemo<EndUserLibrary>(() => new EndUserAgent(), []);
     const instanceSW = useEndUserInstance({ type: EndUserLibraryType.SW, library: librarySW });
