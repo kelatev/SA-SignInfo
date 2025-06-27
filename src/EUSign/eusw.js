@@ -700,7 +700,7 @@ EndUserBrowserInfo.prototype._getBrowserInfo = function() {
         name: EndUserBrowserInfo.BROWSER_NAME_UNKNOWN,
         version: ''
     };
-    var ua = navigator.userAgent, tem;
+    var ua = navigator?.userAgent, tem;
 
     var M = ua.match(
         /(opera|chrome|safari|firefox|msie|trident(?=\/))\/?\s*(\d+)/i) || [];
@@ -728,7 +728,7 @@ EndUserBrowserInfo.prototype._getBrowserInfo = function() {
         }
     }
 
-    M = M[2] ? [M[1], M[2]] : [navigator.appName, navigator.appVersion, '-?'];
+    M = M[2] ? [M[1], M[2]] : [navigator?.appName, navigator?.appVersion, '-?'];
     if ((tem = ua.match(/version\/(\d+)/i)) != null)
         M.splice(1, 1, tem[1]);
 
@@ -741,8 +741,8 @@ EndUserBrowserInfo.prototype._getBrowserInfo = function() {
 //--------------------------------------------------------------------------------
 
 EndUserBrowserInfo.prototype._getOSName = function() {
-    var np = navigator.platform || "";
-    var ua = (navigator.userAgent || "").toLowerCase();
+    var np = navigator?.platform || "";
+    var ua = (navigator?.userAgent || "").toLowerCase();
     var osName;
 
     if (np.indexOf("Win") != -1) {
@@ -768,7 +768,7 @@ EndUserBrowserInfo.prototype._getOSName = function() {
 EndUserBrowserInfo.prototype._getArch = function() {
     var pThis = this;
 
-    var platform = navigator.platform || "";
+    var platform = navigator?.platform || "";
     var osName = pThis._getOSName();
     var arch;
 
