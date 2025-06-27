@@ -17,9 +17,19 @@ const RowDescription: React.FC<{ title: string; description: string }> = ({
     title,
     description,
 }) => {
+    const handleCopy = () => {
+        if (typeof navigator !== 'undefined' && navigator.clipboard) {
+            navigator.clipboard.writeText(description).catch((err) => {
+                console.error('Не вдалося скопіювати:', err);
+            });
+        } else {
+            console.warn('Clipboard API недоступний');
+        }
+    };
+
     return (
         <div className="border border-gray-300 border-dashed rounded min-w-80px py-3 px-4 me-2 mb-3">
-            <div className="fs-6 fw-bold text-gray-700">{description}<CopyIcon className="ms-1 text-hover-primary cursor-pointer" onClick={() => navigator.clipboard.writeText(description)} /></div>
+            <div className="fs-6 fw-bold text-gray-700">{description}<CopyIcon className="ms-1 text-hover-primary cursor-pointer" onClick={handleCopy} /></div>
             <div className="fw-semibold text-gray-500">{title}</div>
         </div>
     );

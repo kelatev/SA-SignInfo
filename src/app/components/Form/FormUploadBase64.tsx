@@ -39,10 +39,14 @@ function FormUploadBase64(props: Base64Props) {
 
     function handleClipboard() {
         try {
-            navigator.clipboard.readText().then(value => {
-                textInput.current && (textInput.current.value = value);
-                handleUpload();
-            });
+            if (typeof navigator !== 'undefined' && navigator.clipboard) {
+                navigator.clipboard.readText().then(value => {
+                    textInput.current && (textInput.current.value = value);
+                    handleUpload();
+                });
+            } else {
+                console.warn('Clipboard API недоступний');
+            }
         } catch (error) {
             console.log('Failed to read clipboard');
         }
@@ -62,7 +66,7 @@ function FormUploadBase64(props: Base64Props) {
                 <Modal.Footer className='border-0 pt-0'>
                     <Button onClick={handleClose} variant="light" size="sm">Закрити</Button>
                     <Button onClick={handleUpload} variant="primary" size="sm">Завантажити</Button>
-                    {navigator.clipboard && <Button onClick={handleClipboard} variant="primary" size="sm">Вставити з буферу</Button>}
+                    {navigator?.clipboard && <Button onClick={handleClipboard} variant="primary" size="sm">Вставити з буферу</Button>}
                 </Modal.Footer>
             </Modal>
         </>
