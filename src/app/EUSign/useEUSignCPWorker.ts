@@ -21,7 +21,7 @@ export default function useEUSignCPWorker(workerUrl: string, onMessage: (result:
         onMessageRef.current = onMessage;
     }, [onMessage]);
 
-    const { worker, promises } = useMemo(() => {
+    const { worker, promises } = useMemo<{ worker: Worker | null, promises: WorkerCallback[] }>(() => {
         if (typeof window === 'undefined') {
             return { worker: null, promises: [] };
         }
@@ -31,7 +31,7 @@ export default function useEUSignCPWorker(workerUrl: string, onMessage: (result:
         }
 
         const worker = new Worker(workerUrl);
-        let promises = [] as WorkerCallback[];
+        let promises: WorkerCallback[] = [];
 
         worker.onmessage = (event: MessageEvent) => {
             const data = event.data;
@@ -79,7 +79,7 @@ export default function useEUSignCPWorker(workerUrl: string, onMessage: (result:
             };
             const id = promises.push(callbackData);// id = index + 1
 
-            worker.postMessage({
+            worker?.postMessage({
                 cmd,
                 params,
                 id,
