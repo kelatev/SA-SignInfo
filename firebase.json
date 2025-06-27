@@ -18,5 +18,16 @@
       "enabled": true
     },
     "singleProjectMode": true
+  },
+  "apphosting": {
+    "backendId": "sign-back",
+    "rootDir": "/",
+    "ignore": [
+      "node_modules",
+      ".git",
+      "firebase-debug.log",
+      "firebase-debug.*.log",
+      "functions"
+    ]
   }
 }
