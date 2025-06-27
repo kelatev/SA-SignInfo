@@ -4,10 +4,10 @@ import { useState, useEffect } from 'react';
 import Card from "../Form/Card";
 import Timeline from "../Timeline/Timeline";
 import InfoSigner from "./InfoSigner";
-import { useEndUserContext } from '../../EUSign/EndUserContext';
+import { useEndUserContext } from '../../../EUSign/EndUserContext';
 import { FileArchiveIcon, FileDashedIcon, FilePlusIcon } from "@phosphor-icons/react";
 import useVerifyFiles from './useVerifyFiles';
-import { IFile } from "../../utils/types";
+import { IFile } from "../../../utils/types";
 
 function PanelCheck() {
     const { librarySW } = useEndUserContext();

@@ -1,6 +1,6 @@
 import React from 'react';
-import { IFile } from "../../utils/types";
-import { FileToIFile } from '../../utils/encode';
+import { IFile } from "../../../utils/types";
+import { FileToIFile } from '../../../utils/encode';
 
 interface FileProps {
     title: string

@@ -1,6 +1,6 @@
 import React from "react";
-import { fileSizeName } from "../../utils/fileSizeName";
-import { IFile } from "../../utils/types";
+import { fileSizeName } from "../../../utils/fileSizeName";
+import { IFile } from "../../../utils/types";
 
 export type Props = {
     children?: React.ReactNode

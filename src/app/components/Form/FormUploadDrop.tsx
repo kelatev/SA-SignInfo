@@ -1,7 +1,7 @@
 import React, { useCallback } from "react";
 import { useDropzone } from 'react-dropzone';
-import { FileToIFile } from '../../utils/encode';
-import { IFile } from "../../utils/types";
+import { FileToIFile } from '../../../utils/encode';
+import { IFile } from "../../../utils/types";
 
 interface FileProps {
     title: string

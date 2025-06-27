@@ -2,8 +2,8 @@ import React, { useRef, useState } from 'react';
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import FormControl from "react-bootstrap/FormControl";
-import { dataURLtoFile, isBase64 } from '../../utils/encode'
-import { IFile } from "../../utils/types";
+import { dataURLtoFile, isBase64 } from '../../../utils/encode'
+import { IFile } from "../../../utils/types";
 
 interface Base64Props {
     title: string

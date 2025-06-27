@@ -1,20 +1,20 @@
 import { useState, useEffect } from "react";
-import { EndUserInstance } from "../../EUSign/useEndUserInstance";
-import { SignContainerInfo } from "../../EUSign/EndUserLibrary";
-import { IFile } from "../../utils/types";
+import { EndUserInstance } from "../../../EUSign/useEndUserInstance";
+import { SignContainerInfo } from "../../../EUSign/EndUserLibrary";
+import { IFile } from "../../../utils/types";
 import {
     EndUserCertificateInfoEx,
     EndUserTimeInfo,
     EndUserSignInfo,
     EndUserCertificate,
-} from "../../EUSign/EndUserTypes";
-import { EndUserSignContainerType } from "../../EUSign/EndUserConstants";
+} from "../../../EUSign/EndUserTypes";
+import { EndUserSignContainerType } from "../../../EUSign/EndUserConstants";
 import {
     IsDigitalStamp,
     GetSignAlgo,
     GetSignFormat,
     GetSignContainerType,
-} from "../../EUSign/EndUserUtil";
+} from "../../../EUSign/EndUserUtil";
 
 /* type EUVerifyErrorCode = {
     NoError: 0;

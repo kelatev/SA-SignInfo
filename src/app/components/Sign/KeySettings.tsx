@@ -3,8 +3,8 @@ import Timeline from "../Timeline/Timeline";
 import Form from "react-bootstrap/Form";
 import { useKeyContext } from './KeyContext';
 import { GearSixIcon, PencilIcon } from "@phosphor-icons/react";
-import { GetSupportedSignAlgos, GetSignContainerType } from '../../EUSign/EndUserUtil';
-import { EndUserSignType, EndUserSignContainerType, EndUserCAdESType } from "../../EUSign/EndUserConstants";
+import { GetSupportedSignAlgos, GetSignContainerType } from '../../../EUSign/EndUserUtil';
+import { EndUserSignType, EndUserSignContainerType, EndUserCAdESType } from "../../../EUSign/EndUserConstants";
 
 interface SelectItem {
     value: number

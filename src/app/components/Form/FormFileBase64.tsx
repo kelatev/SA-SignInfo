@@ -5,7 +5,7 @@ import FormControl from "react-bootstrap/FormControl";
 import { FormCheck } from 'react-bootstrap';
 import { CopyToClipboard } from './CopyToClipboard';
 import { CopyIcon } from "@phosphor-icons/react";
-import { Uint8toBase64, Uint8toAscii, Uint8toUtf8, Uint8toWin1251 } from '../../utils/encode';
+import { Uint8toBase64, Uint8toAscii, Uint8toUtf8, Uint8toWin1251 } from '../../../utils/encode';
 
 interface FormDataProps {
     data: Uint8Array | undefined

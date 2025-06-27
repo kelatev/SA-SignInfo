@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 import { CursorIcon, FileDashedIcon } from "@phosphor-icons/react";
-import { IFile } from "../../utils/types";
-import { useEndUserContext } from "../../EUSign/EndUserContext";
+import { IFile } from "../../../utils/types";
+import { useEndUserContext } from "../../../EUSign/EndUserContext";
 import { useKeyContext } from "./KeyContext";
 import Timeline from "../Timeline/Timeline";
-import { CheckPrivateKey, SignAlgoToPublicKeyType } from '../../EUSign/EndUserUtil'
-import { EndUserKeyUsage, EndUserSignAlgo, EndUserSignType, EndUserCAdESType, EU_SIGN_TYPE_PARAMETER } from '../../EUSign/EndUserConstants'
+import { CheckPrivateKey, SignAlgoToPublicKeyType } from '../../../EUSign/EndUserUtil'
+import { EndUserKeyUsage, EndUserSignAlgo, EndUserSignType, EndUserCAdESType, EU_SIGN_TYPE_PARAMETER } from '../../../EUSign/EndUserConstants'
 
 export default function KeySign() {
     const { currentLibrary, Confirmation } = useEndUserContext();

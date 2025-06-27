@@ -4,8 +4,8 @@ import React, {useEffect} from 'react';
 import PanelCheck from "./components/Check";
 import PanelSign from "./components/Sign";
 import Layout from "./components/Layout";
-import { EndUserContext } from './EUSign/EndUserContext';
-import useEndUserController from './EUSign/useEndUserController';
+import { EndUserContext } from '../EUSign/EndUserContext';
+import useEndUserController from '../EUSign/useEndUserController';
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
 

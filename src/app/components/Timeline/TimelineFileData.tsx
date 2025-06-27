@@ -3,7 +3,7 @@ import TimelineItem from "./TimelineItem";
 import Button from 'react-bootstrap/Button';
 import { Buffer } from 'buffer';
 import { saveAs } from "file-saver";
-import { fileSizeName } from "../../utils/fileSizeName";
+import { fileSizeName } from "../../../utils/fileSizeName";
 import { FileIcon } from "@phosphor-icons/react";
 import FormFileBase64 from '../Form/FormFileBase64';
 

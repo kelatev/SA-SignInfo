@@ -7,8 +7,8 @@ import AlertDanger from "../Form/AlertDanger";
 import FormUploadBase64 from "../Form/FormUploadBase64";
 import DetailsFileAction from "./DetailsFileAction";
 import { FileIcon } from "@phosphor-icons/react";
-import { Uint8toBase64, dataURLtoFile } from '../../utils/encode';
-import { IFile, emptyIFile } from "../../utils/types";
+import { Uint8toBase64, dataURLtoFile } from '../../../utils/encode';
+import { IFile, emptyIFile } from "../../../utils/types";
 
 interface TimelineItemFileInterface {
     onFileChange: (file: IFile | null) => void

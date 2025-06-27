@@ -1,19 +1,19 @@
 import { useCallback, useEffect, useState } from 'react';
-import { EndUserPrivateKey, EndUserKeyMedia } from "../../EUSign/EndUserTypes";
-import { useEndUserContext } from '../../EUSign/EndUserContext';
+import { EndUserPrivateKey, EndUserKeyMedia } from "../../../EUSign/EndUserTypes";
+import { useEndUserContext } from '../../../EUSign/EndUserContext';
 import { useKeyContext } from './KeyContext';
-import useEndUserKeyMedia from '../../EUSign/useEndUserKeyMedia';
+import useEndUserKeyMedia from '../../../EUSign/useEndUserKeyMedia';
 import Form from "react-bootstrap/Form";
-import { KeyMediaType } from '../../EUSign/useEndUserController';
+import { KeyMediaType } from '../../../EUSign/useEndUserController';
 import Timeline from "../Timeline/Timeline";
 import FormPassword from "../Form/FormPassword";
 import AlertWarning from "../Form/AlertWarning";
-import { IFile } from "../../utils/types";
+import { IFile } from "../../../utils/types";
 import { FileLockIcon, PasswordIcon, PackageIcon } from "@phosphor-icons/react";
-import { errorLoadDescription } from '../../EUSign/useEndUserInstance'
-import Settings from "../../EUSign/LIBRARY_SETTINGS.json";
-import { MakeUserId, IsQualifiedCertificates } from '../../EUSign/EndUserUtil'
-import { EndUserKSP } from '../../EUSign/EndUserConstants'
+import { errorLoadDescription } from '../../../EUSign/useEndUserInstance'
+import Settings from "../../../EUSign/LIBRARY_SETTINGS.json";
+import { MakeUserId, IsQualifiedCertificates } from '../../../EUSign/EndUserUtil'
+import { EndUserKSP } from '../../../EUSign/EndUserConstants'
 
 function SignSelect() {
     const { keyMediaType, setKeyMediaType, currentLibrary, Confirmation } = useEndUserContext();
