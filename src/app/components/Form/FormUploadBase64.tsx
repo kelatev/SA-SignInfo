@@ -52,6 +52,8 @@ function FormUploadBase64(props: Base64Props) {
         }
     }
 
+    const canPast = typeof navigator !== 'undefined' && navigator.clipboard && navigator.clipboard.readText;
+
     return (
         <>
             <button onClick={handleShow}
@@ -66,7 +68,7 @@ function FormUploadBase64(props: Base64Props) {
                 <Modal.Footer className='border-0 pt-0'>
                     <Button onClick={handleClose} variant="light" size="sm">Закрити</Button>
                     <Button onClick={handleUpload} variant="primary" size="sm">Завантажити</Button>
-                    {navigator?.clipboard && <Button onClick={handleClipboard} variant="primary" size="sm">Вставити з буферу</Button>}
+                    {canPast && <Button onClick={handleClipboard} variant="primary" size="sm">Вставити з буферу</Button>}
                 </Modal.Footer>
             </Modal>
         </>
