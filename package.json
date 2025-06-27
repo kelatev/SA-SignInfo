@@ -2,37 +2,29 @@
   "name": "sa-uasign",
   "version": "0.1.0",
   "private": true,
-  "directories": {
-    "serve": "dist"
-  },
-  "files": [
-    "dist",
-    "server.js"
-  ],
-  "main": "server.js",
-  "targets": {
-    "main": false
-  },
   "scripts": {
-    "start": "parcel",
-    "build": "parcel build",
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
     "test": "jest",
     "fb:serve": "firebase emulators:start",
     "fb:shell": "npm run build && firebase functions:shell",
     "fb:start": "npm run shell",
     "fb:deploy": "firebase deploy --only hosting",
-    "fb:logs": "firebase functions:log",
-    "lint": "eslint src"
+    "fb:logs": "firebase functions:log"
   },
   "dependencies": {
     "@phosphor-icons/react": "^2.1.8",
     "@restart/hooks": "^0.6.2",
     "@restart/ui": "^1.9.4",
     "buffer": "^6.0.3",
+    "eslint-config-next": "^15.3.4",
     "express": "^5.1.0",
     "file-saver": "^2.0.5",
     "firebase": "^11.8.0",
     "firebase-admin": "^13.4.0",
+    "next": "^15.3.4",
     "parcel": "^2.15.2",
     "prop-types": "^15.8.1",
     "react": "^19.1.0",

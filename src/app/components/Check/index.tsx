@@ -1,3 +1,5 @@
+'use client'
+
 import { useState, useEffect } from 'react';
 import Card from "../Form/Card";
 import Timeline from "../Timeline/Timeline";

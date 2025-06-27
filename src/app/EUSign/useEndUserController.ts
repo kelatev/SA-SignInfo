@@ -1,7 +1,9 @@
+'use client'
+
 import { useState, useMemo, useEffect } from "react";
 import useEndUserInstance, { EndUserLibraryType } from "./useEndUserInstance";
 import EndUserLibrary from "./EndUserLibrary";
-import EndUserWorker from "./EndUserWorker";
+import useEndUserWorker from "./useEndUserWorker";
 import EndUserAgent from "./EndUserAgent";
 import { EndUserEventType } from "./EndUserConstants";
 import useEndUserConfirmation from "./useEndUserConfirmation";
@@ -31,7 +33,7 @@ export default function useEndUserController() {
     const [keyMediaType, setKeyMediaType] = useState<KeyMediaType>(KeyMediaType.File);
 
     const workerUrl = "/eusign/euscp.worker.js?maxDataSize=25";
-    const librarySW = useMemo<EndUserLibrary>(() => new EndUserWorker(workerUrl), [workerUrl]);
+    const librarySW = useEndUserWorker(workerUrl);
     const libraryJS = useMemo<EndUserLibrary>(() => new EndUserAgent(), []);
     const instanceSW = useEndUserInstance({ type: EndUserLibraryType.SW, library: librarySW });
     const instanceJS = useEndUserInstance({ type: EndUserLibraryType.JS, library: libraryJS });
@@ -59,7 +61,7 @@ export default function useEndUserController() {
             !currentLibrary.loading &&
             !currentLibrary.error
         ) {
-            currentLibrary.Load(event => OnEvent(event)).catch(e => {});
+            currentLibrary.Load(event => OnEvent(event));
         }
     }, [currentLibrary]);
 

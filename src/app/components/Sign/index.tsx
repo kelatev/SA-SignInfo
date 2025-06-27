@@ -1,3 +1,5 @@
+'use client'
+
 import { useState } from "react";
 import { KeyContext, PrivatKeyType } from './KeyContext';
 import Timeline from "../Timeline/Timeline";

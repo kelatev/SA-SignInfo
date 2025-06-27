@@ -1,3 +1,5 @@
+'use client';
+
 export default class EUSignCPWorker {
     m_worker: Worker & { _url?: string };
     m_promises: any[];

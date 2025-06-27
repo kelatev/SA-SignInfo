@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useState, useEffect } from "react";
 import FormUploadFile from "../Form/FormUploadFile";
 import FormUploadDrop from "../Form/FormUploadDrop";
@@ -24,31 +26,42 @@ const TimelineFileSelect: React.FC<TimelineItemFileInterface> = ({ onFileChange,
     const storageKey = `${storagePrefix}-file`;
 
     useEffect(() => {
-        const storeData = sessionStorage.getItem(storageKey);
-        const fileData = storagePrefix && storeData && JSON.parse(storeData);
-        const file = fileData && dataURLtoFile(fileData.content, fileData.name);
-
-        if (file) {
-            setFile(file);
-            onFileChange(file);
+        try {
+            const stored = sessionStorage.getItem(storageKey);
+            if (stored) {
+                const parsed = JSON.parse(stored);
+                const restoredFile = dataURLtoFile(parsed.content, parsed.name);
+                if (restoredFile) {
+                    setFile(restoredFile);
+                    onFileChange(restoredFile);
+                }
+            }
+        } catch (err) {
+            console.warn("Failed to load file from sessionStorage:", err);
         }
     }, [onFileChange, storagePrefix, storageKey]);
 
-    function handleFileChange(file: IFile) {
-        setFile(file);
-        onFileChange(file);
-        if (storagePrefix && file.size < 1000000) {
-            (async function () {
-                const content = Uint8toBase64(file.content);
-                sessionStorage.setItem(storageKey, JSON.stringify({ content, name: file.name }));
-            })();
+    function handleFileChange(newFile: IFile) {
+        setFile(newFile);
+        onFileChange(newFile);
+
+        try {
+            if (storagePrefix && newFile.size < 1_000_000) {
+                const content = Uint8toBase64(newFile.content);
+                const payload = JSON.stringify({ content, name: newFile.name });
+                sessionStorage.setItem(storageKey, payload);
+            }
+        } catch (err) {
+            console.warn("Failed to save file to sessionStorage:", err);
         }
     }
 
     function handleNewFile() {
         setFile(undefined);
         onFileChange(null);
-        storagePrefix && sessionStorage.removeItem(storageKey);
+        if (typeof window !== 'undefined' && storagePrefix) {
+            sessionStorage.removeItem(storageKey);
+        }
     }
 
     return (

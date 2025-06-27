@@ -1,5 +1,5 @@
 import React, { ReactElement } from "react";
-import Card from "../components/Form/Card";
+import Card from "./Form/Card";
 
 interface LayoutProps {
     title: string
