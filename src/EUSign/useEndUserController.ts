@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo, useEffect, useCallback } from "react";
 import useEndUserInstance, { EndUserLibraryType } from "./useEndUserInstance";
 import EndUserLibrary from "./EndUserLibrary";
 import useEndUserWorker from "./useEndUserWorker";
@@ -32,17 +32,26 @@ export enum KeyMediaType {
 export default function useEndUserController() {
     const [keyMediaType, setKeyMediaType] = useState<KeyMediaType>(KeyMediaType.File);
 
-    const workerUrl = "/eusign/euscp.worker.js?maxDataSize=25";
+    // Memoize worker URL to prevent unnecessary re-renders
+    const workerUrl = useMemo(() => "/eusign/euscp.worker.js?maxDataSize=25", []);
+    
+    // Initialize libraries
     const librarySW = useEndUserWorker(workerUrl);
     const libraryJS = useMemo<EndUserLibrary>(() => new EndUserAgent(), []);
+    
+    // Create instances
     const instanceSW = useEndUserInstance({ type: EndUserLibraryType.SW, library: librarySW });
     const instanceJS = useEndUserInstance({ type: EndUserLibraryType.JS, library: libraryJS });
+    
+    // Memoize current library selection
     const currentLibrary = useMemo(() => {
         return keyMediaType === KeyMediaType.Hardware ? instanceJS : instanceSW;
     }, [keyMediaType, instanceJS, instanceSW]);
 
     const Confirmation = useEndUserConfirmation();
-    const OnEvent = (event: any) => {
+    
+    // Memoize event handler to prevent unnecessary re-renders
+    const OnEvent = useCallback((event: any) => {
         switch (event.type) {
             case EndUserEventType.ConfirmKSPOperation:
                 Confirmation.BeginOperation(
@@ -51,9 +60,14 @@ export default function useEndUserController() {
                     event.mobileAppName,
                     event.expireDate,
                 );
+                break;
+            default:
+                // Handle other events if needed
+                break;
         }
-    };
+    }, [Confirmation]);
 
+    // Load library when needed
     useEffect(() => {
         if (
             currentLibrary &&
@@ -61,15 +75,16 @@ export default function useEndUserController() {
             !currentLibrary.loading &&
             !currentLibrary.error
         ) {
-            currentLibrary.Load(event => OnEvent(event));
+            currentLibrary.Load(OnEvent);
         }
-    }, [currentLibrary]);
+    }, [currentLibrary, OnEvent]);
 
-    return {
+    // Memoize return object to prevent unnecessary re-renders
+    return useMemo(() => ({
         keyMediaType,
         setKeyMediaType,
         librarySW: instanceSW,
         currentLibrary,
         Confirmation,
-    };
+    }), [keyMediaType, instanceSW, currentLibrary, Confirmation]);
 }
